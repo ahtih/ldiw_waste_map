@@ -1,0 +1,345 @@
+<?php
+
+/**
+ * Implementation of hook_views_default_views().
+ */
+function ldiw_waste_map_features_views_default_views() {
+  $views = array();
+
+  // Exported view: waste_map_display
+  $view = new view;
+  $view->name = 'waste_map_display';
+  $view->description = 'Waste Map WFS OpenLayers';
+  $view->tag = '';
+  $view->view_php = '';
+  $view->base_table = 'node';
+  $view->is_cacheable = FALSE;
+  $view->api_version = 2;
+  $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
+  $handler = $view->new_display('default', 'Defaults', 'default');
+  $handler->override_option('access', array(
+    'type' => 'none',
+  ));
+  $handler->override_option('cache', array(
+    'type' => 'none',
+  ));
+  $handler->override_option('style_plugin', 'openlayers_map');
+  $handler->override_option('style_options', array(
+    'preset' => 'waste_map_wfs',
+  ));
+  $handler = $view->new_display('page', 'Page', 'page_1');
+  $handler->override_option('path', 'waste_map');
+  $handler->override_option('menu', array(
+    'type' => 'none',
+    'title' => '',
+    'description' => '',
+    'weight' => 0,
+    'name' => 'navigation',
+  ));
+  $handler->override_option('tab_options', array(
+    'type' => 'none',
+    'title' => '',
+    'description' => '',
+    'weight' => 0,
+  ));
+
+  $views[$view->name] = $view;
+
+  // Exported view: waste_map_geoclustering_wfs
+  $view = new view;
+  $view->name = 'waste_map_geoclustering_wfs';
+  $view->description = 'Waste Map WFS output with Geoclustering';
+  $view->tag = '';
+  $view->view_php = '';
+  $view->base_table = 'node';
+  $view->is_cacheable = FALSE;
+  $view->api_version = 2;
+  $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
+  $handler = $view->new_display('default', 'Defaults', 'default');
+  $handler->override_option('fields', array(
+    'field_coords_geo' => array(
+      'label' => 'Longitude (field_coords)',
+      'alter' => array(
+        'alter_text' => 0,
+        'text' => '',
+        'make_link' => 0,
+        'path' => '',
+        'link_class' => '',
+        'alt' => '',
+        'prefix' => '',
+        'suffix' => '',
+        'help' => '',
+        'trim' => 0,
+        'max_length' => '',
+        'word_boundary' => 1,
+        'ellipsis' => 1,
+        'strip_tags' => 0,
+        'html' => 0,
+      ),
+      'exclude' => 0,
+      'id' => 'field_coords_geo',
+      'table' => 'node_data_field_coords',
+      'field' => 'field_coords_geo',
+      'relationship' => 'none',
+      'function' => 'x',
+      'op_val_start' => '',
+      'op_val_end' => '',
+      'target_prefix' => '',
+      'input' => 'geo_wkt',
+      'target' => array(
+        'geo_wkt' => '',
+        'geo_latlon' => array(
+          'lat' => '',
+          'lon' => '',
+        ),
+      ),
+      'simplify' => 0,
+    ),
+    'field_diameter_value' => array(
+      'label' => 'Diameter',
+      'alter' => array(
+        'alter_text' => 0,
+        'text' => '',
+        'make_link' => 0,
+        'path' => '',
+        'link_class' => '',
+        'alt' => '',
+        'prefix' => '',
+        'suffix' => '',
+        'help' => '',
+        'trim' => 0,
+        'max_length' => '',
+        'word_boundary' => 1,
+        'ellipsis' => 1,
+        'strip_tags' => 0,
+        'html' => 0,
+      ),
+      'link_to_node' => 0,
+      'label_type' => 'widget',
+      'format' => 'unformatted',
+      'multiple' => array(
+        'group' => TRUE,
+        'multiple_number' => '',
+        'multiple_from' => '',
+        'multiple_reversed' => FALSE,
+      ),
+      'exclude' => 0,
+      'id' => 'field_diameter_value',
+      'table' => 'node_data_field_diameter',
+      'field' => 'field_diameter_value',
+      'relationship' => 'none',
+    ),
+    'field_nr_of_tires_value' => array(
+      'label' => 'Number of tires',
+      'alter' => array(
+        'alter_text' => 0,
+        'text' => '',
+        'make_link' => 0,
+        'path' => '',
+        'link_class' => '',
+        'alt' => '',
+        'prefix' => '',
+        'suffix' => '',
+        'help' => '',
+        'trim' => 0,
+        'max_length' => '',
+        'word_boundary' => 1,
+        'ellipsis' => 1,
+        'strip_tags' => 0,
+        'html' => 0,
+      ),
+      'link_to_node' => 0,
+      'label_type' => 'widget',
+      'format' => 'unformatted',
+      'multiple' => array(
+        'group' => TRUE,
+        'multiple_number' => '',
+        'multiple_from' => '',
+        'multiple_reversed' => FALSE,
+      ),
+      'exclude' => 0,
+      'id' => 'field_nr_of_tires_value',
+      'table' => 'node_data_field_nr_of_tires',
+      'field' => 'field_nr_of_tires_value',
+      'relationship' => 'none',
+    ),
+    'nid' => array(
+      'label' => 'Nid',
+      'alter' => array(
+        'alter_text' => 0,
+        'text' => '',
+        'make_link' => 0,
+        'path' => '',
+        'link_class' => '',
+        'alt' => '',
+        'prefix' => '',
+        'suffix' => '',
+        'help' => '',
+        'trim' => 0,
+        'max_length' => '',
+        'word_boundary' => 1,
+        'ellipsis' => 1,
+        'strip_tags' => 0,
+        'html' => 0,
+      ),
+      'link_to_node' => 0,
+      'exclude' => 0,
+      'id' => 'nid',
+      'table' => 'node',
+      'field' => 'nid',
+      'relationship' => 'none',
+    ),
+    'field_coords_geo_1' => array(
+      'label' => 'Latitude (field_coords)',
+      'alter' => array(
+        'alter_text' => 0,
+        'text' => '',
+        'make_link' => 0,
+        'path' => '',
+        'link_class' => '',
+        'alt' => '',
+        'prefix' => '',
+        'suffix' => '',
+        'help' => '',
+        'trim' => 0,
+        'max_length' => '',
+        'word_boundary' => 1,
+        'ellipsis' => 1,
+        'strip_tags' => 0,
+        'html' => 0,
+      ),
+      'exclude' => 0,
+      'id' => 'field_coords_geo_1',
+      'table' => 'node_data_field_coords',
+      'field' => 'field_coords_geo',
+      'relationship' => 'none',
+      'function' => 'y',
+      'op_val_start' => '',
+      'op_val_end' => '',
+      'target_prefix' => '',
+      'input' => 'geo_wkt',
+      'target' => array(
+        'geo_wkt' => '',
+        'geo_latlon' => array(
+          'lat' => '',
+          'lon' => '',
+        ),
+      ),
+      'simplify' => 0,
+    ),
+    'nr_of_nodes' => array(
+      'label' => 'Number of nodes',
+      'alter' => array(
+        'alter_text' => 0,
+        'text' => '',
+        'make_link' => 0,
+        'path' => '',
+        'link_class' => '',
+        'alt' => '',
+        'prefix' => '',
+        'suffix' => '',
+        'help' => '',
+        'trim' => 0,
+        'max_length' => '',
+        'word_boundary' => 1,
+        'ellipsis' => 1,
+        'strip_tags' => 0,
+        'html' => 0,
+      ),
+      'exclude' => 0,
+      'id' => 'nr_of_nodes',
+      'table' => 'geoclustering_clusters',
+      'field' => 'nr_of_nodes',
+      'relationship' => 'none',
+    ),
+  ));
+  $handler->override_option('arguments', array(
+    'geoclustering_level' => array(
+      'default_action' => 'default',
+      'style_plugin' => 'default_summary',
+      'style_options' => array(),
+      'wildcard' => 'all',
+      'wildcard_substitution' => 'All',
+      'title' => '',
+      'breadcrumb' => '',
+      'default_argument_type' => 'auto',
+      'default_argument' => '',
+      'validate_type' => 'numeric',
+      'validate_fail' => 'not found',
+      'id' => 'geoclustering_level',
+      'table' => 'node',
+      'field' => 'geoclustering_level',
+      'validate_user_argument_type' => 'uid',
+      'validate_user_roles' => array(
+        '2' => 0,
+      ),
+      'relationship' => 'none',
+      'default_options_div_prefix' => '',
+      'default_argument_user' => 0,
+      'default_argument_fixed' => '25',
+      'default_argument_php' => '',
+      'validate_argument_node_type' => array(
+        'waste_point' => 0,
+        'page' => 0,
+        'story' => 0,
+      ),
+      'validate_argument_node_access' => 0,
+      'validate_argument_nid_type' => 'nid',
+      'validate_argument_vocabulary' => array(),
+      'validate_argument_type' => 'tid',
+      'validate_argument_transform' => 0,
+      'validate_user_restrict_roles' => 0,
+      'validate_argument_php' => '',
+      'geoclustering_tree_name' => 'ldiw_waste_map',
+    ),
+  ));
+  $handler->override_option('access', array(
+    'type' => 'none',
+  ));
+  $handler->override_option('cache', array(
+    'type' => 'none',
+  ));
+  $handler->override_option('items_per_page', 400);
+  $handler = $view->new_display('wfs', 'WFS', 'wfs_1');
+  $handler->override_option('style_plugin', 'wfs_feed');
+  $handler->override_option('style_options', array(
+    'mission_description' => FALSE,
+    'description' => '',
+    'data_source' => array(
+      'value' => array(
+        'latlon' => 'latlon',
+      ),
+    ),
+    'fields' => array(
+      'id' => 'nid',
+      'longitude' => 'field_coords_geo',
+      'latitude' => 'field_coords_geo_1',
+      'wkt' => '',
+    ),
+  ));
+  $handler->override_option('row_plugin', 'node_rss');
+  $handler->override_option('row_options', array(
+    'relationship' => 'none',
+    'item_length' => 'default',
+  ));
+  $handler->override_option('path', 'waste_map_geoclustering.wfs');
+  $handler->override_option('menu', array(
+    'type' => 'none',
+    'title' => '',
+    'description' => '',
+    'weight' => 0,
+    'name' => 'navigation',
+  ));
+  $handler->override_option('tab_options', array(
+    'type' => 'none',
+    'title' => '',
+    'description' => '',
+    'weight' => 0,
+  ));
+  $handler->override_option('displays', array());
+  $handler->override_option('sitename_title', FALSE);
+
+  $views[$view->name] = $view;
+
+  return $views;
+}

@@ -1,0 +1,88 @@
+<?php
+// $Id$
+
+//!!! include auto nodetitle configuration & dependency, ideally as a Feature
+
+/**
+ * Implementation of hook_ctools_plugin_directory()
+ */
+function ldiw_waste_map_ctools_plugin_directory($module, $plugin) {
+  if ($module == 'openlayers' && $plugin == 'style_plugin') {
+    return 'plugins/style_plugin';
+  }
+}
+  
+/**
+ * Implementation of hook_ctools_plugin_api()
+ */
+function ldiw_waste_map_ctools_plugin_api($module, $api) {
+  if ($module == "openlayers") {
+    switch ($api) {
+      case 'openlayers_styles':
+        return array('version' => 1);
+      case 'openlayers_layers':
+        return array('version' => 1);
+    }
+  }
+}
+
+/**
+ * Implementation of hook_geoclustering_tree_params()
+ */
+
+function ldiw_waste_map_geoclustering_tree_params()
+{
+	$tree_params=new stdClass();
+	$tree_params->name='ldiw_waste_map';
+	$tree_params->description='LDIW project Waste Map';
+	$tree_params->maxlevel=27;
+	$tree_params->geofield_name='field_coords';
+	$tree_params->node_conditions=array('type' => 'waste_point',
+										'status' => 1);
+	return array($tree_params->name => $tree_params);
+	}
+
+/**
+ * Implementation of hook_openlayers_styles()
+ */
+function ldiw_waste_map_openlayers_styles() {
+  $styles = array();
+
+  $style = new stdClass();
+  $style->api_version = 1;
+  $style->name = 'waste_point_style';
+  $style->title = t('Waste point style');
+  $style->description = t('Waste point style');
+  $style->data = array(
+    'pointRadius' => '5',
+    'fillColor' => '#ff4040',
+    'strokeColor' => '#800000',
+    'strokeWidth' => '2',
+    'strokeOpacity' => '0.4',
+    'plugins' => array(
+      'ldiw_waste_map_point_style_plugin' => array(),
+    ),
+  );
+  $styles[$style->name] = $style;
+
+  return $styles;
+}
+
+/**
+ * Implementation of hook_openlayers_layer_types()
+ */
+function ldiw_waste_map_openlayers_layer_types() {
+  return array(
+    'ldiw_waste_map_layer_type_wfs' => array(
+      'title' => t('WFS BBOX Vector layer'),
+      'description' => t('A Vector map that uses WFS protocol to get features
+									and uses OpenLayers BBOX Strategy.'),
+      'layer_type' => array(
+        'path' => drupal_get_path('module','ldiw_waste_map'),
+        'file' => 'wfs_layer_type.inc',
+        'class' => 'ldiw_waste_map_layer_type_wfs',
+        'parent' => 'openlayers_layer_type',
+      ),
+    )
+  );
+}
