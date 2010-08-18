@@ -24,6 +24,10 @@ function ldiw_waste_map_ctools_plugin_api($module, $api) {
         return array('version' => 1);
     }
   }
+  if ($module == "geoclustering_tree_params" &&
+								$api == "geoclustering_tree_params") {
+    return array('version' => 1);
+  }
 }
 
 /**
@@ -36,6 +40,7 @@ function ldiw_waste_map_geoclustering_tree_params()
 	$tree_params->name='ldiw_waste_map';
 	$tree_params->description='LDIW project Waste Map';
 	$tree_params->maxlevel=27;
+	$tree_params->api_version=1;
 	$tree_params->geofield_name='field_coords';
 	$tree_params->node_conditions=array('type' => 'waste_point',
 										'status' => 1);
