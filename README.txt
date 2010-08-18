@@ -37,7 +37,7 @@ import them e.g. using Node Import module, but you have to apply
 http://drupal.org/files/issues/node_import-707760.patch to get Node Import
 to support Geo fields.
 
-After that you should see the map at http://<drupal-root-URL>/waste_map
+After that you should see the map at http://{your-drupal-root-URL}/waste_map
 
 Maintainers
 -----------
