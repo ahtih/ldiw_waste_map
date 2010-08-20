@@ -11,7 +11,7 @@ Drupal.openlayers.layer.ldiw_waste_map_wfs = function(title, map, options) {
     projection: "EPSG:4326",
     buffer: 0,
     protocol: new OpenLayers.Protocol.WFS({
-        url: options.url,
+        url: options.base_url.replace(/\/$/,'') + '/' + options.url.replace(/^\//,''),
         featurePrefix: 'drupal',
         featureType: options.typeName,
         geometryName: options.geometryName,

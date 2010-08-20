@@ -18,19 +18,22 @@ class ldiw_waste_map_layer_type_wfs extends openlayers_layer_type {
   /**
    * Provide initial values for options.
    */
-  function options_init() {
-    return array(
-      'layer_type' => 'ldiw_waste_map_wfs',
-      'layer_handler' => 'ldiw_waste_map_wfs',
-      'projection' => array('4326', '900913'),
-      'baselayer' => FALSE,
-      'typeName' => '',
-      'formatOptions' => array(
-        'extractStyles' => TRUE,
-        'extractAttributes' => TRUE,
-      ),
-    );
-  }
+	function options_init()
+		{
+			global $base_url;
+			return array(
+					'base_url' => $base_url,
+					'layer_type' => 'ldiw_waste_map_wfs',
+					'layer_handler' => 'ldiw_waste_map_wfs',
+					'projection' => array('4326', '900913'),
+					'baselayer' => FALSE,
+					'typeName' => '',
+					'formatOptions' => array(
+							'extractStyles' => TRUE,
+							'extractAttributes' => TRUE,
+							),
+					);
+			}
 
   /**
    * Options form which generates layers
@@ -39,11 +42,11 @@ class ldiw_waste_map_layer_type_wfs extends openlayers_layer_type {
     return array(
       'url' => array(
         '#type' => 'textfield',
-        '#title' => t('URL'),
-        '#description' => t('The URL of the WFS server.'),
+        '#title' => t('WFS URL'),
+        '#description' => t('WFS endpoint URL, relative to Drupal root.'),
         '#maxlength' => 1024,
         '#default_value' => isset($this->data['url']) ?
-          $this->data['url'] : ''
+												$this->data['url'] : ''
       ),
       'typeName' => array(
         '#type' => 'textfield',
@@ -74,8 +77,8 @@ class ldiw_waste_map_layer_type_wfs extends openlayers_layer_type {
    * Render.
    */
   function render(&$map) {
-    drupal_add_js(drupal_get_path('module', 'ldiw_waste_map') 
-      .'/wfs_layer_type.js');
+    drupal_add_js(drupal_get_path('module','ldiw_waste_map')
+													. '/wfs_layer_type.js');
     return $this->options;
   }
 }

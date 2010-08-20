@@ -12,7 +12,7 @@ function ldiw_waste_map_features_openlayers_layers() {
   $openlayers_layers->title = 'Waste Map';
   $openlayers_layers->description = 'Waste Map';
   $openlayers_layers->data = array(
-    'url' => 'http://127.0.0.1/waste_map_geoclustering.wfs',
+    'url' => 'waste_map_geoclustering.wfs',
     'typeName' => 'waste_map_geoclustering_wfs',
     'geometryName' => 'geometry',
     'layer_type' => 'ldiw_waste_map_layer_type_wfs',
