@@ -15,6 +15,7 @@ projects[] = views
 projects[wfs][patch][] = "http://drupal.org/files/issues/wfs-filter-changes.patch"
 projects[geo][patch][] = "http://drupal.org/files/issues/geo-filter-float.patch"
 projects[geo][patch][] = "http://drupal.org/files/issues/geo-ewkb-parsing.patch"
+projects[geo][patch][] = "http://drupal.org/files/issues/geo-883032.patch"
 
 projects[geoclustering][type] = "module"
 projects[geoclustering][download][type] = "git"
