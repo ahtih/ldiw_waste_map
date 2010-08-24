@@ -30,8 +30,7 @@ Drupal.theme.openlayersPopup=function(feature)
 			}
 		}
 	else {
-		output='Diameter ' + feature.attributes.field_diameter_value +
-																	'm';
+		output='Diameter ' + feature.attributes.field_diameter_value + 'm';
 		if (feature.attributes.field_nr_of_tires_value != '' &&
 					feature.attributes.field_nr_of_tires_value != '0') {
 			output+='<br>Contains ' +
