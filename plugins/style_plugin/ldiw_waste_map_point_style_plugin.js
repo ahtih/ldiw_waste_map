@@ -4,11 +4,8 @@ Drupal.openlayers.styleContext.ldiw_waste_map_context=function(parameters) {
 
 	this.getpointRadius=function(feature)
 		{
-			if (feature.attributes.nr_of_nodes == '') {
-				return 2+2*Math.log(feature.attributes.field_diameter_value ?
+			return 2+2*Math.log(feature.attributes.field_diameter_value ?
 							feature.attributes.field_diameter_value : 1);
-				}
-			return 2+2*Math.log(feature.attributes.nr_of_nodes);
 			};
 
 	this.getfillColor=function(feature)
@@ -22,21 +19,28 @@ Drupal.openlayers.styleContext.ldiw_waste_map_context=function(parameters) {
 Drupal.theme.openlayersPopup=function(feature)
 {
 	var output='';
-	if (feature.attributes.nr_of_nodes == '') {
-		output='Diameter ' + feature.attributes.field_diameter_value +
-																	'm<br>';
+	if (feature.attributes.nr_of_nodes &&
+									feature.attributes.nr_of_nodes > 1) {
+		output=feature.attributes.nr_of_nodes + ' waste points';
 		if (feature.attributes.field_nr_of_tires_value != '' &&
 					feature.attributes.field_nr_of_tires_value != '0') {
-			output+='Contains ' +
+			output+='<br>Contains ' +
 							feature.attributes.field_nr_of_tires_value +
-							' tires<br>';
-			}
-		if (feature.attributes.body != '') {
-			output+='<br>' + feature.attributes.body;
+							' tires';
 			}
 		}
 	else {
-		output=feature.attributes.nr_of_nodes + ' waste points';
+		output='Diameter ' + feature.attributes.field_diameter_value +
+																	'm';
+		if (feature.attributes.field_nr_of_tires_value != '' &&
+					feature.attributes.field_nr_of_tires_value != '0') {
+			output+='<br>Contains ' +
+							feature.attributes.field_nr_of_tires_value +
+							' tires';
+			}
+		if (feature.attributes.body != '') {
+			output+='<br><br>' + feature.attributes.body;
+			}
 		}
 
 	return '<div class="openlayers-popup">' + output + '</div>';
