@@ -93,3 +93,26 @@ function ldiw_waste_map_openlayers_layer_types() {
     )
   );
 }
+
+/**
+ * Implementation of hook_form_alter()
+ */
+function ldiw_waste_map_form_alter(&$form,$form_state,$form_id)
+{
+	if ($form_id == 'waste_point_node_form') {
+		formfilter_filter_form($form,array(
+				array('revision_information'),
+				array('body_field','format'),
+				array('author'),
+				array('options'),
+				array('comment_settings'),
+				array('menu'),
+				array('body_field','teaser_js'),
+				array('body_field','teaser_include'),
+				));
+
+		$form['body_field']['body']['#title']=t('Description');
+		$form['body_field']['body']['#type']='textfield';
+		$form['body_field']['body']['#maxlength']='2000';
+		}
+	}

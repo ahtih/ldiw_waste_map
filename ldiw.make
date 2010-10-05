@@ -11,6 +11,7 @@ projects[] = imagefield
 projects[] = openlayers
 projects[] = strongarm
 projects[] = views
+projects[] = formfilter
 
 projects[wfs][patch][] = "http://drupal.org/files/issues/wfs-filter-changes.patch"
 projects[geo][patch][] = "http://drupal.org/files/issues/geo-filter-float.patch"
