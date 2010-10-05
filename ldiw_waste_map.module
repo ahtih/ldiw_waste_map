@@ -22,6 +22,8 @@ function ldiw_waste_map_ctools_plugin_api($module, $api) {
         return array('version' => 1);
       case 'openlayers_layers':
         return array('version' => 1);
+      case 'openlayers_behaviors':
+        return array('version' => 1);
     }
   }
   if ($module == "geoclustering_tree_params" &&
@@ -93,6 +95,25 @@ function ldiw_waste_map_openlayers_layer_types() {
     )
   );
 }
+
+/**
+ * Implementation of hook_openlayers_behaviors()
+ */
+function ldiw_waste_map_openlayers_behaviors()
+{
+	return array(
+		'ldiw_waste_map_behavior_addpointcontent' => array(
+			'title' => t('Add Point Content'),
+			'description' => t('Add content to Drupal by clicking on map and filling in node form in popup. Coordinate fields in node form are automatically filled+hidden based on map location clicked'),
+			'type' => 'layer',
+			'path' => drupal_get_path('module','ldiw_waste_map'),
+			'file' => 'ldiw_waste_map_behavior_addpointcontent.inc',
+			'behavior' => array(
+				'class' => 'ldiw_waste_map_behavior_addpointcontent',
+				'parent' => 'openlayers_behavior',
+			),
+		));
+	}
 
 /**
  * Implementation of hook_form_alter()

@@ -29,11 +29,16 @@ function ldiw_waste_map_features_openlayers_presets() {
       ),
     ),
     'behaviors' => array(
+      'ldiw_waste_map_behavior_addpointcontent' => array(
+        'content_type' => 'waste_point',
+        'layer_to_refresh' => 'waste_map_wfs',
+      ),
       'openlayers_behavior_attribution' => array(),
       'openlayers_behavior_popup' => array(
         'layers' => array(),
       ),
       'openlayers_behavior_keyboarddefaults' => array(),
+      'openlayers_behavior_layerswitcher' => array(),
       'openlayers_behavior_navigation' => array(
         'zoomWheelEnabled' => 1,
       ),
@@ -55,9 +60,9 @@ function ldiw_waste_map_features_openlayers_presets() {
     'projection' => '900913',
     'displayProjection' => '4326',
     'styles' => array(
-      'default' => 'waste_point_style',
+      'default' => 'default',
       'select' => 'waste_point_style',
-      'temporary' => 'waste_point_style',
+      'temporary' => 'default',
     ),
     'options' => NULL,
   );
