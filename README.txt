@@ -26,6 +26,7 @@ Many patches to other modules are needed for Waste Map to really work:
 - http://drupal.org/files/issues/wfs-filter-changes.patch
 - http://drupal.org/files/issues/geo-filter-float.patch
 - http://drupal.org/files/issues/geo-ewkb-parsing.patch
+- http://drupal.org/node/710908
 
 To see anything on Waste Map, you need to add some content (nodes having
 "Waste Point" content type) using the usual Drupal methods
