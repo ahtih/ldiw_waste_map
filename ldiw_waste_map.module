@@ -63,13 +63,13 @@ function ldiw_waste_map_openlayers_styles() {
   $style->title = t('Waste point style');
   $style->description = t('Waste point style');
   $style->data = array(
-    'pointRadius' => '5',
-    'fillColor' => '#ff4040',
+    'pointRadius' => '${ldiw_waste_map_point_style_plugin_plugins_getpointRadius}',
+    'fillColor' => '${ldiw_waste_map_point_style_plugin_plugins_getfillColor}',
     'strokeColor' => '#800000',
     'strokeWidth' => '2',
     'strokeOpacity' => '0.4',
     'plugins' => array(
-      'ldiw_waste_map_point_style_plugin' => array(),
+      'plugin' => 'ldiw_waste_map_point_style_plugin',
     ),
   );
   $styles[$style->name] = $style;

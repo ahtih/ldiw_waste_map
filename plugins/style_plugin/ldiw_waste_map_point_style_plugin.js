@@ -1,19 +1,22 @@
 // $Id$
 
-Drupal.openlayers.styleContext.ldiw_waste_map_context=function(parameters) {
+Drupal.openlayers.style_plugin.ldiw_waste_map_point_style_plugin=
+													function(parameters) {}
 
-	this.getpointRadius=function(feature)
+Drupal.openlayers.style_plugin.ldiw_waste_map_point_style_plugin.prototype=
+{
+	'getpointRadius':function(feature)
 		{
 			return 2+2*Math.log(feature.attributes.field_diameter_value ?
 							feature.attributes.field_diameter_value : 1);
-			};
+			},
 
-	this.getfillColor=function(feature)
+	'getfillColor':function(feature)
 		{
 			return (feature.attributes.nr_of_nodes &&
 									feature.attributes.nr_of_nodes > 1) ?
 													'#d07070' : '#ff4040';
-			};
+			},
 	};
 
 Drupal.theme.openlayersPopup=function(feature)
