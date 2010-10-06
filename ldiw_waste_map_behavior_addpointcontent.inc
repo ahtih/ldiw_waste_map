@@ -30,11 +30,10 @@ class ldiw_waste_map_behavior_addpointcontent extends openlayers_behavior
 		// We call drupal_render_form() and ignore its result, just to make
 		//   sure the relevant drupal_add_js() calls get done
 
-		$node_type='waste_point';
 		include_once drupal_get_path('module','node') . '/node.pages.inc';
-		$form_id=$node_type . '_node_form';
+		$form_id=$this->options['content_type'] . '_node_form';
 		$form_state=array();
-		$node=array('type' => $node_type);
+		$node=array('type' => $this->options['content_type']);
 		$form=drupal_retrieve_form($form_id,$form_state,$node);
 		drupal_prepare_form($form_id,$form,$form_state);
 		drupal_process_form($form_id,$form,$form_state);
@@ -44,6 +43,9 @@ class ldiw_waste_map_behavior_addpointcontent extends openlayers_behavior
 							'/ldiw_waste_map_behavior_addpointcontent.css');
 		drupal_add_js(drupal_get_path('module','ldiw_waste_map') .
 							'/ldiw_waste_map_behavior_addpointcontent.js');
-		return $this->options;
+
+		return array_merge($this->options,array(
+				'content_type_name' => node_get_types('type',
+									$this->options['content_type'])->name));
 		}
 	}

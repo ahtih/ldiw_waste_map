@@ -22,10 +22,11 @@ function ldiw_waste_map_behavior_addpointcontent_close_form(layer,options)
 	}
 
 function ldiw_waste_map_behavior_addpointcontent_fixup_form(
-								popup,temp_features_layer,options,coords)
+						popup,title,temp_features_layer,options,coords)
 {
-	var coords_map={'field_coords[0][geo][lon]': coords && coords.lon,
-					'field_coords[0][geo][lat]': coords && coords.lat};
+	var coords_map={	//!!! Remove hardcoding of field_coords
+			'field_coords[0][geo][lon]': coords && coords.lon,
+			'field_coords[0][geo][lat]': coords && coords.lat};
 	for (var fieldname in coords_map) {
 		var node=$(popup.contentDiv).find("[name='" + fieldname + "']");
 		if (coords) {
@@ -33,6 +34,9 @@ function ldiw_waste_map_behavior_addpointcontent_fixup_form(
 			}
 		node.parents('.form-item').hide();
 		}
+
+	$(popup.contentDiv).prepend('<b>' + title + '</b>');
+												//!!! Move style to CSS
 
 	Drupal.attachBehaviors(popup.contentDiv);
 	$(popup.contentDiv).find('#node-form').submit(function()
@@ -48,7 +52,7 @@ function ldiw_waste_map_behavior_addpointcontent_fixup_form(
 								$(popup.contentDiv).html(
 										doc.find('.messages, .messages ~'));
 								ldiw_waste_map_behavior_addpointcontent_fixup_form(
-										popup,temp_features_layer,
+										popup,title,temp_features_layer,
 										options,coords);
 
 									// scroll form to beginning to ensure
@@ -104,6 +108,7 @@ function ldiw_waste_map_behavior_addpointcontent_drawmenu(args)
 		//  a layer refresh and thus un-select the feature we clicked on
 
 	var form_url;
+	var form_title;
 	var coords_to_set_in_form;
 
 	var feature_to_edit=options.hover_control.last_highlighted_feature;
@@ -111,12 +116,17 @@ function ldiw_waste_map_behavior_addpointcontent_drawmenu(args)
 		layer.removeFeatures(layer.features);
 
 		form_url='/node/' + feature_to_edit.fid + '/edit';
+										//!!! Remove hardcoding of .fid
+		form_title=Drupal.t('Edit existing @type',
+								{'@type':options.content_type_name});
 		}
 	else {
 		form_url='/node/add/' + options.content_type.replace('_','-');
+		form_title=Drupal.t('Add new @type',
+								{'@type':options.content_type_name});
 		coords_to_set_in_form=coords.clone().transform(
-							layer.map.getProjectionObject(),
-							new OpenLayers.Projection('EPSG:4326'));
+								layer.map.getProjectionObject(),
+								new OpenLayers.Projection('EPSG:4326'));
 		}
 
 		// Fetch form content using AJAX
@@ -124,8 +134,8 @@ function ldiw_waste_map_behavior_addpointcontent_drawmenu(args)
 	$(options.form_popup.contentDiv).load(form_url + ' #node-form',null,
 			function() {
 				ldiw_waste_map_behavior_addpointcontent_fixup_form(
-									options.form_popup,layer,options,
-									coords_to_set_in_form);
+									options.form_popup,form_title,layer,
+									options,coords_to_set_in_form);
 				options.form_popup.updateSize();
 				});
 
@@ -144,7 +154,7 @@ Drupal.behaviors.ldiw_waste_map_behavior_addpointcontent=function(context)
 			// Create temporary features layer
 
 		var temp_features_layer=new OpenLayers.Layer.Vector(
-					Drupal.t("Temporary Features Layer"),
+					Drupal.t('Temporary Features Layer'),
 					{projection: new OpenLayers.Projection('EPSG:4326'),
 					styleMap: new OpenLayers.StyleMap(
 								{'default':data.map.styles.temporary}),
