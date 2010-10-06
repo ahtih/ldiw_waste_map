@@ -10,16 +10,17 @@ class ldiw_waste_map_behavior_addpointcontent extends openlayers_behavior
 				'#type' => 'select',
 				'#options' => node_get_types('names'),
 				'#description' =>
-						t('Select content type to add when map is clicked. This also determines the node form displayed in popup.'),
-				'#default_value' => isset($defaults['content_type']) ? $defaults['content_type'] : NULL
+						t('Content type to add when map is clicked. This also determines the node form displayed in popup.'),
+				'#default_value' => isset($defaults['content_type']) ?
+										$defaults['content_type'] : NULL
 				),
-			'layer_to_refresh' => array(
+			'features_layer' => array(
 				'#type' => 'select',
-				'#options' => array(NULL => t('<Do not refresh>')) +
-													$this->map['layers'],
+				'#options' => $this->map['layers'],
 				'#description' =>
-						t('Optionally select layer to refresh when new point is added. This could be e.g. a WFS vector layer which dynamically fetches the newly added point from Drupal server.'),
-				'#default_value' => isset($defaults['layer_to_refresh']) ? $defaults['layer_to_refresh'] : NULL
+						t('Vector layer containing features to be added/edited. This layer will also be refreshed after successful add/edit.'),
+				'#default_value' => isset($defaults['features_layer']) ?
+										$defaults['features_layer'] : NULL
 				),
 			);
 		}

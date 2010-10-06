@@ -31,7 +31,7 @@ function ldiw_waste_map_features_openlayers_presets() {
     'behaviors' => array(
       'ldiw_waste_map_behavior_addpointcontent' => array(
         'content_type' => 'waste_point',
-        'layer_to_refresh' => 'waste_map_wfs',
+        'features_layer' => 'waste_map_wfs',
       ),
       'openlayers_behavior_attribution' => array(),
       'openlayers_behavior_popup' => array(

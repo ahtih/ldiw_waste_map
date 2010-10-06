@@ -110,8 +110,8 @@ function ldiw_waste_map_openlayers_behaviors()
 {
 	return array(
 		'ldiw_waste_map_behavior_addpointcontent' => array(
-			'title' => t('Add Point Content'),
-			'description' => t('Add content to Drupal by clicking on map and filling in node form in popup. Coordinate fields in node form are automatically filled+hidden based on map location clicked'),
+			'title' => t('Add/Edit Point Content'),
+			'description' => t('Add/edit Drupal content nodes by clicking on map and filling in node form in popup.'),
 			'type' => 'layer',
 			'path' => drupal_get_path('module','ldiw_waste_map'),
 			'file' => 'ldiw_waste_map_behavior_addpointcontent.inc',
