@@ -54,28 +54,35 @@ function ldiw_waste_map_geoclustering_tree_params()
 /**
  * Implementation of hook_openlayers_styles()
  */
-function ldiw_waste_map_openlayers_styles() {
-  $styles = array();
+function ldiw_waste_map_openlayers_styles()
+{
+	$styles=array();
 
-  $style = new stdClass();
-  $style->api_version = 1;
-  $style->name = 'waste_point_style';
-  $style->title = t('Waste point style');
-  $style->description = t('Waste point style');
-  $style->data = array(
-    'pointRadius' => '${ldiw_waste_map_point_style_plugin_plugins_getpointRadius}',
-    'fillColor' => '${ldiw_waste_map_point_style_plugin_plugins_getfillColor}',
-    'strokeColor' => '#800000',
-    'strokeWidth' => '2',
-    'strokeOpacity' => '0.4',
-    'plugins' => array(
-      'plugin' => 'ldiw_waste_map_point_style_plugin',
-    ),
-  );
-  $styles[$style->name] = $style;
+	$style=new stdClass();
+	$style->api_version=1;
+	$style->name='waste_point_style';
+	$style->title=t('Waste point style');
+	$style->description=$style->title;
+	$style->data=array(
+		'pointRadius' => '${ldiw_waste_map_point_style_plugin_plugins_getpointRadius}',
+		'fillColor' => '${ldiw_waste_map_point_style_plugin_plugins_getfillColor}',
+		'strokeColor' => '#800000',
+		'strokeWidth' => '2',
+		'strokeOpacity' => '0.4',
+		'plugins' => array('plugin' => 'ldiw_waste_map_point_style_plugin'),
+		);
+	$styles[$style->name]=$style;
 
-  return $styles;
-}
+	$style=clone $style;
+	$style->name='waste_point_highlight_style';
+	$style->title=t('Waste point highlight style');
+	$style->description=$style->title;
+	$style->data['strokeWidth']='4';
+	$style->data['strokeOpacity']='1';
+	$styles[$style->name]=$style;
+
+	return $styles;
+	}
 
 /**
  * Implementation of hook_openlayers_layer_types()

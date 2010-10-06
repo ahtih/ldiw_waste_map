@@ -106,15 +106,12 @@ Drupal.behaviors.ldiw_waste_map_behavior_addpointcontent=function(context)
 
 			// Create temporary features layer
 
-		var temp_features_layer_options={
-			projection: new OpenLayers.Projection('EPSG:4326'),
-			drupalID: 'ldiw_waste_map_addpointcontent_layer'
-			};
 		var temp_features_layer=new OpenLayers.Layer.Vector(
-							Drupal.t("Temporary Features Layer"),
-							temp_features_layer_options);
-		temp_features_layer.styleMap=Drupal.openlayers.getStyleMap(
-							data.map,temp_features_layer_options.drupalID);
+					Drupal.t("Temporary Features Layer"),
+					{projection: new OpenLayers.Projection('EPSG:4326'),
+					styleMap: new OpenLayers.StyleMap(
+								{'default':data.map.styles.temporary}),
+					});
 		data.openlayers.addLayer(temp_features_layer);
 
 			// Create panel with mode switching buttons
@@ -134,5 +131,18 @@ Drupal.behaviors.ldiw_waste_map_behavior_addpointcontent=function(context)
 		data.openlayers.addControl(panel);
     	panel.activate();
     	panel.redraw();
+
+			// Create control to highlight existing points on hover
+
+		var hover_control=new OpenLayers.Control.SelectFeature(
+			data.openlayers.getLayersBy('drupalID',options.layer_to_refresh),	//!!! rename this
+			{hover: true,
+				highlightOnly: true,
+				clickout: false,
+				multiple: false,
+				});
+
+		data.openlayers.addControl(hover_control);
+		hover_control.activate();
 		}
 	};

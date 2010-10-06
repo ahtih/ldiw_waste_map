@@ -38,7 +38,9 @@ function ldiw_waste_map_features_openlayers_presets() {
         'layers' => array(),
       ),
       'openlayers_behavior_keyboarddefaults' => array(),
-      'openlayers_behavior_layerswitcher' => array(),
+      'openlayers_behavior_layerswitcher' => array(
+        'ascending' => 1,
+      ),
       'openlayers_behavior_navigation' => array(
         'zoomWheelEnabled' => 1,
       ),
@@ -50,9 +52,7 @@ function ldiw_waste_map_features_openlayers_presets() {
       'google_normal' => 'google_normal',
       'waste_map_wfs' => 'waste_map_wfs',
     ),
-    'layer_styles' => array(
-      'waste_map_wfs' => 'waste_point_style',
-    ),
+    'layer_styles' => array(),
     'layer_activated' => array(
       'waste_map_wfs' => 'waste_map_wfs',
     ),
@@ -60,11 +60,10 @@ function ldiw_waste_map_features_openlayers_presets() {
     'projection' => '900913',
     'displayProjection' => '4326',
     'styles' => array(
-      'default' => 'default',
-      'select' => 'waste_point_style',
+      'default' => 'waste_point_style',
+      'select' => 'waste_point_highlight_style',
       'temporary' => 'default',
     ),
-    'options' => NULL,
   );
 
   $export['waste_map_wfs'] = $openlayers_presets;
