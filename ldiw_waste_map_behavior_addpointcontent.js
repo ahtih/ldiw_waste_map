@@ -89,6 +89,32 @@ function ldiw_waste_map_behavior_addpointcontent_drawmenu(args)
 	var layer=args.object;
 	var coords=args.feature.geometry.getBounds().getCenterLonLat();
 
+	var form_url;
+	var form_title;
+	var coords_to_set_in_form;
+
+	var feature_to_edit=options.hover_control.last_highlighted_feature;
+	if (feature_to_edit && feature_to_edit.renderIntent == 'select') {
+		layer.removeFeatures(layer.features);
+
+		var node_id=feature_to_edit.fid;	//!!! Remove hardcoding of .fid
+		if (isNaN(node_id)) {
+			return;
+			}
+		form_url='/node/' + node_id + '/edit';
+
+		form_title=Drupal.t('Edit existing @type',
+								{'@type':options.content_type_name});
+		}
+	else {
+		form_url='/node/add/' + options.content_type.replace('_','-');
+		form_title=Drupal.t('Add new @type',
+								{'@type':options.content_type_name});
+		coords_to_set_in_form=coords.clone().transform(
+								layer.map.getProjectionObject(),
+								new OpenLayers.Projection('EPSG:4326'));
+		}
+
 	options.form_popup=new OpenLayers.Popup.FramedCloud(
 			'ldiw_waste_map_behavior_addpointcontent_form',
 			coords,null,'Loading...',null,true,
@@ -106,28 +132,6 @@ function ldiw_waste_map_behavior_addpointcontent_drawmenu(args)
 
 		//!!! Deactivate map navigation (zoom, pan, ...) which would trigger
 		//  a layer refresh and thus un-select the feature we clicked on
-
-	var form_url;
-	var form_title;
-	var coords_to_set_in_form;
-
-	var feature_to_edit=options.hover_control.last_highlighted_feature;
-	if (feature_to_edit && feature_to_edit.renderIntent == 'select') {
-		layer.removeFeatures(layer.features);
-
-		form_url='/node/' + feature_to_edit.fid + '/edit';
-										//!!! Remove hardcoding of .fid
-		form_title=Drupal.t('Edit existing @type',
-								{'@type':options.content_type_name});
-		}
-	else {
-		form_url='/node/add/' + options.content_type.replace('_','-');
-		form_title=Drupal.t('Add new @type',
-								{'@type':options.content_type_name});
-		coords_to_set_in_form=coords.clone().transform(
-								layer.map.getProjectionObject(),
-								new OpenLayers.Projection('EPSG:4326'));
-		}
 
 		// Fetch form content using AJAX
 
