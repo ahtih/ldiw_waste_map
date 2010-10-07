@@ -96,6 +96,7 @@ function ldiw_waste_map_features_strongarm() {
   $strongarm->value = array(
     0 => 'status',
     1 => 'promote',
+    2 => 'revision',
   );
 
   $export['node_options_waste_point'] = $strongarm;
