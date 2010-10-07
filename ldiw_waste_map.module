@@ -139,7 +139,6 @@ function ldiw_waste_map_form_alter(&$form,$form_state,$form_id)
 				array('body_field','teaser_include'),
 				));
 
-		$form['body_field']['body']['#title']=t('Description');
 		$form['body_field']['body']['#type']='textfield';
 		$form['body_field']['body']['#maxlength']='2000';
 		}
