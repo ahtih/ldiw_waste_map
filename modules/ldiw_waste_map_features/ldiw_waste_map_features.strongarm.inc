@@ -92,6 +92,21 @@ function ldiw_waste_map_features_strongarm() {
   $strongarm = new stdClass;
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
+  $strongarm->name = 'content_extra_weights_waste_point';
+  $strongarm->value = array(
+    'title' => '-5',
+    'body_field' => '4',
+    'revision_information' => '-3',
+    'author' => '-2',
+    'options' => '-1',
+    'comment_settings' => '0',
+    'menu' => '-4',
+  );
+
+  $export['content_extra_weights_waste_point'] = $strongarm;
+  $strongarm = new stdClass;
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
   $strongarm->name = 'node_options_waste_point';
   $strongarm->value = array(
     0 => 'status',
