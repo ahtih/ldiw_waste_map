@@ -29,34 +29,49 @@ function ldiw_waste_map_behavior_addpointcontent_fixup_form(
 			'field_coords[0][geo][lat]': coords && coords.lat};
 	for (var fieldname in coords_map) {
 		var node=$(popup.contentDiv).find("[name='" + fieldname + "']");
-		if (coords) {
-			node.attr('value',coords_map[fieldname]);
+		if (node.length) {
+			if (coords) {
+				node.attr('value',coords_map[fieldname]);
+				}
+			node.parents('.form-item').hide();
 			}
-		node.parents('.form-item').hide();
 		}
 
 	$(popup.contentDiv).prepend('<b>' + title + '</b>');
 												//!!! Move style to CSS
 
 	Drupal.attachBehaviors(popup.contentDiv);
-	$(popup.contentDiv).find('#node-form').submit(function()
+
+	$(popup.contentDiv).find(':submit').click(function()
 		{
-			$.post(this.action,$(this).serialize(),
+				// This is also triggered when submitting the form via
+				//   keyboard, not just via click
+			$(this.form).data('submit-attribute',
+									this.name + '=' + this.value + '&');
+			});
+
+	$(popup.contentDiv).find('form').submit(function()
+		{
+			$.post(this.action,
+					$(this).data('submit-attribute') + $(this).serialize(),
 					function(data)
 						{
 							var doc=jQuery('<div />').append(data);
-							if (doc.find('#node-form').length) {
+							if (doc.find('#node-form,#node-delete-confirm').
+																length) {
 									// New form was returned, thus form
-									//  validation probably failed. Show the
+									//  validation probably failed or
+									//  delete needs confirmation. Show the
 									//  new form then
-								$(popup.contentDiv).html(
-										doc.find('.messages, .messages ~'));
+								var form=doc.find('.left-corner > *').
+									not('.breadcrumb,#tabs-wrapper,#footer');
+								$(popup.contentDiv).html(form);
 								ldiw_waste_map_behavior_addpointcontent_fixup_form(
 										popup,title,temp_features_layer,
 										options,coords);
 
 									// scroll form to beginning to ensure
-									//   that error message is visible
+									//   that error messages are visible
 								popup.contentDiv.scrollTop=0;
 								}
 							else {
