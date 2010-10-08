@@ -104,7 +104,7 @@ function ldiw_waste_map_behavior_addpointcontent_drawmenu(args)
 	var layer=args.object;
 	var coords=args.feature.geometry.getBounds().getCenterLonLat();
 
-	var form_url;
+	var form_url=options.site_base_url.replace(/\/$/,'');
 	var form_title;
 	var coords_to_set_in_form;
 
@@ -116,13 +116,13 @@ function ldiw_waste_map_behavior_addpointcontent_drawmenu(args)
 		if (isNaN(node_id)) {
 			return;
 			}
-		form_url='/node/' + node_id + '/edit';
+		form_url+='/node/' + node_id + '/edit';
 
 		form_title=Drupal.t('Edit existing @type',
 								{'@type':options.content_type_name});
 		}
 	else {
-		form_url='/node/add/' + options.content_type.replace('_','-');
+		form_url+='/node/add/' + options.content_type.replace('_','-');
 		form_title=Drupal.t('Add new @type',
 								{'@type':options.content_type_name});
 		coords_to_set_in_form=coords.clone().transform(
