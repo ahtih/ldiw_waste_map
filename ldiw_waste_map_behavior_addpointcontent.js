@@ -1,216 +1,225 @@
 // $Id$
 
-function ldiw_waste_map_behavior_addpointcontent_close_form(layer,options)
+function ldiw_waste_map_behavior_addpointcontent_state(data,options)
 {
-	layer.map.removePopup(options.form_popup);
-	options.form_popup=null;
+	this.restart_editing_mode=function()
+		{
+				// Re-activate drawfeature_control so that it remains
+				//   at top priority in event listeners list.
+				// This also triggers this.close_form()
 
-	layer.removeFeatures(layer.features);
+			this.drawfeature_control.deactivate();
+			this.drawfeature_control.activate();
+			}
 
-	options.hover_control.activate();
-
-		// Re-activate drawfeature_control so that it remains
-		//   at top priority in event listeners list
-
-	options.drawfeature_control.deactivate();
-	options.drawfeature_control.activate();
-
-	if (options.hover_control.last_highlighted_feature) {
-		options.hover_control.unhighlight(
-							options.hover_control.last_highlighted_feature);
-		}
-	}
-
-function ldiw_waste_map_behavior_addpointcontent_fixup_form(
-						popup,title,temp_features_layer,options,coords)
-{
-	var coords_map={	//!!! Remove hardcoding of field_coords
-			'field_coords[0][geo][lon]': coords && coords.lon,
-			'field_coords[0][geo][lat]': coords && coords.lat};
-	for (var fieldname in coords_map) {
-		var node=$(popup.contentDiv).find("[name='" + fieldname + "']");
-		if (node.length) {
-			if (coords) {
-				node.attr('value',coords_map[fieldname]);
+	this.close_form=function()
+		{
+			if (this.form_popup) {
+				this.temp_features_layer.map.removePopup(this.form_popup);
+				this.form_popup=null;
 				}
-			node.parents('.form-item').hide();
+
+			this.temp_features_layer.removeFeatures(
+										this.temp_features_layer.features);
+
+			this.hover_control.activate();
+
+			if (this.hover_control.last_highlighted_feature) {
+				this.hover_control.unhighlight(
+							this.hover_control.last_highlighted_feature);
+				}
 			}
-		}
 
-	$(popup.contentDiv).prepend('<b>' + title + '</b>');
-												//!!! Move style to CSS
-
-	Drupal.attachBehaviors(popup.contentDiv);
-
-	$(popup.contentDiv).find(':submit').click(function()
+	this.process_form_response=function(data)
 		{
-				// This is also triggered when submitting the form via
-				//   keyboard, not just via click
-			$(this.form).data('submit-attribute',
-									this.name + '=' + this.value + '&');
-			});
+			var doc=jQuery('<div />').append(data);
+			if (doc.find('#node-form,#node-delete-confirm').length) {
+					// New form was returned, thus either form validation
+					//  failed or delete needs confirmation.
+					//  Show the new form then
+				var form=doc.find('.left-corner > *').
+								not('.breadcrumb,#tabs-wrapper,#footer');
+				$(this.form_popup.contentDiv).html(form);
+				this.fixup_form();
 
-	$(popup.contentDiv).find('form').submit(function()
-		{
-			$.post(this.action,
-					$(this).data('submit-attribute') + $(this).serialize(),
-					function(data)
-						{
-							var doc=jQuery('<div />').append(data);
-							if (doc.find('#node-form,#node-delete-confirm').
-																length) {
-									// New form was returned, thus form
-									//  validation probably failed or
-									//  delete needs confirmation. Show the
-									//  new form then
-								var form=doc.find('.left-corner > *').
-									not('.breadcrumb,#tabs-wrapper,#footer');
-								$(popup.contentDiv).html(form);
-								ldiw_waste_map_behavior_addpointcontent_fixup_form(
-										popup,title,temp_features_layer,
-										options,coords);
+					// Scroll form to beginning to ensure that
+					//   error messages are visible
+				this.form_popup.contentDiv.scrollTop=0;
+				}
+			else {
+					// Form submission was successful
 
-									// scroll form to beginning to ensure
-									//   that error messages are visible
-								popup.contentDiv.scrollTop=0;
-								}
-							else {
-									// Form submission was successful
-
-								var layers_to_refresh=temp_features_layer.
-										map.getLayersBy('drupalID',
-												options.features_layer);
-								for (var i in layers_to_refresh) {
-									layers_to_refresh[i].events.triggerEvent(
-													"refresh",{force:true});
-									}
-								ldiw_waste_map_behavior_addpointcontent_close_form(
-													temp_features_layer,options);
-								}
-							},
-					'html');
-			return false;
-			});
-	}
-
-function ldiw_waste_map_behavior_addpointcontent_sketchcomplete(args)
-{
-	return !this.form_popup;
-	}
-
-function ldiw_waste_map_behavior_addpointcontent_drawmenu(args)
-{
-	var options=this;	// Drupal options form values are in "this"
-	var layer=args.object;
-	var coords=args.feature.geometry.getBounds().getCenterLonLat();
-
-	var form_url=options.site_base_url.replace(/\/$/,'');
-	var form_title;
-	var coords_to_set_in_form;
-
-	var feature_to_edit=options.hover_control.last_highlighted_feature;
-	if (feature_to_edit && feature_to_edit.renderIntent == 'select') {
-		layer.removeFeatures(layer.features);
-
-		var node_id=feature_to_edit.fid;	//!!! Remove hardcoding of .fid
-		if (isNaN(node_id)) {
-			return;
+				var layers_to_refresh=this.temp_features_layer.map.
+						getLayersBy('drupalID',this.options.features_layer);
+				for (var i in layers_to_refresh) {
+					layers_to_refresh[i].events.triggerEvent(
+												"refresh",{force:true});
+					}
+				this.restart_editing_mode();
+				}
 			}
-		form_url+='/node/' + node_id + '/edit';
 
-		form_title=Drupal.t('Edit existing @type',
-								{'@type':options.content_type_name});
-		}
-	else {
-		form_url+='/node/add/' + options.content_type.replace('_','-');
-		form_title=Drupal.t('Add new @type',
-								{'@type':options.content_type_name});
-		coords_to_set_in_form=coords.clone().transform(
+	this.fixup_form=function()
+		{
+			var coords_map={	//!!! Remove hardcoding of field_coords
+					'field_coords[0][geo][lon]':
+								this.coords_to_set_in_form &&
+											this.coords_to_set_in_form.lon,
+					'field_coords[0][geo][lat]':
+								this.coords_to_set_in_form &&
+											this.coords_to_set_in_form.lat};
+			for (var fieldname in coords_map) {
+				var node=$(this.form_popup.contentDiv).find(
+											"[name='" + fieldname + "']");
+				if (node.length) {
+					if (this.coords_to_set_in_form) {
+						node.attr('value',coords_map[fieldname]);
+						}
+					node.parents('.form-item').hide();
+					}
+				}
+
+			$(this.form_popup.contentDiv).prepend(
+					'<b>' + this.form_title + '</b>'); //!!! Move style to CSS
+
+			Drupal.attachBehaviors(this.form_popup.contentDiv);
+
+			var state=this;
+			$(this.form_popup.contentDiv).find(':submit').click(function()
+						// This is also triggered when submitting the form
+						//   via keyboard, not just via click
+				{ state.submit_attribute=this.name+'='+this.value + '&'; });
+
+			$(this.form_popup.contentDiv).find('form').submit(function()
+				{
+					$.post(this.action,
+							state.submit_attribute + $(this).serialize(),
+							function(data) {
+								state.process_form_response(data);
+								},
+							'html');
+					return false;
+					});
+			}
+
+	this.sketchcomplete=function()
+		{
+			return !this.form_popup;
+			}
+
+	this.draw_menu=function(args)
+		{
+			var layer=args.object;
+			var coords=args.feature.geometry.getBounds().getCenterLonLat();
+
+			var form_url=this.options.site_base_url.replace(/\/$/,'');
+
+			var feature_to_edit=this.hover_control.last_highlighted_feature;
+			if (feature_to_edit && feature_to_edit.renderIntent == 'select') {
+				layer.removeFeatures(layer.features);
+
+				var node_id=feature_to_edit.fid; //!!! Remove hardcoding of .fid
+				if (isNaN(node_id)) {
+					return;
+					}
+				form_url+='/node/' + node_id + '/edit';
+
+				this.form_title=Drupal.t('Edit existing @type',
+								{'@type':this.options.content_type_name});
+				this.coords_to_set_in_form=null;
+				}
+			else {
+				form_url+='/node/add/' + this.options.content_type.replace('_','-');
+				this.form_title=Drupal.t('Add new @type',
+								{'@type':this.options.content_type_name});
+				this.coords_to_set_in_form=coords.clone().transform(
 								layer.map.getProjectionObject(),
 								new OpenLayers.Projection('EPSG:4326'));
-		}
+				}
 
-	options.form_popup=new OpenLayers.Popup.FramedCloud(
-			'ldiw_waste_map_behavior_addpointcontent_form',
-			coords,null,'Loading...',null,true,
-			function(e)
-				{
-					ldiw_waste_map_behavior_addpointcontent_close_form(
-															layer,options);
-					OpenLayers.Event.stop(e);
-					}
-			);
-	options.form_popup.panMapIfOutOfView=false;	// Avoid layer refresh which
-												//   would un-select the
-												//   feature we clicked on
-	options.hover_control.deactivate();
+			var state=this;
+			this.form_popup=new OpenLayers.Popup.FramedCloud(
+					'ldiw_waste_map_behavior_addpointcontent_form',
+					coords,null,'Loading...',null,true,
+					function(e)
+						{
+							state.restart_editing_mode();
+							OpenLayers.Event.stop(e);
+							}
+					);
+			this.form_popup.panMapIfOutOfView=false;
+								// Avoid layer refresh which would
+								//   un-select the feature we clicked on
+			this.hover_control.deactivate();
 
-		//!!! Deactivate map navigation (zoom, pan, ...) which would trigger
-		//  a layer refresh and thus un-select the feature we clicked on
+				//!!! Deactivate map navigation (zoom, pan, ...) which would trigger
+				//  a layer refresh and thus un-select the feature we clicked on
 
-		// Fetch form content using AJAX
+				// Fetch form content using AJAX
 
-	$(options.form_popup.contentDiv).load(form_url + ' #node-form',null,
-			function() {
-				ldiw_waste_map_behavior_addpointcontent_fixup_form(
-									options.form_popup,form_title,layer,
-									options,coords_to_set_in_form);
-				options.form_popup.updateSize();
-				});
+			var state=this;
+			$(this.form_popup.contentDiv).load(
+					form_url + ' #node-form',null,
+					function() {
+						state.fixup_form();
+						state.form_popup.updateSize();
+						});
 
-	args.feature.popup=options.form_popup;
-	layer.map.addPopup(options.form_popup,true);
-	}
+			args.feature.popup=this.form_popup;
+			layer.map.addPopup(this.form_popup,true);
+			}
 
-Drupal.behaviors.ldiw_waste_map_behavior_addpointcontent=function(context)
-{
-	var data=$(context).data('openlayers');
-	if (data && data.map.behaviors['ldiw_waste_map_behavior_addpointcontent']) {
+		/***********************/
+		/*****             *****/
+		/***** Constructor *****/
+		/*****             *****/
+		/***********************/
 
-		var options=
-				data.map.behaviors['ldiw_waste_map_behavior_addpointcontent'];
+	this.options=options;
+	this.form_popup=null;
 
-			// Create temporary features layer
+		// Create temporary features layer
 
-		var temp_features_layer=new OpenLayers.Layer.Vector(
+	this.temp_features_layer=new OpenLayers.Layer.Vector(
 					Drupal.t('Temporary Features Layer'),
 					{projection: new OpenLayers.Projection('EPSG:4326'),
 					styleMap: new OpenLayers.StyleMap(
 								{'default':data.map.styles.temporary}),
 					});
-		data.openlayers.addLayer(temp_features_layer);
+	data.openlayers.addLayer(this.temp_features_layer);
 
-			// Create panel with mode switching buttons
+		// Create panel with mode switching buttons
 
-		var invisible_stylemap=new OpenLayers.StyleMap(
+	var invisible_stylemap=new OpenLayers.StyleMap(
 									new OpenLayers.Style({pointRadius:0}));
-		options.drawfeature_control=new OpenLayers.Control.DrawFeature(
-						temp_features_layer,
+	this.drawfeature_control=new OpenLayers.Control.DrawFeature(
+						this.temp_features_layer,
 						OpenLayers.Handler.Point,
 						{'displayClass':'olControlDrawFeaturePoint',
 						'handlerOptions':{layerOptions:{
 											styleMap:invisible_stylemap}}}
 						);
-		var panel=new OpenLayers.Control.Panel();
-		panel.addControls([	new OpenLayers.Control.Navigation(),
-							options.drawfeature_control]);
-		panel.defaultControl=panel.controls[0];
+	var panel=new OpenLayers.Control.Panel();
+	panel.addControls([	new OpenLayers.Control.Navigation(),
+							this.drawfeature_control]);
+	panel.defaultControl=panel.controls[0];
 
-		//!!! on selecting Navigation, close options.form_popup
+	this.drawfeature_control.events.register('deactivate',this,
+														this.close_form);
+	this.temp_features_layer.events.register('sketchcomplete',this,
+														this.sketchcomplete);
+	this.temp_features_layer.events.register('featureadded',this,
+														this.draw_menu);
 
-		temp_features_layer.events.register('sketchcomplete',options,
-					ldiw_waste_map_behavior_addpointcontent_sketchcomplete);
-		temp_features_layer.events.register('featureadded',options,
-					ldiw_waste_map_behavior_addpointcontent_drawmenu);
+	data.openlayers.addControl(panel);
+   	panel.activate();
+   	panel.redraw();
 
-		data.openlayers.addControl(panel);
-    	panel.activate();
-    	panel.redraw();
+		// Create control to highlight existing points on hover
 
-			// Create control to highlight existing points on hover
-
-		options.hover_control=new OpenLayers.Control.SelectFeature(
-			data.openlayers.getLayersBy('drupalID',options.features_layer),
+	this.hover_control=new OpenLayers.Control.SelectFeature(
+			data.openlayers.getLayersBy('drupalID',
+											this.options.features_layer),
 			{hover: true,
 				onBeforeSelect: function(feature)
 					{
@@ -220,11 +229,19 @@ Drupal.behaviors.ldiw_waste_map_behavior_addpointcontent=function(context)
 						}
 				});
 
-			// Prevent hover_control hijacking clicks
+		// Prevent hover_control hijacking clicks
 
-		options.hover_control.handlers.feature.stopClick=false;
+	this.hover_control.handlers.feature.stopClick=false;
 
-		data.openlayers.addControl(options.hover_control);
-		options.hover_control.activate();
+	data.openlayers.addControl(this.hover_control);
+	this.hover_control.activate();
+	}
+
+Drupal.behaviors.ldiw_waste_map_behavior_addpointcontent=function(context)
+{
+	var data=$(context).data('openlayers');
+	if (data && data.map.behaviors['ldiw_waste_map_behavior_addpointcontent']) {
+		new ldiw_waste_map_behavior_addpointcontent_state(data,
+			data.map.behaviors['ldiw_waste_map_behavior_addpointcontent']);
 		}
 	};
