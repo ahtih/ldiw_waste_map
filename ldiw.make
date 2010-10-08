@@ -21,7 +21,7 @@ projects[geo][patch][] = "http://drupal.org/files/issues/geo-883032.patch"
 
 projects[geoclustering][type] = "module"
 projects[geoclustering][download][type] = "git"
-projects[geoclustering][download][url] = "git://http://github.com/ahtih/Geoclustering.git"
+projects[geoclustering][download][url] = "git://github.com/ahtih/Geoclustering.git"
 
 projects[ldiw_waste_map][type] = "module"
 projects[ldiw_waste_map][download][type] = "git"
