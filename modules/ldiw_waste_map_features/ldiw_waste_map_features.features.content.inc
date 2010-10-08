@@ -208,12 +208,61 @@ function ldiw_waste_map_features_content_default_fields() {
     ),
   );
 
+  // Exported field: field_volume
+  $fields['waste_point-field_volume'] = array(
+    'field_name' => 'field_volume',
+    'type_name' => 'waste_point',
+    'display_settings' => array(
+      'label' => array(
+        'format' => 'above',
+        'exclude' => 0,
+      ),
+      'teaser' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'full' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      '4' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+    ),
+    'widget_active' => '1',
+    'type' => 'computed',
+    'required' => '0',
+    'multiple' => '0',
+    'module' => 'computed_field',
+    'active' => '1',
+    'code' => '$diameter=is_null($node->field_diameter[0][\'value\']) ? 2 : $node->field_diameter[0][\'value\'];
+$node_field[0][\'value\'] = max(0.1,min(0.25,$diameter*0.2/5)) * max(0.3,$diameter*$diameter);',
+    'display_format' => '$display = $node_field_item[\'value\'];',
+    'store' => 1,
+    'data_type' => 'float',
+    'data_length' => '24',
+    'data_not_NULL' => 0,
+    'data_default' => '',
+    'data_sortable' => 0,
+    'widget' => array(
+      'default_value' => NULL,
+      'default_value_php' => NULL,
+      'label' => 'Volume',
+      'weight' => '6',
+      'description' => 'Volume of waste, in m3',
+      'type' => 'computed',
+      'module' => 'computed_field',
+    ),
+  );
+
   // Translatables
   // Included for use with string extractors like potx.
   t('Coordinates');
   t('Diameter');
   t('Number of tires');
   t('Photo');
+  t('Volume');
 
   return $fields;
 }

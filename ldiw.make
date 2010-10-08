@@ -3,6 +3,7 @@ core = 6.x
 projects[] = drupal
 
 projects[] = auto_nodetitle
+projects[] = computed_field
 projects[] = cck
 projects[] = ctools
 projects[] = features

@@ -1,8 +1,6 @@
 <?php
 // $Id$
 
-//!!! include auto nodetitle configuration & dependency, ideally as a Feature
-
 /**
  * Implementation of hook_ctools_plugin_directory()
  */
@@ -46,7 +44,8 @@ function ldiw_waste_map_geoclustering_tree_params()
 	$tree_params->geofield_name='field_coords';
 	$tree_params->node_conditions=array('type' => 'waste_point',
 										'status' => 1);
-	$tree_params->summed_field_names=array(	'field_diameter',
+	$tree_params->summed_field_names=array(	'field_volume',
+											'field_diameter',
 											'field_nr_of_tires');
 	return array($tree_params->name => $tree_params);
 	}
