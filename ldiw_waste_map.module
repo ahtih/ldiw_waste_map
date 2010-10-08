@@ -140,5 +140,7 @@ function ldiw_waste_map_form_alter(&$form,$form_state,$form_id)
 
 		$form['body_field']['body']['#type']='textfield';
 		$form['body_field']['body']['#maxlength']='2000';
+
+		unset($form['buttons']['preview']);
 		}
 	}
