@@ -14,8 +14,8 @@ function ldiw_waste_map_features_openlayers_presets() {
   $openlayers_presets->data = array(
     'width' => 'auto',
     'height' => '800px',
-    'image_path' => 'http://openlayers.org/api/img/',
-    'css_path' => 'http://openlayers.org/api/theme/default/style.css',
+    'image_path' => 'http://openlayers.org/api/2.9/img/',
+    'css_path' => 'http://openlayers.org/api/2.9/theme/default/style.css',
     'proxy_host' => '',
     'hide_empty_map' => 0,
     'center' => array(
