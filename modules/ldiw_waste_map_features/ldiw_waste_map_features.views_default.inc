@@ -23,6 +23,7 @@ function ldiw_waste_map_features_views_default_views() {
   $handler->override_option('cache', array(
     'type' => 'none',
   ));
+  $handler->override_option('title', 'Waste Map');
   $handler->override_option('style_plugin', 'openlayers_map');
   $handler->override_option('style_options', array(
     'preset' => 'waste_map_wfs',
