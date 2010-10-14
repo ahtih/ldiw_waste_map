@@ -16,8 +16,6 @@ function ldiw_waste_map_ctools_plugin_directory($module, $plugin) {
 function ldiw_waste_map_ctools_plugin_api($module, $api) {
   if ($module == "openlayers") {
     switch ($api) {
-      case 'openlayers_styles':
-        return array('version' => 1);
       case 'openlayers_layers':
         return array('version' => 1);
       case 'openlayers_behaviors':
@@ -48,40 +46,6 @@ function ldiw_waste_map_geoclustering_tree_params()
 											'field_diameter',
 											'field_nr_of_tires');
 	return array($tree_params->name => $tree_params);
-	}
-
-/**
- * Implementation of hook_openlayers_styles()
- */
-function ldiw_waste_map_openlayers_styles()
-{
-	$styles=array();
-
-	$style=new stdClass();
-	$style->api_version=1;
-	$style->name='waste_point_style';
-	$style->title=t('Waste point style');
-	$style->description=$style->title;
-	$style->data=array(
-		'pointRadius' => array('plugin' => 'ldiw_waste_map_point_style_plugin',
-							'method' => 'getpointRadius'),
-		'fillColor' => array('plugin' => 'ldiw_waste_map_point_style_plugin',
-							'method' => 'fillColor'),
-		'strokeColor' => '#800000',
-		'strokeWidth' => '2',
-		'strokeOpacity' => '0.4',
-		);
-	$styles[$style->name]=$style;
-
-	$style=clone $style;
-	$style->name='waste_point_highlight_style';
-	$style->title=t('Waste point highlight style');
-	$style->description=$style->title;
-	$style->data['strokeWidth']='4';
-	$style->data['strokeOpacity']='1';
-	$styles[$style->name]=$style;
-
-	return $styles;
 	}
 
 /**
