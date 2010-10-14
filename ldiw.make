@@ -13,7 +13,7 @@ projects[] = strongarm
 projects[] = views
 projects[] = formfilter
 
-projects[openlayers][patch][] = "http://drupal.org/files/issues/style_plugin8_0.patch"
+projects[openlayers][version] = 2.x-dev
 projects[wfs][patch][] = "http://drupal.org/files/issues/wfs-filter-changes.patch"
 projects[geo][patch][] = "http://drupal.org/files/issues/geo-filter-float.patch"
 projects[geo][patch][] = "http://drupal.org/files/issues/geo-ewkb-parsing.patch"
