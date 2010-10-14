@@ -37,8 +37,10 @@ Drupal.theme.openlayersPopup=function(feature)
 			}
 		}
 	else {
-		output='Volume ' + volume_formatted + 'm&sup3;<br>' +
-				'Diameter ' + attrs.field_diameter_value + 'm';
+		output='Volume ' + volume_formatted + 'm&sup3;';
+		if (attrs.field_diameter_value != '') {
+			output+='<br>Diameter ' + attrs.field_diameter_value + 'm';
+			}
 		if (attrs.field_nr_of_tires_value != '' &&
 								attrs.field_nr_of_tires_value != '0') {
 			output+='<br>Contains ' + attrs.field_nr_of_tires_value +
