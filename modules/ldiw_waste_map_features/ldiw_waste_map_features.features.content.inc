@@ -6,6 +6,256 @@
 function ldiw_waste_map_features_content_default_fields() {
   $fields = array();
 
+  // Exported field: field_composition_biodegradable
+  $fields['waste_point-field_composition_biodegradable'] = array(
+    'field_name' => 'field_composition_biodegradable',
+    'type_name' => 'waste_point',
+    'display_settings' => array(
+      'label' => array(
+        'format' => 'above',
+        'exclude' => 0,
+      ),
+      'teaser' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'full' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      '4' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+    ),
+    'widget_active' => '1',
+    'type' => 'number_float',
+    'required' => '0',
+    'multiple' => '0',
+    'module' => 'number',
+    'active' => '1',
+    'prefix' => '',
+    'suffix' => '%',
+    'min' => '0',
+    'max' => '100',
+    'allowed_values' => '',
+    'allowed_values_php' => '',
+    'widget' => array(
+      'default_value' => array(
+        '0' => array(
+          'value' => '',
+          '_error_element' => 'default_value_widget][field_composition_biodegradable][0][value',
+        ),
+      ),
+      'default_value_php' => NULL,
+      'label' => 'Composition: biodegradable',
+      'weight' => '8',
+      'description' => 'Percentage (in volume) of soil, biomass, sand etc',
+      'type' => 'number',
+      'module' => 'number',
+    ),
+  );
+
+  // Exported field: field_composition_construction
+  $fields['waste_point-field_composition_construction'] = array(
+    'field_name' => 'field_composition_construction',
+    'type_name' => 'waste_point',
+    'display_settings' => array(
+      'label' => array(
+        'format' => 'above',
+        'exclude' => 0,
+      ),
+      'teaser' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'full' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      '4' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+    ),
+    'widget_active' => '1',
+    'type' => 'number_float',
+    'required' => '0',
+    'multiple' => '0',
+    'module' => 'number',
+    'active' => '1',
+    'prefix' => '',
+    'suffix' => '%',
+    'min' => '0',
+    'max' => '100',
+    'allowed_values' => '',
+    'allowed_values_php' => '',
+    'widget' => array(
+      'default_value' => array(
+        '0' => array(
+          'value' => '',
+          '_error_element' => 'default_value_widget][field_composition_construction][0][value',
+        ),
+      ),
+      'default_value_php' => NULL,
+      'label' => 'Composition: construction',
+      'weight' => '9',
+      'description' => 'Percentage (in volume) of construction waste',
+      'type' => 'number',
+      'module' => 'number',
+    ),
+  );
+
+  // Exported field: field_composition_dangerous
+  $fields['waste_point-field_composition_dangerous'] = array(
+    'field_name' => 'field_composition_dangerous',
+    'type_name' => 'waste_point',
+    'display_settings' => array(
+      'label' => array(
+        'format' => 'above',
+        'exclude' => 0,
+      ),
+      'teaser' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'full' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      '4' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+    ),
+    'widget_active' => '1',
+    'type' => 'number_float',
+    'required' => '0',
+    'multiple' => '0',
+    'module' => 'number',
+    'active' => '1',
+    'prefix' => '',
+    'suffix' => '%',
+    'min' => '0',
+    'max' => '100',
+    'allowed_values' => '',
+    'allowed_values_php' => '',
+    'widget' => array(
+      'default_value' => array(
+        '0' => array(
+          'value' => '',
+          '_error_element' => 'default_value_widget][field_composition_dangerous][0][value',
+        ),
+      ),
+      'default_value_php' => NULL,
+      'label' => 'Composition: dangerous waste and tires',
+      'weight' => '7',
+      'description' => 'Percentage (in volume) of dangerous waste and tires',
+      'type' => 'number',
+      'module' => 'number',
+    ),
+  );
+
+  // Exported field: field_composition_large
+  $fields['waste_point-field_composition_large'] = array(
+    'field_name' => 'field_composition_large',
+    'type_name' => 'waste_point',
+    'display_settings' => array(
+      'label' => array(
+        'format' => 'above',
+        'exclude' => 0,
+      ),
+      'teaser' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'full' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      '4' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+    ),
+    'widget_active' => '1',
+    'type' => 'number_float',
+    'required' => '0',
+    'multiple' => '0',
+    'module' => 'number',
+    'active' => '1',
+    'prefix' => '',
+    'suffix' => '%',
+    'min' => '0',
+    'max' => '100',
+    'allowed_values' => '',
+    'allowed_values_php' => '',
+    'widget' => array(
+      'default_value' => array(
+        '0' => array(
+          'value' => '',
+          '_error_element' => 'default_value_widget][field_composition_large][0][value',
+        ),
+      ),
+      'default_value_php' => NULL,
+      'label' => 'Composition: large',
+      'weight' => '6',
+      'description' => 'Percentage (in volume) of large objects like furniture',
+      'type' => 'number',
+      'module' => 'number',
+    ),
+  );
+
+  // Exported field: field_composition_other
+  $fields['waste_point-field_composition_other'] = array(
+    'field_name' => 'field_composition_other',
+    'type_name' => 'waste_point',
+    'display_settings' => array(
+      'label' => array(
+        'format' => 'above',
+        'exclude' => 0,
+      ),
+      'teaser' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'full' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      '4' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+    ),
+    'widget_active' => '1',
+    'type' => 'number_float',
+    'required' => '0',
+    'multiple' => '0',
+    'module' => 'number',
+    'active' => '1',
+    'prefix' => '',
+    'suffix' => '%',
+    'min' => '0',
+    'max' => '100',
+    'allowed_values' => '',
+    'allowed_values_php' => '',
+    'widget' => array(
+      'default_value' => array(
+        '0' => array(
+          'value' => '',
+          '_error_element' => 'default_value_widget][field_composition_other][0][value',
+        ),
+      ),
+      'default_value_php' => NULL,
+      'label' => 'Composition: other',
+      'weight' => '10',
+      'description' => 'Percentage (in volume) of other waste',
+      'type' => 'number',
+      'module' => 'number',
+    ),
+  );
+
   // Exported field: field_coords
   $fields['waste_point-field_coords'] = array(
     'field_name' => 'field_coords',
@@ -201,7 +451,7 @@ function ldiw_waste_map_features_content_default_fields() {
       'default_image' => NULL,
       'use_default_image' => 0,
       'label' => 'Photo',
-      'weight' => '5',
+      'weight' => '11',
       'description' => '',
       'type' => 'imagefield_widget',
       'module' => 'imagefield',
@@ -249,7 +499,7 @@ $node_field[0][\'value\'] = max(0.1,min(0.25,$diameter*0.2/5)) * max(0.3,$diamet
       'default_value' => NULL,
       'default_value_php' => NULL,
       'label' => 'Volume',
-      'weight' => '6',
+      'weight' => '5',
       'description' => 'Volume of waste, in m3',
       'type' => 'computed',
       'module' => 'computed_field',
@@ -258,6 +508,11 @@ $node_field[0][\'value\'] = max(0.1,min(0.25,$diameter*0.2/5)) * max(0.3,$diamet
 
   // Translatables
   // Included for use with string extractors like potx.
+  t('Composition: biodegradable');
+  t('Composition: construction');
+  t('Composition: dangerous waste and tires');
+  t('Composition: large');
+  t('Composition: other');
   t('Coordinates');
   t('Diameter');
   t('Number of tires');

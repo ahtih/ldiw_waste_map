@@ -44,7 +44,12 @@ function ldiw_waste_map_geoclustering_tree_params()
 										'status' => 1);
 	$tree_params->summed_field_names=array(	'field_volume',
 											'field_diameter',
-											'field_nr_of_tires');
+											'field_nr_of_tires',
+											'field_composition_large',
+											'field_composition_dangerous',
+											'field_composition_biodegradable',
+											'field_composition_construction',
+											'field_composition_other');
 	return array($tree_params->name => $tree_params);
 	}
 
