@@ -324,7 +324,7 @@ function ldiw_waste_map_features_views_default_views() {
       'empty_zero' => 0,
       'link_to_node' => 0,
       'label_type' => 'widget',
-      'format' => 'default',
+      'format' => 'unformatted',
       'multiple' => array(
         'group' => TRUE,
         'multiple_number' => '',
