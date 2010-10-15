@@ -20,7 +20,7 @@ function ldiw_waste_map_features_openlayers_presets() {
     'hide_empty_map' => 0,
     'center' => array(
       'initial' => array(
-        'centerpoint' => '25.263061522439, 58.645581224282',
+        'centerpoint' => '14.78210449161, 46.121148845796',
         'zoom' => '8',
       ),
       'restrict' => array(
@@ -40,6 +40,8 @@ function ldiw_waste_map_features_openlayers_presets() {
       'openlayers_behavior_keyboarddefaults' => array(),
       'openlayers_behavior_layerswitcher' => array(
         'ascending' => 1,
+        'roundedCorner' => 1,
+        'roundedCornerColor' => 'darkblue',
       ),
       'openlayers_behavior_navigation' => array(
         'zoomWheelEnabled' => 1,
