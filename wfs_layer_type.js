@@ -4,12 +4,13 @@
  * Openlayer layer handler for WFS BBOX Vector Layer Type
  */
 Drupal.openlayers.layer.ldiw_waste_map_wfs = function(title, map, options) {
-  options_2 = {
+  var layer_options = {
     drupalID: options.drupalID,
     strategies: [new OpenLayers.Strategy.BBOX({	resFactor:1.4,
 												ratio:1})],
     projection: "EPSG:4326",
     buffer: 0,
+	rendererOptions: {zIndexing: true},
     protocol: new OpenLayers.Protocol.WFS({
         url: options.base_url.replace(/\/$/,'') + '/' + options.url.replace(/^\//,''),
         featurePrefix: 'drupal',
@@ -24,7 +25,7 @@ Drupal.openlayers.layer.ldiw_waste_map_wfs = function(title, map, options) {
       })
   };
 
-  var layer = new OpenLayers.Layer.Vector(title, options_2);
+  var layer=new OpenLayers.Layer.Vector(title,layer_options);
   layer.styleMap=Drupal.openlayers.getStyleMap(map,options.drupalID);
   return layer;
 };

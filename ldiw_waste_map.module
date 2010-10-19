@@ -114,3 +114,19 @@ function ldiw_waste_map_form_alter(&$form,$form_state,$form_id)
 		unset($form['buttons']['preview']);
 		}
 	}
+
+/**
+ * Implementation of hook_menu()
+ */
+
+function ldiw_waste_map_menu()
+{
+	return array(
+		file_directory_path() . '/ldiw_waste_map/waste_point_icon' => array(
+			'file' =>
+				'plugins/style_plugin/ldiw_waste_map_point_style_plugin.inc',
+			'page callback' => 'ldiw_waste_map_waste_point_icon',
+			'access callback' => TRUE,
+			'type' => MENU_CALLBACK,
+			));
+	}

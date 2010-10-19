@@ -26,6 +26,11 @@ Many patches to other modules are needed for Waste Map to really work:
 - http://drupal.org/files/issues/wfs-filter-changes.patch (http://drupal.org/node/745200)
 - http://drupal.org/files/issues/geo-filter-float.patch (http://drupal.org/node/883010)
 - http://drupal.org/files/issues/geo-ewkb-parsing.patch (http://drupal.org/node/883020)
+- http://drupal.org/files/issues/openlayers-backgroundGraphic-style-props.patch (http://drupal.org/node/945728)
+
+You also need to patch OpenLayers JavaScript library:
+- http://trac.osgeo.org/openlayers/ticket/2658
+- http://trac.osgeo.org/openlayers/ticket/2891
 
 To see anything on Waste Map, you need to add some content (nodes having
 "Waste Point" content type) using the usual Drupal methods

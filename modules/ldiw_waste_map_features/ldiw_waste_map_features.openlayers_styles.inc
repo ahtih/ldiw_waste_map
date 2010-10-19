@@ -12,19 +12,37 @@ function ldiw_waste_map_features_openlayers_styles() {
   $openlayers_styles->title = 'Waste point highlight style';
   $openlayers_styles->description = 'Waste point highlight style';
   $openlayers_styles->data = array(
+    'externalGraphic' => array(
+      'plugin' => 'ldiw_waste_map_point_style_plugin',
+    ),
     'pointRadius' => array(
       'plugin' => 'ldiw_waste_map_point_style_plugin',
     ),
     'fillColor' => array(
       'plugin' => 'ldiw_waste_map_point_style_plugin',
     ),
-    'strokeColor' => '#800000',
-    'strokeWidth' => 4,
+    'strokeColor' => '#EE9900',
+    'strokeWidth' => 0,
     'fillOpacity' => 1,
     'strokeOpacity' => 1,
     'strokeLinecap' => 'round',
     'strokeDashstyle' => 'solid',
     'graphicOpacity' => 1,
+    'graphicZIndex' => 1,
+    'backgroundGraphic' => 'sites/all/modules/ldiw_waste_map/img/selected-marker.png',
+    'backgroundWidth' => array(
+      'plugin' => 'ldiw_waste_map_point_style_plugin',
+    ),
+    'backgroundHeight' => array(
+      'plugin' => 'ldiw_waste_map_point_style_plugin',
+    ),
+    'backgroundXOffset' => array(
+      'plugin' => 'ldiw_waste_map_point_style_plugin',
+    ),
+    'backgroundYOffset' => array(
+      'plugin' => 'ldiw_waste_map_point_style_plugin',
+    ),
+    'backgroundGraphicZIndex' => 0,
     'labelAlign' => 'cm',
   );
 
@@ -36,14 +54,15 @@ function ldiw_waste_map_features_openlayers_styles() {
   $openlayers_styles->title = 'Waste point style';
   $openlayers_styles->description = 'Waste point style';
   $openlayers_styles->data = array(
+    'externalGraphic' => array(
+      'plugin' => 'ldiw_waste_map_point_style_plugin',
+    ),
     'pointRadius' => array(
       'plugin' => 'ldiw_waste_map_point_style_plugin',
     ),
     'fillColor' => array(
       'plugin' => 'ldiw_waste_map_point_style_plugin',
     ),
-    'strokeColor' => '#800000',
-    'strokeWidth' => 2,
     'fillOpacity' => 1,
     'strokeOpacity' => 0.4,
     'strokeLinecap' => 'round',
