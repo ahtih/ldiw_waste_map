@@ -13,7 +13,7 @@ function ldiw_waste_map_features_openlayers_presets() {
   $openlayers_presets->description = 'Waste Map';
   $openlayers_presets->data = array(
     'width' => 'auto',
-    'height' => '800px',
+    'height' => '500px',
     'image_path' => 'http://openlayers.org/api/2.9/img/',
     'css_path' => 'http://openlayers.org/api/2.9/theme/default/style.css',
     'proxy_host' => '',
@@ -49,9 +49,9 @@ function ldiw_waste_map_features_openlayers_presets() {
       'openlayers_behavior_panzoombar' => array(),
       'openlayers_behavior_scaleline' => array(),
     ),
-    'default_layer' => 'google_normal',
+    'default_layer' => 'osm_mapnik',
     'layers' => array(
-      'google_normal' => 'google_normal',
+      'osm_mapnik' => 'osm_mapnik',
       'waste_map_wfs' => 'waste_map_wfs',
     ),
     'layer_styles' => array(),
