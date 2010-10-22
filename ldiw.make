@@ -15,7 +15,6 @@ projects[] = formfilter
 
 projects[openlayers][version] = 2.x-dev
 
-projects[openlayers][patch][] = "http://drupal.org/files/issues/openlayers-backgroundGraphic-style-props.patch"
 projects[wfs][patch][] = "http://drupal.org/files/issues/wfs-filter-changes.patch"
 projects[geo][patch][] = "http://drupal.org/files/issues/geo-filter-float.patch"
 projects[geo][patch][] = "http://drupal.org/files/issues/geo-ewkb-parsing.patch"
