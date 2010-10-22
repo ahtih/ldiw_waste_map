@@ -29,8 +29,11 @@ class openlayers_style_plugin_point_style_plugin
 
 	function render()
 		{
-			drupal_add_js(drupal_get_path('module', 'ldiw_waste_map') .
+			drupal_add_js(drupal_get_path('module','ldiw_waste_map') .
 				'/plugins/style_plugin/ldiw_waste_map_point_style_plugin.js');
+			drupal_add_js(array('ldiw_waste_map_point_style_plugin_icons_base_url' =>
+					$GLOBALS['base_url'] . '/' . file_directory_path() .
+					'/ldiw_waste_map/waste_point_icon/'),'setting');
 			}
 	}
 

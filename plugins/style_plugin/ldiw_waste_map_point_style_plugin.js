@@ -79,9 +79,8 @@ Drupal.openlayers.style_plugin.ldiw_waste_map_point_style_plugin.prototype=
 			for (var i=0;i < composition.length;i++)
 				composition[i]=composition[i].join(':');
 
-			//!!! use base_url and file_directory_path() here
-			return '/sites/default/files/ldiw_waste_map/waste_point_icon/' +
-											composition.join('_') + '.png';
+			return Drupal.settings.ldiw_waste_map_point_style_plugin_icons_base_url +
+					composition.join('_') + '.png';
 			},
 
 	calc_fillColor:function(feature)
