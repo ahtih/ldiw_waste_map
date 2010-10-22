@@ -3,34 +3,36 @@
 
 // Define plugin for CTools
 $plugin = array(
-  'title' => t('Waste point style plugin'),
-  'description' => t('Waste point style plugin'),
-  'style_plugin' => array(
-    'class' => 'openlayers_style_plugin_point_style_plugin',
-    'parent' => 'openlayers_style_plugin',
-  ),
-);
+	'title' => t('Waste point style plugin'),
+	'description' => t('Waste point style plugin'),
+	'style_plugin' => array(
+		'class' => 'openlayers_style_plugin_point_style_plugin',
+		'parent' => 'openlayers_style_plugin'),
+	);
 
-class openlayers_style_plugin_point_style_plugin extends 
-  openlayers_style_plugin {
+//!!! hook_requirements()'is kontrollida, kas openlayers_style_plugin on olemas
 
-  function get_context_properties() {
-    return array(
-        'pointRadius' => 'calc_pointRadius',
-		'fillColor' => 'calc_fillColor',
-		'externalGraphic' => 'calc_externalGraphic',
-		'backgroundWidth' => 'calc_backgroundWidth',
-		'backgroundHeight' => 'calc_backgroundHeight',
-		'backgroundXOffset' => 'calc_backgroundXOffset',
-		'backgroundYOffset' => 'calc_backgroundYOffset',
-    );
-  }
+class openlayers_style_plugin_point_style_plugin
+										extends openlayers_style_plugin {
+	function get_context_properties()
+		{
+			return array(
+				'pointRadius' => 'calc_pointRadius',
+				'fillColor' => 'calc_fillColor',
+				'externalGraphic' => 'calc_externalGraphic',
+				'backgroundWidth' => 'calc_backgroundWidth',
+				'backgroundHeight' => 'calc_backgroundHeight',
+				'backgroundXOffset' => 'calc_backgroundXOffset',
+				'backgroundYOffset' => 'calc_backgroundYOffset',
+				);
+			}
 
-  function render() {
-    drupal_add_js(drupal_get_path('module', 'ldiw_waste_map') .
-      '/plugins/style_plugin/ldiw_waste_map_point_style_plugin.js');
-  }
-}
+	function render()
+		{
+			drupal_add_js(drupal_get_path('module', 'ldiw_waste_map') .
+				'/plugins/style_plugin/ldiw_waste_map_point_style_plugin.js');
+			}
+	}
 
 function ldiw_waste_map_waste_point_icon()
 {
@@ -79,8 +81,9 @@ function ldiw_waste_map_waste_point_icon()
 
 	file_transfer($cache_fname,$headers);
 
-	//!!! implement hook_requirements() to check for directory writability
+	//!!! Create cache directory during install
 	//!!! delete cache directory upon uninstall
+	//!!! implement hook_requirements() to check for directory writability
 	}
 
 function ldiw_waste_map_waste_point_generate_icon($dest_fname,
