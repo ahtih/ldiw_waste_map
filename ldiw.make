@@ -16,9 +16,15 @@ projects[] = formfilter
 projects[openlayers][version] = 2.x-dev
 
 projects[wfs][patch][] = "http://drupal.org/files/issues/wfs-filter-changes.patch"
+
+projects[geo][download][type] = "cvs"
+projects[geo][download][module] = "contributions/modules/geo"
+projects[geo][download][revision] = HEAD
+projects[geo][patch][] = "http://drupal.org/files/issues/geo_openlayers_0.patch"
 projects[geo][patch][] = "http://drupal.org/files/issues/geo-filter-float.patch"
 projects[geo][patch][] = "http://drupal.org/files/issues/geo-ewkb-parsing.patch"
 projects[geo][patch][] = "http://drupal.org/files/issues/geo-883032.patch"
+projects[geo][patch][] = "http://drupal.org/files/issues/geo-table-prefixes-776436.patch"
 
 projects[geoclustering][type] = "module"
 projects[geoclustering][download][type] = "git"
