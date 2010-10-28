@@ -106,11 +106,15 @@ function ldiw_waste_map_form_alter(&$form,$form_state,$form_id)
 				array('menu'),
 				array('body_field','teaser_js'),
 				array('body_field','teaser_include'),
+				array('book'),
+				array('attachments'),
 				));
 
 		$form['body_field']['body']['#type']='textfield';
 		$form['body_field']['body']['#maxlength']='2000';
 
+		unset($form['book']['plid']);
+		unset($form['attachments']['wrapper']['new']['attach']);
 		unset($form['buttons']['preview']);
 		}
 	}
