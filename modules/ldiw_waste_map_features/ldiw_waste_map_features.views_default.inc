@@ -12,7 +12,7 @@ function ldiw_waste_map_features_views_default_views() {
   $view->description = 'Waste Map WFS OpenLayers';
   $view->tag = '';
   $view->view_php = '';
-  $view->base_table = 'node';
+  $view->base_table = 'files';
   $view->is_cacheable = FALSE;
   $view->api_version = 2;
   $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
