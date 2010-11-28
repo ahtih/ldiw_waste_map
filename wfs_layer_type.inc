@@ -20,19 +20,18 @@ class ldiw_waste_map_layer_type_wfs extends openlayers_layer_type {
    */
 	function options_init()
 		{
-			global $base_url;
 			return array(
-					'base_url' => $base_url,
-					'layer_type' => 'ldiw_waste_map_wfs',
-					'layer_handler' => 'ldiw_waste_map_wfs',
-					'projection' => array('4326', '900913'),
-					'baselayer' => FALSE,
-					'typeName' => '',
-					'formatOptions' => array(
-							'extractStyles' => TRUE,
-							'extractAttributes' => TRUE,
-							),
-					);
+				'base_url' => substr(url('.',array('absolute'=>TRUE)),0,-1),
+				'layer_type' => 'ldiw_waste_map_wfs',
+				'layer_handler' => 'ldiw_waste_map_wfs',
+				'projection' => array('4326', '900913'),
+				'baselayer' => FALSE,
+				'typeName' => '',
+				'formatOptions' => array(
+						'extractStyles' => TRUE,
+						'extractAttributes' => TRUE,
+						),
+				);
 			}
 
   /**

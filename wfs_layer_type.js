@@ -12,7 +12,7 @@ Drupal.openlayers.layer.ldiw_waste_map_wfs = function(title, map, options) {
     buffer: 0,
 	rendererOptions: {zIndexing: true},
     protocol: new OpenLayers.Protocol.WFS({
-        url: options.base_url.replace(/\/$/,'') + '/' + options.url.replace(/^\//,''),
+        url: options.base_url + options.url,
         featurePrefix: 'drupal',
         featureType: options.typeName,
         geometryName: options.geometryName,
