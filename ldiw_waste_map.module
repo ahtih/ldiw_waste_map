@@ -114,6 +114,7 @@ function ldiw_waste_map_form_alter(&$form,$form_state,$form_id)
 		$form['body_field']['body']['#maxlength']='2000';
 
 		unset($form['book']['plid']);
+		unset($form['book']['pick-book']);
 		unset($form['attachments']['wrapper']['new']['attach']);
 		unset($form['buttons']['preview']);
 		}
