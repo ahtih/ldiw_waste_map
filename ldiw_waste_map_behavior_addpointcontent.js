@@ -112,7 +112,7 @@ function ldiw_waste_map_behavior_addpointcontent_state(data,options)
 			var layer=args.object;
 			var coords=args.feature.geometry.getBounds().getCenterLonLat();
 
-			var form_url=this.options.site_base_url.replace(/\/$/,'');
+			var form_url=this.options.node_base_url;
 
 			var feature_to_edit=this.hover_control.last_highlighted_feature;
 			if (feature_to_edit && feature_to_edit.renderIntent == 'select') {
@@ -122,14 +122,14 @@ function ldiw_waste_map_behavior_addpointcontent_state(data,options)
 				if (isNaN(node_id)) {
 					return;
 					}
-				form_url+='/node/' + node_id + '/edit';
+				form_url+=node_id + '/edit';
 
 				this.form_title=Drupal.t('Edit existing @type',
 								{'@type':this.options.content_type_name});
 				this.coords_to_set_in_form=null;
 				}
 			else {
-				form_url+='/node/add/' + this.options.content_type.replace('_','-');
+				form_url+='add/' + this.options.content_type.replace('_','-');
 				this.form_title=Drupal.t('Add new @type',
 								{'@type':this.options.content_type_name});
 				this.coords_to_set_in_form=coords.clone().transform(

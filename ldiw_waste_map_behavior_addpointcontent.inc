@@ -44,9 +44,8 @@ class ldiw_waste_map_behavior_addpointcontent extends openlayers_behavior
 		drupal_add_js(drupal_get_path('module','ldiw_waste_map') .
 							'/ldiw_waste_map_behavior_addpointcontent.js');
 
-		global $base_url;
 		return array_merge($this->options,array(
-				'site_base_url' => $base_url,
+				'node_base_url' => url('node/',array('absolute'=>TRUE)),
 				'content_type_name' => node_get_types('type',
 									$this->options['content_type'])->name));
 		}
