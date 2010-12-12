@@ -196,13 +196,19 @@ function ldiw_waste_map_behavior_addpointcontent_state(data,options)
 						this.temp_features_layer,
 						OpenLayers.Handler.Point,
 						{'displayClass':'olControlDrawFeaturePoint',
+						'title':Drupal.t('Add/Edit Waste Point'),
 						'handlerOptions':{layerOptions:{
 											styleMap:invisible_stylemap}}}
 						);
 	var panel=new OpenLayers.Control.Panel();
-	panel.addControls([	new OpenLayers.Control.Navigation(),
+	panel.addControls([	new OpenLayers.Control.Navigation(
+							{'title':Drupal.t('Move map')}),
 							this.drawfeature_control]);
 	panel.defaultControl=panel.controls[0];
+
+	for (var i=0;i < panel.controls.length;i++) {
+		$(panel.controls[i].panel_div).text(panel.controls[i].title);
+		}
 
 	this.drawfeature_control.events.register('deactivate',this,
 														this.close_form);

@@ -1,28 +1,43 @@
 /* $Id$ */
 
 .olControlPanel  {
-    float:right;
-    right: 0px;
-    height: 30px; 
-    width: 200px;
-}
+	float:right;
+	right: 0px;
+	height: 60px; 
+	width: 160px;
+	}
+
 .olControlPanel div { 
-  background-image: url("http://openlayers.org/api/theme/default/img/editing_tool_bar.png");
-  background-repeat: no-repeat;
-  float:right;
-  width:  24px;
-  height: 24px;
-  margin: 5px;
-}
+	float:right;
+	width:  160px;
+	height: 24px;
+	line-height: 24px;
+	border-style: solid;
+	border-color: #666666;
+	text-align: center;
+	font-weight: bold;
+	}
+
 .olControlPanel .olControlNavigationItemActive { 
-  background-position: -103px -23px; 
-}
+	background-color: #f1c02a; 
+	border-width: 3px;
+	margin: 4px;
+	}
+
 .olControlPanel .olControlNavigationItemInactive { 
-  background-position: -103px -0px; 
-}
+	background-color: #e9e7e3;
+	border-width: 2px;
+	margin: 5px;
+	}
+
 .olControlPanel .olControlDrawFeaturePointItemActive { 
-  background-position: -77px -23px; 
-}
+	background-color: #f1c02a; 
+	border-width: 3px;
+	margin: 4px;
+	}
+
 .olControlPanel .olControlDrawFeaturePointItemInactive { 
-  background-position: -77px -0px; 
-}
+	background-color: #e9e7e3;
+	border-width: 2px;
+	margin: 5px;
+	}
