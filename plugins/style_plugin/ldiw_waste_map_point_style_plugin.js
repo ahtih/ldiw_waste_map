@@ -43,10 +43,7 @@ Drupal.theme.openlayersPopup=function(feature)
 				composition;
 		}
 	else {
-		output='Volume ' + volume_formatted + 'm&sup3;';
-		if (attrs.field_diameter_value)
-			output+='<br>Diameter ' + attrs.field_diameter_value + 'm';
-		output+=composition;
+		output='Volume ' + volume_formatted + 'm&sup3;' + composition;
 		if (attrs.body != '')
 			output+='<br><br>' + attrs.body;
 		}

@@ -93,15 +93,6 @@ function ldiw_waste_map_features_user_default_permissions() {
     ),
   );
 
-  // Exported permission: edit field_diameter
-  $permissions['edit field_diameter'] = array(
-    'name' => 'edit field_diameter',
-    'roles' => array(
-      '0' => 'anonymous user',
-      '1' => 'authenticated user',
-    ),
-  );
-
   // Exported permission: edit field_nr_of_tires
   $permissions['edit field_nr_of_tires'] = array(
     'name' => 'edit field_nr_of_tires',
@@ -186,15 +177,6 @@ function ldiw_waste_map_features_user_default_permissions() {
   // Exported permission: view field_coords
   $permissions['view field_coords'] = array(
     'name' => 'view field_coords',
-    'roles' => array(
-      '0' => 'anonymous user',
-      '1' => 'authenticated user',
-    ),
-  );
-
-  // Exported permission: view field_diameter
-  $permissions['view field_diameter'] = array(
-    'name' => 'view field_diameter',
     'roles' => array(
       '0' => 'anonymous user',
       '1' => 'authenticated user',

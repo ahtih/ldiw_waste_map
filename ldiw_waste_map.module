@@ -43,7 +43,6 @@ function ldiw_waste_map_geoclustering_tree_params()
 	$tree_params->node_conditions=array('type' => 'waste_point',
 										'status' => 1);
 	$tree_params->summed_field_names=array(	'field_volume',
-											'field_diameter',
 											'field_nr_of_tires',
 											'field_composition_large',
 											'field_composition_dangerous',

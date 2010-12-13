@@ -304,56 +304,6 @@ function ldiw_waste_map_features_content_default_fields() {
     ),
   );
 
-  // Exported field: field_diameter
-  $fields['waste_point-field_diameter'] = array(
-    'field_name' => 'field_diameter',
-    'type_name' => 'waste_point',
-    'display_settings' => array(
-      'label' => array(
-        'format' => 'above',
-        'exclude' => 0,
-      ),
-      'teaser' => array(
-        'format' => 'default',
-        'exclude' => 0,
-      ),
-      'full' => array(
-        'format' => 'default',
-        'exclude' => 0,
-      ),
-      '4' => array(
-        'format' => 'default',
-        'exclude' => 0,
-      ),
-    ),
-    'widget_active' => '1',
-    'type' => 'number_integer',
-    'required' => '0',
-    'multiple' => '0',
-    'module' => 'number',
-    'active' => '1',
-    'prefix' => '',
-    'suffix' => 'm',
-    'min' => '0',
-    'max' => '50',
-    'allowed_values' => '',
-    'allowed_values_php' => '',
-    'widget' => array(
-      'default_value' => array(
-        '0' => array(
-          'value' => '',
-          '_error_element' => 'default_value_widget][field_diameter][0][value',
-        ),
-      ),
-      'default_value_php' => NULL,
-      'label' => 'Diameter',
-      'weight' => '2',
-      'description' => '',
-      'type' => 'number',
-      'module' => 'number',
-    ),
-  );
-
   // Exported field: field_nr_of_tires
   $fields['waste_point-field_nr_of_tires'] = array(
     'field_name' => 'field_nr_of_tires',
@@ -516,7 +466,6 @@ function ldiw_waste_map_features_content_default_fields() {
   t('Composition: large');
   t('Composition: other');
   t('Coordinates');
-  t('Diameter');
   t('Number of tires');
   t('Photo');
   t('Volume');
