@@ -2,6 +2,14 @@
 
 Drupal.openlayers.style_plugin.ldiw_waste_map_point_style_plugin=
 													function(parameters) {
+
+Drupal.theme.openlayersAddPointContentNoNodeID=function(feature)
+{
+	return Drupal.t('This is a cluster of @nr_of_nodes Waste points. ' + 
+		'You have to zoom in before you can see and edit them individually.',
+		{'@nr_of_nodes':feature.attributes.nr_of_nodes});
+	}
+
 Drupal.theme.openlayersPopup=function(feature)
 {
 	var attrs=feature.attributes;

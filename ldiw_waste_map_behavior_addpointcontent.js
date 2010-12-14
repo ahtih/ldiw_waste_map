@@ -1,5 +1,10 @@
 // $Id$
 
+Drupal.theme.prototype.openlayersAddPointContentNoNodeID=function(feature)
+{
+	return Drupal.t('Selected feature has no Node ID to edit');
+	}
+
 function ldiw_waste_map_behavior_addpointcontent_state(data,options)
 {
 	this.restart_editing_mode=function()
@@ -120,6 +125,15 @@ function ldiw_waste_map_behavior_addpointcontent_state(data,options)
 
 				var node_id=feature_to_edit.fid; //!!! Remove hardcoding of .fid
 				if (isNaN(node_id)) {
+					var popup_text=Drupal.theme(
+									'openlayersAddPointContentNoNodeID',
+									feature_to_edit);
+					if (popup_text)
+						layer.map.addPopup(
+							new OpenLayers.Popup.FramedCloud(
+								'ldiw_waste_map_behavior_addpointcontent_no_node_id',
+								coords,null,popup_text,null,true),
+							true);
 					return;
 					}
 				form_url+=node_id + '/edit';
