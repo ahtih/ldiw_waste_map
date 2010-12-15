@@ -10,8 +10,8 @@
 }
 
 .vertically-condensed-form .form-item {
-	margin-top: 0.5em !important;
-	margin-bottom: 0.5em !important;
+	margin-top: 0.4em !important;
+	margin-bottom: 0.4em !important;
 }
 
 .vertically-condensed-form .filefield-element,
@@ -26,6 +26,10 @@
 
 #ldiw_waste_map_behavior_addpointcontent_form form {
 	padding-top: 0.5em;
+}
+
+.vertically-condensed-form fieldset {
+	margin-bottom: 0;
 }
 
 #edit-field-nr-of-tires-0-value-wrapper {
