@@ -43,7 +43,7 @@ function ldiw_waste_map_behavior_addpointcontent_state(data,options)
 					//  failed or delete needs confirmation.
 					//  Show the new form then
 				var form=doc.find('form').parent().children().
-								not('.breadcrumb,#tabs-wrapper,#footer');
+							not('.breadcrumb,.title,#tabs-wrapper,#footer');
 				$(this.form_popup.contentDiv).html(form);
 				this.fixup_form();
 
