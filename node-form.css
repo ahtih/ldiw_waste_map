@@ -1,4 +1,4 @@
-.label-left-of-input-10em label {
+.label-left-of-input label {
 	display: inline;
 }
 
@@ -35,4 +35,8 @@
 #edit-field-volume-0-value-wrapper {
 	display: inline;
 	padding-right: 1em;
+}
+
+#edit-field-photo-0-upload-wrapper {
+	width: 488px;
 }

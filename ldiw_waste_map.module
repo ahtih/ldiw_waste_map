@@ -110,13 +110,15 @@ function ldiw_waste_map_form_alter(&$form,$form_state,$form_id)
 				));
 
 		$form['body_field']['body']['#type']='textfield';
-		$form['body_field']['body']['#maxlength']='2000';
+		$form['body_field']['body']['#maxlength']=2000;
+		$form['body_field']['body']['#size']=41;
 
 		drupal_add_css(drupal_get_path('module','ldiw_waste_map') .
 														'/node-form.css');
 
-		foreach (array('field_volume','field_nr_of_tires') as $key) {
-			$form[$key]['#prefix']='<span class="label-left-of-input-10em">';
+		foreach (array('field_volume','field_nr_of_tires','body_field')
+																as $key) {
+			$form[$key]['#prefix']='<span class="label-left-of-input">';
 			$form[$key]['#suffix']='</span>';
 			}
 
