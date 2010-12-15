@@ -48,9 +48,9 @@ function ldiw_waste_map_features_content_default_fields() {
         ),
       ),
       'default_value_php' => NULL,
-      'label' => 'Composition: biodegradable',
+      'label' => 'Biodegradable (soil, biomass, sand etc)',
       'weight' => '7',
-      'description' => 'Percentage (in volume) of soil, biomass, sand etc',
+      'description' => '',
       'type' => 'number',
       'module' => 'number',
     ),
@@ -98,9 +98,9 @@ function ldiw_waste_map_features_content_default_fields() {
         ),
       ),
       'default_value_php' => NULL,
-      'label' => 'Composition: construction',
+      'label' => 'Construction waste',
       'weight' => '8',
-      'description' => 'Percentage (in volume) of construction waste',
+      'description' => '',
       'type' => 'number',
       'module' => 'number',
     ),
@@ -148,9 +148,9 @@ function ldiw_waste_map_features_content_default_fields() {
         ),
       ),
       'default_value_php' => NULL,
-      'label' => 'Composition: dangerous waste and tires',
+      'label' => 'Dangerous waste and tires',
       'weight' => '6',
-      'description' => 'Percentage (in volume) of dangerous waste and tires',
+      'description' => '',
       'type' => 'number',
       'module' => 'number',
     ),
@@ -198,9 +198,9 @@ function ldiw_waste_map_features_content_default_fields() {
         ),
       ),
       'default_value_php' => NULL,
-      'label' => 'Composition: large',
+      'label' => 'Large objects like furniture',
       'weight' => '5',
-      'description' => 'Percentage (in volume) of large objects like furniture',
+      'description' => '',
       'type' => 'number',
       'module' => 'number',
     ),
@@ -248,9 +248,9 @@ function ldiw_waste_map_features_content_default_fields() {
         ),
       ),
       'default_value_php' => NULL,
-      'label' => 'Composition: other',
+      'label' => 'Other',
       'weight' => '9',
-      'description' => 'Percentage (in volume) of other waste',
+      'description' => '',
       'type' => 'number',
       'module' => 'number',
     ),
@@ -452,7 +452,7 @@ function ldiw_waste_map_features_content_default_fields() {
       'default_value_php' => NULL,
       'label' => 'Volume',
       'weight' => '2',
-      'description' => 'Volume of waste, in m³',
+      'description' => '',
       'type' => 'number',
       'module' => 'number',
     ),
@@ -460,13 +460,13 @@ function ldiw_waste_map_features_content_default_fields() {
 
   // Translatables
   // Included for use with string extractors like potx.
-  t('Composition: biodegradable');
-  t('Composition: construction');
-  t('Composition: dangerous waste and tires');
-  t('Composition: large');
-  t('Composition: other');
+  t('Biodegradable (soil, biomass, sand etc)');
+  t('Construction waste');
   t('Coordinates');
+  t('Dangerous waste and tires');
+  t('Large objects like furniture');
   t('Number of tires');
+  t('Other');
   t('Photo');
   t('Volume');
 

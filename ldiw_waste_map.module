@@ -112,6 +112,39 @@ function ldiw_waste_map_form_alter(&$form,$form_state,$form_id)
 		$form['body_field']['body']['#type']='textfield';
 		$form['body_field']['body']['#maxlength']='2000';
 
+		drupal_add_css(drupal_get_path('module','ldiw_waste_map') .
+														'/node-form.css');
+
+		foreach (array('field_volume','field_nr_of_tires') as $key) {
+			$form[$key]['#prefix']='<span class="label-left-of-input-10em">';
+			$form[$key]['#suffix']='</span>';
+			}
+
+		$composition_weight=
+				$form['#content_extra_fields']['body_field']['weight'] + 1;
+		foreach ($form as $key => $element) {
+			if (is_array($element) && isset($element['#weight']) &&
+							$element['#weight'] >= $composition_weight) {
+				$form[$key]['#weight']+=1;
+				}
+			}
+
+		$form['composition']=array(
+				'#type' => 'fieldset',
+				'#title' => t('Composition percentages (in volume)'),
+				'#weight' => $composition_weight,
+				'#attributes' => array('class' => 'label-left-of-input-23em'),
+				);
+
+		$form['#attributes']['class'].=' vertically-condensed-form';
+
+		foreach ($form as $key => $element) {
+			if (strpos($key,'field_composition_') === 0) {
+				$form['composition'][$key]=$element;
+				unset($form[$key]);
+				}
+			}
+
 		unset($form['book']['plid']);
 		unset($form['book']['pick-book']);
 		unset($form['attachments']['wrapper']['new']['attach']);
@@ -133,4 +166,18 @@ function ldiw_waste_map_menu()
 			'access callback' => TRUE,
 			'type' => MENU_CALLBACK,
 			));
+	}
+
+/***************************************************************************/
+/**************                                               **************/
+/************** Implementation of hook_openlayers_map_alter() **************/
+/**************                                               **************/
+/***************************************************************************/
+
+function ldiw_waste_map_openlayers_map_alter(&$map)
+{
+	if (isset($map['behaviors']['ldiw_waste_map_behavior_addpointcontent'])) {
+		drupal_add_css(drupal_get_path('module','ldiw_waste_map') .
+														'/node-form.css');
+		}
 	}

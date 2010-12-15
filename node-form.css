@@ -1,0 +1,28 @@
+.label-left-of-input-10em label {
+	display: inline;
+}
+
+.label-left-of-input-23em label {
+	float: left;
+	text-align: right;
+	padding-right: 1em;
+	width: 23em;
+}
+
+.vertically-condensed-form .form-item {
+	margin-top: 0.5em !important;
+	margin-bottom: 0.5em !important;
+}
+
+#ldiw_waste_map_behavior_addpointcontent_form form {
+	padding-top: 0.5em;
+}
+
+#edit-field-nr-of-tires-0-value-wrapper {
+	display: inline;
+}
+
+#edit-field-volume-0-value-wrapper {
+	display: inline;
+	padding-right: 1em;
+}
