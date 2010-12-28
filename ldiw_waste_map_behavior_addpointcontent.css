@@ -4,12 +4,12 @@
 	float:right;
 	right: 0px;
 	height: 60px; 
-	width: 160px;
+	width: 15em;
 	}
 
 .olControlPanel div { 
 	float:right;
-	width:  160px;
+	width:  15em;
 	height: 24px;
 	line-height: 24px;
 	border-style: solid;
