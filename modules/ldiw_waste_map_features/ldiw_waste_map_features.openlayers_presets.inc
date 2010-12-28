@@ -38,11 +38,6 @@ function ldiw_waste_map_features_openlayers_presets() {
         'layers' => array(),
       ),
       'openlayers_behavior_keyboarddefaults' => array(),
-      'openlayers_behavior_layerswitcher' => array(
-        'ascending' => 1,
-        'roundedCorner' => 1,
-        'roundedCornerColor' => 'darkblue',
-      ),
       'openlayers_behavior_navigation' => array(
         'zoomWheelEnabled' => 1,
       ),
