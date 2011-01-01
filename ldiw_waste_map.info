@@ -1,4 +1,5 @@
 core = "6.x"
+php = 5.2
 dependencies[] = "ctools"
 dependencies[] = "geoclustering"
 dependencies[] = "openlayers"

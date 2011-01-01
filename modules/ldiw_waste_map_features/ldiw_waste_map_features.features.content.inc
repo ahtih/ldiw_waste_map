@@ -11,9 +11,10 @@ function ldiw_waste_map_features_content_default_fields() {
     'field_name' => 'field_composition_biodegradable',
     'type_name' => 'waste_point',
     'display_settings' => array(
+      'weight' => '7',
+      'parent' => '',
       'label' => array(
         'format' => 'above',
-        'exclude' => 0,
       ),
       'teaser' => array(
         'format' => 'default',
@@ -61,9 +62,10 @@ function ldiw_waste_map_features_content_default_fields() {
     'field_name' => 'field_composition_construction',
     'type_name' => 'waste_point',
     'display_settings' => array(
+      'weight' => '8',
+      'parent' => '',
       'label' => array(
         'format' => 'above',
-        'exclude' => 0,
       ),
       'teaser' => array(
         'format' => 'default',
@@ -111,9 +113,10 @@ function ldiw_waste_map_features_content_default_fields() {
     'field_name' => 'field_composition_dangerous',
     'type_name' => 'waste_point',
     'display_settings' => array(
+      'weight' => '6',
+      'parent' => '',
       'label' => array(
         'format' => 'above',
-        'exclude' => 0,
       ),
       'teaser' => array(
         'format' => 'default',
@@ -161,9 +164,10 @@ function ldiw_waste_map_features_content_default_fields() {
     'field_name' => 'field_composition_large',
     'type_name' => 'waste_point',
     'display_settings' => array(
+      'weight' => '5',
+      'parent' => '',
       'label' => array(
         'format' => 'above',
-        'exclude' => 0,
       ),
       'teaser' => array(
         'format' => 'default',
@@ -211,9 +215,10 @@ function ldiw_waste_map_features_content_default_fields() {
     'field_name' => 'field_composition_other',
     'type_name' => 'waste_point',
     'display_settings' => array(
+      'weight' => '9',
+      'parent' => '',
       'label' => array(
         'format' => 'above',
-        'exclude' => 0,
       ),
       'teaser' => array(
         'format' => 'default',
@@ -261,9 +266,10 @@ function ldiw_waste_map_features_content_default_fields() {
     'field_name' => 'field_coords',
     'type_name' => 'waste_point',
     'display_settings' => array(
+      'weight' => '1',
+      'parent' => '',
       'label' => array(
         'format' => 'above',
-        'exclude' => 0,
       ),
       'teaser' => array(
         'format' => 'default',
@@ -304,14 +310,70 @@ function ldiw_waste_map_features_content_default_fields() {
     ),
   );
 
+  // Exported field: field_external_photo
+  $fields['waste_point-field_external_photo'] = array(
+    'field_name' => 'field_external_photo',
+    'type_name' => 'waste_point',
+    'display_settings' => array(
+      'weight' => '13',
+      'parent' => '',
+      'label' => array(
+        'format' => 'above',
+      ),
+      'teaser' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'full' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      '4' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'token' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+    ),
+    'widget_active' => '1',
+    'type' => 'text',
+    'required' => '0',
+    'multiple' => '10',
+    'module' => 'text',
+    'active' => '1',
+    'text_processing' => '0',
+    'max_length' => '10000',
+    'allowed_values' => '',
+    'allowed_values_php' => '',
+    'widget' => array(
+      'rows' => 5,
+      'size' => '60',
+      'default_value' => array(
+        '0' => array(
+          'value' => '',
+          '_error_element' => 'default_value_widget][field_external_photo][0][value',
+        ),
+      ),
+      'default_value_php' => NULL,
+      'label' => 'External photo',
+      'weight' => '13',
+      'description' => 'Object in PHP serialized format. Example: a:5:{s:3:"url";s:37:"http://www.externalsite.com/image.jpg";s:5:"width";i:500;s:6:"height";i:300;s:8:"link_url";s:38:"http://www.externalsite.com/image.html";s:16:"attribution_html";s:19:"Photo by John Smith";}',
+      'type' => 'text_textfield',
+      'module' => 'text',
+    ),
+  );
+
   // Exported field: field_nr_of_tires
   $fields['waste_point-field_nr_of_tires'] = array(
     'field_name' => 'field_nr_of_tires',
     'type_name' => 'waste_point',
     'display_settings' => array(
+      'weight' => '3',
+      'parent' => '',
       'label' => array(
         'format' => 'above',
-        'exclude' => 0,
       ),
       'teaser' => array(
         'format' => 'default',
@@ -359,9 +421,10 @@ function ldiw_waste_map_features_content_default_fields() {
     'field_name' => 'field_photo',
     'type_name' => 'waste_point',
     'display_settings' => array(
+      'weight' => '10',
+      'parent' => '',
       'label' => array(
         'format' => 'above',
-        'exclude' => 0,
       ),
       'teaser' => array(
         'format' => 'image_plain',
@@ -408,14 +471,67 @@ function ldiw_waste_map_features_content_default_fields() {
     ),
   );
 
+  // Exported field: field_photos_id_width_height
+  $fields['waste_point-field_photos_id_width_height'] = array(
+    'field_name' => 'field_photos_id_width_height',
+    'type_name' => 'waste_point',
+    'display_settings' => array(
+      'weight' => '12',
+      'parent' => '',
+      'label' => array(
+        'format' => 'above',
+      ),
+      'teaser' => array(
+        'format' => 'hidden',
+        'exclude' => 0,
+      ),
+      'full' => array(
+        'format' => 'hidden',
+        'exclude' => 0,
+      ),
+      '4' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'token' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+    ),
+    'widget_active' => '1',
+    'type' => 'computed',
+    'required' => '0',
+    'multiple' => '0',
+    'module' => 'computed_field',
+    'active' => '1',
+    'code' => '$node_field[0][\'value\'] = ldiw_waste_map_compute_photos_id_width_height($node);',
+    'display_format' => '$display = $node_field_item[\'value\'];',
+    'store' => 1,
+    'data_type' => 'text',
+    'data_length' => '',
+    'data_not_NULL' => 0,
+    'data_default' => '',
+    'data_sortable' => 0,
+    'widget' => array(
+      'default_value' => NULL,
+      'default_value_php' => NULL,
+      'label' => 'Photos ID:Width:Height',
+      'weight' => '12',
+      'description' => '',
+      'type' => 'computed',
+      'module' => 'computed_field',
+    ),
+  );
+
   // Exported field: field_volume
   $fields['waste_point-field_volume'] = array(
     'field_name' => 'field_volume',
     'type_name' => 'waste_point',
     'display_settings' => array(
+      'weight' => '2',
+      'parent' => '',
       'label' => array(
         'format' => 'above',
-        'exclude' => 0,
       ),
       'teaser' => array(
         'format' => 'default',
@@ -464,10 +580,12 @@ function ldiw_waste_map_features_content_default_fields() {
   t('Construction waste');
   t('Coordinates');
   t('Dangerous waste and tires');
+  t('External photo');
   t('Large objects like furniture');
   t('Number of tires');
   t('Other');
   t('Photo');
+  t('Photos ID:Width:Height');
   t('Volume');
 
   return $fields;

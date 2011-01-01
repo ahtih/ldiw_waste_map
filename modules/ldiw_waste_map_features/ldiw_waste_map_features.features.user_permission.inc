@@ -93,6 +93,15 @@ function ldiw_waste_map_features_user_default_permissions() {
     ),
   );
 
+  // Exported permission: edit field_external_photo
+  $permissions['edit field_external_photo'] = array(
+    'name' => 'edit field_external_photo',
+    'roles' => array(
+      '0' => 'anonymous user',
+      '1' => 'authenticated user',
+    ),
+  );
+
   // Exported permission: edit field_nr_of_tires
   $permissions['edit field_nr_of_tires'] = array(
     'name' => 'edit field_nr_of_tires',
@@ -105,6 +114,15 @@ function ldiw_waste_map_features_user_default_permissions() {
   // Exported permission: edit field_photo
   $permissions['edit field_photo'] = array(
     'name' => 'edit field_photo',
+    'roles' => array(
+      '0' => 'anonymous user',
+      '1' => 'authenticated user',
+    ),
+  );
+
+  // Exported permission: edit field_photos_id_width_height
+  $permissions['edit field_photos_id_width_height'] = array(
+    'name' => 'edit field_photos_id_width_height',
     'roles' => array(
       '0' => 'anonymous user',
       '1' => 'authenticated user',
@@ -183,6 +201,15 @@ function ldiw_waste_map_features_user_default_permissions() {
     ),
   );
 
+  // Exported permission: view field_external_photo
+  $permissions['view field_external_photo'] = array(
+    'name' => 'view field_external_photo',
+    'roles' => array(
+      '0' => 'anonymous user',
+      '1' => 'authenticated user',
+    ),
+  );
+
   // Exported permission: view field_nr_of_tires
   $permissions['view field_nr_of_tires'] = array(
     'name' => 'view field_nr_of_tires',
@@ -195,6 +222,15 @@ function ldiw_waste_map_features_user_default_permissions() {
   // Exported permission: view field_photo
   $permissions['view field_photo'] = array(
     'name' => 'view field_photo',
+    'roles' => array(
+      '0' => 'anonymous user',
+      '1' => 'authenticated user',
+    ),
+  );
+
+  // Exported permission: view field_photos_id_width_height
+  $permissions['view field_photos_id_width_height'] = array(
+    'name' => 'view field_photos_id_width_height',
     'roles' => array(
       '0' => 'anonymous user',
       '1' => 'authenticated user',

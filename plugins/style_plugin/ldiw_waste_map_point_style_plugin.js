@@ -12,6 +12,11 @@ Drupal.theme.openlayersAddPointContentNoNodeID=function(feature)
 
 Drupal.theme.openlayersPopup=function(feature)
 {
+	var style_hack=document.getElementById(
+						'ldiw_waste_map_point_style_plugin_firefox_hack');
+	if (style_hack)
+		document.body.removeChild(style_hack);
+
 	var attrs=feature.attributes;
 
 	var coeff=attrs.field_volume_value >= 5 ? 1 : 10;
@@ -54,6 +59,76 @@ Drupal.theme.openlayersPopup=function(feature)
 		output='Volume ' + volume_formatted + 'm&sup3;' + composition;
 		if (attrs.body != '')
 			output+='<br><br>' + attrs.body;
+		if (attrs.field_photos_id_width_height_value != '') {
+			var photo_divs=[];
+			var photos=attrs.field_photos_id_width_height_value.split(' ');
+			var popup_width=0;
+			var max_photo_width=Math.min(
+						OpenLayers.Popup.FramedCloud.prototype.maxSize.w,
+						feature.layer.map.size.w-
+								feature.layer.map.paddingForPopups.left-
+								feature.layer.map.paddingForPopups.right)-
+						170;
+			for (var i in photos) {
+				var photo=photos[i].split(':');
+				var div_id=Math.floor(Math.random()*1000000);
+
+				var width=photo[1] || 400;
+				var height=photo[2] || 0;
+				if (width > max_photo_width) {
+					height=max_photo_width * height / width;
+					width=max_photo_width;
+					}
+				popup_width=Math.max(popup_width,width);
+				output+='<div id="' + div_id + '">' +
+						'<img src="' +
+							Drupal.settings.ldiw_waste_map_base_url +
+							'/photo/' + feature.fid + '/' + photo[0] + '" ' +
+							'width="' + width + '"';
+				if (height)
+					output+=' height="' + height + '"';
+				output+='/></div>';
+
+				photo_divs.push(photo.concat([div_id,width,height]));
+				}
+
+			if (OpenLayers.Util.getBrowserName() == 'firefox') {
+				var style=document.createElement('style');
+				style.id='ldiw_waste_map_point_style_plugin_firefox_hack';
+				style.innerHTML=
+						".olFramedCloudPopupContent { min-width:" +
+						(popup_width + OpenLayers.Util.getScrollbarWidth()) +
+						"px; }";
+				document.body.appendChild(style);
+				}
+
+			$.post(Drupal.settings.ldiw_waste_map_base_url +
+						'/photos_ajax/' + feature.fid,
+					'',function(data) {
+							for (var i in photo_divs) {
+								var div=photo_divs[i];
+								var photo=data[div[0]];
+								if (!photo)
+									continue;
+
+								var html='<img src="' + photo['url'] + '"';
+								if ('width' in photo)
+									html+=' width="' + div[4] + '"';
+								if ('height' in photo)
+									html+=' height="' + div[5] + '"';
+								html+='/>';
+								if ('link_url' in photo)
+									html='<a href="' + photo['link_url'] +
+													'">' + html + '</a>';
+								if ('attribution_html' in photo)
+									html+='<div>' +
+										photo['attribution_html'] + '</div>';
+
+								$('#' + div[3]).html(html);
+								}
+							},
+					'json');
+			}
 		}
 
 	return '<div class="openlayers-popup">' + output + '</div>';

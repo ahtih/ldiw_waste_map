@@ -1,6 +1,9 @@
 <?php
 // $Id$
 
+DEFINE('LDIW_WASTE_MAP_DEFAULT_PHOTO_FIELDS',
+									'field_photo field_external_photo');
+
 /**
  * Implementation of hook_ctools_plugin_directory()
  */
@@ -79,7 +82,8 @@ function ldiw_waste_map_openlayers_behaviors()
 	return array(
 		'ldiw_waste_map_behavior_addpointcontent' => array(
 			'title' => t('Add/Edit Point Content'),
-			'description' => t('Add/edit Drupal content nodes by clicking on map and filling in node form in popup.'),
+			'description' => t('Add/edit Drupal content nodes by ' .
+					'clicking on map and filling in node form in popup.'),
 			'type' => 'layer',
 			'path' => drupal_get_path('module','ldiw_waste_map'),
 			'file' => 'ldiw_waste_map_behavior_addpointcontent.inc',
@@ -108,6 +112,8 @@ function ldiw_waste_map_form_alter(&$form,$form_state,$form_id)
 				array('book'),
 				array('attachments'),
 				));
+
+		//!!! hide external photos data
 
 		$form['body_field']['body']['#type']='textfield';
 		$form['body_field']['body']['#maxlength']=2000;
@@ -167,7 +173,52 @@ function ldiw_waste_map_menu()
 			'page callback' => 'ldiw_waste_map_waste_point_icon',
 			'access callback' => TRUE,
 			'type' => MENU_CALLBACK,
-			));
+			),
+		'ldiw_waste_map/photos_ajax/%' => array(
+			'page callback' => 'ldiw_waste_map_photos_ajax',
+			'access callback' => TRUE,
+			'page arguments' => array(2),
+			'type' => MENU_CALLBACK,
+			),
+		'ldiw_waste_map/photo/%/%' => array(
+			'page callback' => 'ldiw_waste_map_photo',
+			'access callback' => TRUE,
+			'page arguments' => array(2,3),
+			'type' => MENU_CALLBACK,
+			),
+
+		// Admin page
+		'admin/settings/ldiw_waste_map' => array(
+			'title' => 'LDIW Waste Map',
+			'description' => 'Configure the LDIW Waste Map.',
+			'page callback' => 'drupal_get_form',
+			'page arguments' => array('ldiw_waste_map_admin_settings'),
+			'access arguments' => array('administer site configuration'),
+			),
+		);
+	}
+
+/***************************************************************************/
+/***************************                     ***************************/
+/*************************** Admin settings page ***************************/
+/***************************                     ***************************/
+/***************************************************************************/
+
+function ldiw_waste_map_admin_settings()
+{
+	$form=array(
+		'ldiw_waste_map_photo_field_names' => array(
+				'#type' => 'textfield',
+				'#title' => t('Space-separated list of CCK Field names ' .
+										'containing Waste Point photos'),
+				'#default_value' => variable_get(
+						'ldiw_waste_map_photo_field_names',
+						LDIW_WASTE_MAP_DEFAULT_PHOTO_FIELDS),
+				'#size' => 32,
+				'#maxlength' => 1000,
+				),
+		);
+	return system_settings_form($form);
 	}
 
 /***************************************************************************/
@@ -182,4 +233,129 @@ function ldiw_waste_map_openlayers_map_alter(&$map)
 		drupal_add_css(drupal_get_path('module','ldiw_waste_map') .
 														'/node-form.css');
 		}
+	}
+
+/***************************************************************************/
+/**********************                              ***********************/
+/********************** ldiw_waste_map_list_photos() ***********************/
+/**********************                              ***********************/
+/***************************************************************************/
+
+function ldiw_waste_map_list_photos(&$node)
+{
+	$fieldnames=explode(' ',variable_get(
+						'ldiw_waste_map_photo_field_names',
+						LDIW_WASTE_MAP_DEFAULT_PHOTO_FIELDS));
+	$data=array();
+	foreach ($fieldnames as $fieldname) {
+		foreach ($node->{$fieldname} as $value) {
+			$id=NULL;
+			$serialized_data=array();
+			if (!empty($value['fid'])) {
+				$id=$value['fid'];
+				}
+			elseif (!empty($value['value'])) {
+				$info=@unserialize($value['value']);
+				if ($info && !empty($info['url'])) {
+					$id=$value['value'];
+					$serialized_data=$info;
+					}
+				}
+			if (isset($id)) {
+				$data[]=array(	base64_encode(substr(md5($id),0,3)),
+								$value,
+								$serialized_data);
+				}
+			}
+		}
+
+	return $data;
+	}
+
+/***************************************************************************/
+/*************                                                 *************/
+/************* ldiw_waste_map_compute_photos_id_width_height() *************/
+/*************                                                 *************/
+/***************************************************************************/
+
+function ldiw_waste_map_compute_photos_id_width_height(&$node)
+{
+	$data=array();
+	foreach (ldiw_waste_map_list_photos($node) as $photo) {
+		list($id,$value,$serialized_data)=$photo;
+		if (!empty($value['filepath'])) {
+			$info=@getimagesize($value['filepath']);
+			if ($info) {
+				$serialized_data['width'] =$info[0];
+				$serialized_data['height']=$info[1];
+				}
+			}
+
+		$width =empty($serialized_data['width'] ) ? 0 :
+												$serialized_data['width'];
+		$height=empty($serialized_data['height']) ? 0 :
+												$serialized_data['height'];
+		$data[]="$id:$width:$height";
+		}
+	return implode(' ',$data);
+	}
+
+/***************************************************************************/
+/**********************                              ***********************/
+/********************** ldiw_waste_map_photos_ajax() ***********************/
+/**********************                              ***********************/
+/***************************************************************************/
+
+function ldiw_waste_map_photos_ajax($node_id)
+{
+	$node=node_load($node_id);
+	if (!$node) {
+		drupal_not_found();
+		return;
+		}
+
+	//!!! check node type
+
+	$data=array();
+	foreach (ldiw_waste_map_list_photos($node) as $photo) {
+		list($id,$value,$serialized_data)=$photo;
+		if (!empty($serialized_data)) {
+			$data[$id]=$serialized_data;
+			}
+		}
+
+	print json_encode($data);
+	}
+
+/***************************************************************************/
+/*************************                        **************************/
+/************************* ldiw_waste_map_photo() **************************/
+/*************************                        **************************/
+/***************************************************************************/
+
+function ldiw_waste_map_photo($node_id,$photo_id)
+{
+	$node=node_load($node_id);
+	if (!$node) {
+		drupal_not_found();
+		return;
+		}
+
+	//!!! check node type
+
+	foreach (ldiw_waste_map_list_photos($node) as $photo) {
+		list($id,$value,$serialized_data)=$photo;
+		if ($id == $photo_id) {
+			if (!empty($value['filepath'])) {
+				file_download($value['filepath']);	// This does not return
+				}
+			if (!empty($serialized_data['url'])) {
+				session_write_close();
+				header('Location: ' . $serialized_data['url'],TRUE,302);
+				exit();
+				}
+			}
+		}
+
+	drupal_not_found();
 	}
