@@ -44,3 +44,7 @@
 #edit-field-photo-0-upload-wrapper {
 	width: 488px;
 }
+
+#field_external_photo_values {
+	display: none;
+}

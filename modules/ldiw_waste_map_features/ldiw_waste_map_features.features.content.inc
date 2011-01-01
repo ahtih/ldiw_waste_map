@@ -359,7 +359,7 @@ function ldiw_waste_map_features_content_default_fields() {
       'default_value_php' => NULL,
       'label' => 'External photo',
       'weight' => '13',
-      'description' => 'Object in PHP serialized format. Example: a:5:{s:3:"url";s:37:"http://www.externalsite.com/image.jpg";s:5:"width";i:500;s:6:"height";i:300;s:8:"link_url";s:38:"http://www.externalsite.com/image.html";s:16:"attribution_html";s:19:"Photo by John Smith";}',
+      'description' => '',
       'type' => 'text_textfield',
       'module' => 'text',
     ),
