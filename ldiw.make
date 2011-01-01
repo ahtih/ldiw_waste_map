@@ -1,3 +1,5 @@
+api = 2
+
 core = 6.x
 
 projects[] = drupal
@@ -14,6 +16,7 @@ projects[] = views
 projects[] = formfilter
 
 projects[openlayers][version] = 2.x-dev
+projects[openlayers][patch][] = "http://drupal.org/files/issues/OpenLayers-popup-featureremoved.patch"
 
 projects[wfs][patch][] = "http://drupal.org/files/issues/wfs-filter-changes.patch"
 
