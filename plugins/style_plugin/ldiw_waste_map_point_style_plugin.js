@@ -56,7 +56,10 @@ Drupal.theme.openlayersPopup=function(feature)
 				composition;
 		}
 	else {
-		output='Volume ' + volume_formatted + 'm&sup3;' + composition;
+		output='';
+		if (volume_formatted > 0)
+			output+='Volume <b>' + volume_formatted + 'm&sup3;</b>';
+		output+=composition;
 		if (attrs.body != '')
 			output+='<br><br>' + attrs.body;
 		if (attrs.field_photos_id_width_height_value != '') {
