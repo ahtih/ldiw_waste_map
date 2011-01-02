@@ -20,8 +20,8 @@ function ldiw_waste_map_features_openlayers_presets() {
     'hide_empty_map' => 0,
     'center' => array(
       'initial' => array(
-        'centerpoint' => '14.78210449161, 46.121148845796',
-        'zoom' => '8',
+        'centerpoint' => '9.0692138668392, 49.760982892584',
+        'zoom' => '4',
       ),
       'restrict' => array(
         'restrictextent' => 0,
