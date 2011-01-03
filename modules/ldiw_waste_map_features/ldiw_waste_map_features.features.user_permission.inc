@@ -39,27 +39,9 @@ function ldiw_waste_map_features_user_default_permissions() {
     ),
   );
 
-  // Exported permission: edit field_composition_biodegradable
-  $permissions['edit field_composition_biodegradable'] = array(
-    'name' => 'edit field_composition_biodegradable',
-    'roles' => array(
-      '0' => 'anonymous user',
-      '1' => 'authenticated user',
-    ),
-  );
-
-  // Exported permission: edit field_composition_construction
-  $permissions['edit field_composition_construction'] = array(
-    'name' => 'edit field_composition_construction',
-    'roles' => array(
-      '0' => 'anonymous user',
-      '1' => 'authenticated user',
-    ),
-  );
-
-  // Exported permission: edit field_composition_dangerous
-  $permissions['edit field_composition_dangerous'] = array(
-    'name' => 'edit field_composition_dangerous',
+  // Exported permission: edit field_composition_glass
+  $permissions['edit field_composition_glass'] = array(
+    'name' => 'edit field_composition_glass',
     'roles' => array(
       '0' => 'anonymous user',
       '1' => 'authenticated user',
@@ -78,6 +60,24 @@ function ldiw_waste_map_features_user_default_permissions() {
   // Exported permission: edit field_composition_other
   $permissions['edit field_composition_other'] = array(
     'name' => 'edit field_composition_other',
+    'roles' => array(
+      '0' => 'anonymous user',
+      '1' => 'authenticated user',
+    ),
+  );
+
+  // Exported permission: edit field_composition_paper
+  $permissions['edit field_composition_paper'] = array(
+    'name' => 'edit field_composition_paper',
+    'roles' => array(
+      '0' => 'anonymous user',
+      '1' => 'authenticated user',
+    ),
+  );
+
+  // Exported permission: edit field_composition_pmp
+  $permissions['edit field_composition_pmp'] = array(
+    'name' => 'edit field_composition_pmp',
     'roles' => array(
       '0' => 'anonymous user',
       '1' => 'authenticated user',
@@ -147,27 +147,9 @@ function ldiw_waste_map_features_user_default_permissions() {
     ),
   );
 
-  // Exported permission: view field_composition_biodegradable
-  $permissions['view field_composition_biodegradable'] = array(
-    'name' => 'view field_composition_biodegradable',
-    'roles' => array(
-      '0' => 'anonymous user',
-      '1' => 'authenticated user',
-    ),
-  );
-
-  // Exported permission: view field_composition_construction
-  $permissions['view field_composition_construction'] = array(
-    'name' => 'view field_composition_construction',
-    'roles' => array(
-      '0' => 'anonymous user',
-      '1' => 'authenticated user',
-    ),
-  );
-
-  // Exported permission: view field_composition_dangerous
-  $permissions['view field_composition_dangerous'] = array(
-    'name' => 'view field_composition_dangerous',
+  // Exported permission: view field_composition_glass
+  $permissions['view field_composition_glass'] = array(
+    'name' => 'view field_composition_glass',
     'roles' => array(
       '0' => 'anonymous user',
       '1' => 'authenticated user',
@@ -186,6 +168,24 @@ function ldiw_waste_map_features_user_default_permissions() {
   // Exported permission: view field_composition_other
   $permissions['view field_composition_other'] = array(
     'name' => 'view field_composition_other',
+    'roles' => array(
+      '0' => 'anonymous user',
+      '1' => 'authenticated user',
+    ),
+  );
+
+  // Exported permission: view field_composition_paper
+  $permissions['view field_composition_paper'] = array(
+    'name' => 'view field_composition_paper',
+    'roles' => array(
+      '0' => 'anonymous user',
+      '1' => 'authenticated user',
+    ),
+  );
+
+  // Exported permission: view field_composition_pmp
+  $permissions['view field_composition_pmp'] = array(
+    'name' => 'view field_composition_pmp',
     'roles' => array(
       '0' => 'anonymous user',
       '1' => 'authenticated user',

@@ -6,153 +6,54 @@
 function ldiw_waste_map_features_content_default_fields() {
   $fields = array();
 
-  // Exported field: field_composition_biodegradable
-  $fields['waste_point-field_composition_biodegradable'] = array(
-    'field_name' => 'field_composition_biodegradable',
+  // Exported field: field_composition_glass
+  $fields['waste_point-field_composition_glass'] = array(
+    'field_name' => 'field_composition_glass',
     'type_name' => 'waste_point',
     'display_settings' => array(
+      'label' => array(
+        'format' => 'above',
+        'exclude' => 0,
+      ),
+      'teaser' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'full' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      '4' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'token' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+    ),
+    'widget_active' => '1',
+    'type' => 'number_float',
+    'required' => '0',
+    'multiple' => '0',
+    'module' => 'number',
+    'active' => '1',
+    'prefix' => '',
+    'suffix' => '%',
+    'min' => '0',
+    'max' => '100',
+    'allowed_values' => '',
+    'allowed_values_php' => '',
+    'widget' => array(
+      'default_value' => array(
+        '0' => array(
+          'value' => '',
+          '_error_element' => 'default_value_widget][field_composition_glass][0][value',
+        ),
+      ),
+      'default_value_php' => NULL,
+      'label' => 'Glass (incl glass bottles)',
       'weight' => '7',
-      'parent' => '',
-      'label' => array(
-        'format' => 'above',
-      ),
-      'teaser' => array(
-        'format' => 'default',
-        'exclude' => 0,
-      ),
-      'full' => array(
-        'format' => 'default',
-        'exclude' => 0,
-      ),
-      '4' => array(
-        'format' => 'default',
-        'exclude' => 0,
-      ),
-    ),
-    'widget_active' => '1',
-    'type' => 'number_float',
-    'required' => '0',
-    'multiple' => '0',
-    'module' => 'number',
-    'active' => '1',
-    'prefix' => '',
-    'suffix' => '%',
-    'min' => '0',
-    'max' => '100',
-    'allowed_values' => '',
-    'allowed_values_php' => '',
-    'widget' => array(
-      'default_value' => array(
-        '0' => array(
-          'value' => '',
-          '_error_element' => 'default_value_widget][field_composition_biodegradable][0][value',
-        ),
-      ),
-      'default_value_php' => NULL,
-      'label' => 'Biodegradable (soil, biomass, sand etc)',
-      'weight' => '7',
-      'description' => '',
-      'type' => 'number',
-      'module' => 'number',
-    ),
-  );
-
-  // Exported field: field_composition_construction
-  $fields['waste_point-field_composition_construction'] = array(
-    'field_name' => 'field_composition_construction',
-    'type_name' => 'waste_point',
-    'display_settings' => array(
-      'weight' => '8',
-      'parent' => '',
-      'label' => array(
-        'format' => 'above',
-      ),
-      'teaser' => array(
-        'format' => 'default',
-        'exclude' => 0,
-      ),
-      'full' => array(
-        'format' => 'default',
-        'exclude' => 0,
-      ),
-      '4' => array(
-        'format' => 'default',
-        'exclude' => 0,
-      ),
-    ),
-    'widget_active' => '1',
-    'type' => 'number_float',
-    'required' => '0',
-    'multiple' => '0',
-    'module' => 'number',
-    'active' => '1',
-    'prefix' => '',
-    'suffix' => '%',
-    'min' => '0',
-    'max' => '100',
-    'allowed_values' => '',
-    'allowed_values_php' => '',
-    'widget' => array(
-      'default_value' => array(
-        '0' => array(
-          'value' => '',
-          '_error_element' => 'default_value_widget][field_composition_construction][0][value',
-        ),
-      ),
-      'default_value_php' => NULL,
-      'label' => 'Construction waste',
-      'weight' => '8',
-      'description' => '',
-      'type' => 'number',
-      'module' => 'number',
-    ),
-  );
-
-  // Exported field: field_composition_dangerous
-  $fields['waste_point-field_composition_dangerous'] = array(
-    'field_name' => 'field_composition_dangerous',
-    'type_name' => 'waste_point',
-    'display_settings' => array(
-      'weight' => '6',
-      'parent' => '',
-      'label' => array(
-        'format' => 'above',
-      ),
-      'teaser' => array(
-        'format' => 'default',
-        'exclude' => 0,
-      ),
-      'full' => array(
-        'format' => 'default',
-        'exclude' => 0,
-      ),
-      '4' => array(
-        'format' => 'default',
-        'exclude' => 0,
-      ),
-    ),
-    'widget_active' => '1',
-    'type' => 'number_float',
-    'required' => '0',
-    'multiple' => '0',
-    'module' => 'number',
-    'active' => '1',
-    'prefix' => '',
-    'suffix' => '%',
-    'min' => '0',
-    'max' => '100',
-    'allowed_values' => '',
-    'allowed_values_php' => '',
-    'widget' => array(
-      'default_value' => array(
-        '0' => array(
-          'value' => '',
-          '_error_element' => 'default_value_widget][field_composition_dangerous][0][value',
-        ),
-      ),
-      'default_value_php' => NULL,
-      'label' => 'Dangerous waste and tires',
-      'weight' => '6',
       'description' => '',
       'type' => 'number',
       'module' => 'number',
@@ -203,7 +104,7 @@ function ldiw_waste_map_features_content_default_fields() {
       ),
       'default_value_php' => NULL,
       'label' => 'Large objects like furniture',
-      'weight' => '5',
+      'weight' => '8',
       'description' => '',
       'type' => 'number',
       'module' => 'number',
@@ -255,6 +156,114 @@ function ldiw_waste_map_features_content_default_fields() {
       'default_value_php' => NULL,
       'label' => 'Other',
       'weight' => '9',
+      'description' => '',
+      'type' => 'number',
+      'module' => 'number',
+    ),
+  );
+
+  // Exported field: field_composition_paper
+  $fields['waste_point-field_composition_paper'] = array(
+    'field_name' => 'field_composition_paper',
+    'type_name' => 'waste_point',
+    'display_settings' => array(
+      'label' => array(
+        'format' => 'above',
+        'exclude' => 0,
+      ),
+      'teaser' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'full' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      '4' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'token' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+    ),
+    'widget_active' => '1',
+    'type' => 'number_float',
+    'required' => '0',
+    'multiple' => '0',
+    'module' => 'number',
+    'active' => '1',
+    'prefix' => '',
+    'suffix' => '%',
+    'min' => '0',
+    'max' => '100',
+    'allowed_values' => '',
+    'allowed_values_php' => '',
+    'widget' => array(
+      'default_value' => array(
+        '0' => array(
+          'value' => '',
+          '_error_element' => 'default_value_widget][field_composition_paper][0][value',
+        ),
+      ),
+      'default_value_php' => NULL,
+      'label' => 'Paper or cardboard',
+      'weight' => '6',
+      'description' => '',
+      'type' => 'number',
+      'module' => 'number',
+    ),
+  );
+
+  // Exported field: field_composition_pmp
+  $fields['waste_point-field_composition_pmp'] = array(
+    'field_name' => 'field_composition_pmp',
+    'type_name' => 'waste_point',
+    'display_settings' => array(
+      'label' => array(
+        'format' => 'above',
+        'exclude' => 0,
+      ),
+      'teaser' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'full' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      '4' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'token' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+    ),
+    'widget_active' => '1',
+    'type' => 'number_float',
+    'required' => '0',
+    'multiple' => '0',
+    'module' => 'number',
+    'active' => '1',
+    'prefix' => '',
+    'suffix' => '%',
+    'min' => '0',
+    'max' => '100',
+    'allowed_values' => '',
+    'allowed_values_php' => '',
+    'widget' => array(
+      'default_value' => array(
+        '0' => array(
+          'value' => '',
+          '_error_element' => 'default_value_widget][field_composition_pmp][0][value',
+        ),
+      ),
+      'default_value_php' => NULL,
+      'label' => 'Plastics, metals, packaging',
+      'weight' => '5',
       'description' => '',
       'type' => 'number',
       'module' => 'number',
@@ -358,7 +367,7 @@ function ldiw_waste_map_features_content_default_fields() {
       ),
       'default_value_php' => NULL,
       'label' => 'External photo',
-      'weight' => '13',
+      'weight' => '12',
       'description' => '',
       'type' => 'text_textfield',
       'module' => 'text',
@@ -516,7 +525,7 @@ function ldiw_waste_map_features_content_default_fields() {
       'default_value' => NULL,
       'default_value_php' => NULL,
       'label' => 'Photos ID:Width:Height',
-      'weight' => '12',
+      'weight' => '11',
       'description' => '',
       'type' => 'computed',
       'module' => 'computed_field',
@@ -576,16 +585,16 @@ function ldiw_waste_map_features_content_default_fields() {
 
   // Translatables
   // Included for use with string extractors like potx.
-  t('Biodegradable (soil, biomass, sand etc)');
-  t('Construction waste');
   t('Coordinates');
-  t('Dangerous waste and tires');
   t('External photo');
+  t('Glass (incl glass bottles)');
   t('Large objects like furniture');
   t('Number of tires');
   t('Other');
+  t('Paper or cardboard');
   t('Photo');
   t('Photos ID:Width:Height');
+  t('Plastics, metals, packaging');
   t('Volume');
 
   return $fields;

@@ -172,15 +172,15 @@ Drupal.openlayers.style_plugin.ldiw_waste_map_point_style_plugin.prototype=
 			//!!! make colors and fields configurable
 			var composition=[
 					['e41e2f',parseFloat(
-							attrs.field_composition_dangerous_value || 0)],
+							attrs.field_composition_large_value || 0)],
 					['f7c16b',parseFloat(
-							attrs.field_composition_construction_value || 0)],
+							attrs.field_composition_pmp_value || 0)],
 					['3ab54a',parseFloat(
-							attrs.field_composition_biodegradable_value || 0)],
+							attrs.field_composition_paper_value || 0)],
 					['38439c',parseFloat(
 								attrs.field_composition_other_value || 0) +
 							parseFloat(
-								attrs.field_composition_large_value || 0)]];
+								attrs.field_composition_glass_value || 0)]];
 			composition.sort(function(a,b){return a[1]-b[1]});
 
 			while (composition.length && composition[0][1] <= 0)
