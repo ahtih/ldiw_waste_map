@@ -21,6 +21,8 @@ Drupal.theme.openlayersPopup=function(feature)
 
 	var coeff=attrs.field_volume_value >= 5 ? 1 : 10;
 	var volume_formatted=Math.round(attrs.field_volume_value * coeff) / coeff;
+	if (volume_formatted == 0)
+		volume_formatted=0.1;
 
 	var composition_map={};
 	var composition_sum=0;
