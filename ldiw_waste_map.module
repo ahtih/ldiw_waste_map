@@ -3,6 +3,8 @@
 
 DEFINE('LDIW_WASTE_MAP_DEFAULT_PHOTO_FIELDS',
 									'field_photo field_external_photo');
+DEFINE('LDIW_WASTE_MAP_COMPOSITION_FIELDS_PREFIX',
+									'field_composition_');
 
 /**
  * Implementation of hook_ctools_plugin_directory()
@@ -47,10 +49,9 @@ function ldiw_waste_map_geoclustering_tree_params()
 										'status' => 1);
 	$tree_params->summed_field_names=array(	'field_volume',
 											'field_nr_of_tires');
-	$composition_prefix='field_composition_';
 	foreach (array_keys(content_fields(NULL,'waste_point')) as $fieldname) {
-		if (substr($fieldname,0,strlen($composition_prefix)) ==
-													$composition_prefix) {
+		if (strpos($fieldname,
+						LDIW_WASTE_MAP_COMPOSITION_FIELDS_PREFIX) === 0) {
 			array_push($tree_params->summed_field_names,$fieldname);
 			}
 		}
@@ -148,7 +149,7 @@ function ldiw_waste_map_form_alter(&$form,$form_state,$form_id)
 		$form['#attributes']['class'].=' vertically-condensed-form';
 
 		foreach ($form as $key => $element) {
-			if (strpos($key,'field_composition_') === 0) {
+			if (strpos($key,LDIW_WASTE_MAP_COMPOSITION_FIELDS_PREFIX) === 0) {
 				$form['composition'][$key]=$element;
 				unset($form[$key]);
 				}
