@@ -250,7 +250,7 @@ function ldiw_waste_map_features_views_default_views() {
         'word_boundary' => 1,
         'ellipsis' => 1,
         'html' => 0,
-        'strip_tags' => 1,
+        'strip_tags' => 0,
       ),
       'empty' => '',
       'hide_empty' => 0,
