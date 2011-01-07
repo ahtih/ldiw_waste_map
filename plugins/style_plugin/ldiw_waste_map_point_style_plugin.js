@@ -168,9 +168,13 @@ Drupal.openlayers.style_plugin.ldiw_waste_map_point_style_plugin.prototype=
 			return this.calc_backgroundXOffset(feature);
 			},
 
-	parse_composition:function(attrs)
+	parse_composition:function(feature)
 		{
-			//!!! compute this only once
+			var attrs=feature.attributes;
+
+			if (attrs.parsed_composition)
+				return;
+
 			//!!! make colors and fields configurable
 			var composition=[
 					['e41e2f',parseFloat(
@@ -188,12 +192,14 @@ Drupal.openlayers.style_plugin.ldiw_waste_map_point_style_plugin.prototype=
 			while (composition.length && composition[0][1] <= 0)
 				composition.shift();
 
-			return composition;
+			attrs.parsed_composition=composition;
 			},
 
 	calc_externalGraphic:function(feature)
 		{
-			var composition=this.parse_composition(feature.attributes);
+			this.parse_composition(feature);
+			var composition=feature.attributes.parsed_composition;
+
 			if (composition.length < 2)
 				return '';
 
@@ -222,7 +228,9 @@ Drupal.openlayers.style_plugin.ldiw_waste_map_point_style_plugin.prototype=
 
 	calc_fillColor:function(feature)
 		{
-			var composition=this.parse_composition(feature.attributes);
+			this.parse_composition(feature);
+			var composition=feature.attributes.parsed_composition;
+
 			if (composition.length > 1)
 				return '';
 
