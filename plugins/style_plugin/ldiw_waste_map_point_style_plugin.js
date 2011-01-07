@@ -144,8 +144,8 @@ Drupal.openlayers.style_plugin.ldiw_waste_map_point_style_plugin.prototype=
 {
 	calc_pointRadius:function(feature)
 		{
-			return parseInt(Math.min(20,4+3*Math.log(Math.sqrt(
-					Math.max(1,feature.attributes.field_volume_value)))));
+			this.parse_composition(feature);
+			return feature.attributes.style_pointRadius;
 			},
 
 	calc_backgroundWidth:function(feature)
@@ -170,10 +170,14 @@ Drupal.openlayers.style_plugin.ldiw_waste_map_point_style_plugin.prototype=
 
 	parse_composition:function(feature)
 		{
+			if (feature.attributes.style_pointRadius !== undefined)
+				return;
+
 			var attrs=feature.attributes;
 
-			if (attrs.parsed_composition)
-				return;
+			feature.attributes.style_pointRadius=parseInt(Math.min(20,
+						4+3*Math.log(Math.sqrt(Math.max(1,
+								feature.attributes.field_volume_value)))));
 
 			//!!! make colors and fields configurable
 			var composition=[
@@ -192,35 +196,31 @@ Drupal.openlayers.style_plugin.ldiw_waste_map_point_style_plugin.prototype=
 			while (composition.length && composition[0][1] <= 0)
 				composition.shift();
 
-			feature.attributes.sum_composition=0;
+			var composition_sum=0;
 			for (var i=0;i < composition.length;i++)
-				feature.attributes.sum_composition+=composition[i][1];
+				composition_sum+=composition[i][1];
 
 			if (composition.length > 1) {
-				var radius=this.calc_pointRadius(feature);
-				var threshold=feature.attributes.sum_composition *
-											(1 - 500 / Math.pow(radius,4));
+				var threshold=composition_sum * (1 - 500 / Math.pow(
+									feature.attributes.style_pointRadius,4));
 				if (composition[composition.length-1][1] > threshold) {
 					composition[0]=composition[composition.length-1];
 					composition.length=1;
-					feature.attributes.sum_composition=composition[0][1];
+					composition_sum=composition[0][1];
 					}
 				}
 
-			attrs.parsed_composition=composition;
-			},
+			feature.attributes.style_fillColor='';
+			feature.attributes.style_externalGraphic='';
 
-	calc_externalGraphic:function(feature)
-		{
-			this.parse_composition(feature);
-			var composition=feature.attributes.parsed_composition;
-
-			if (composition.length < 2)
-				return '';
+			if (composition.length <= 1) {
+				feature.attributes.style_fillColor=composition.length ?
+										'#' + composition[0][0] : '#a0a0a0';
+				return;
+				}
 
 			var composition_slots_left=8;
-			var coeff=composition_slots_left /
-						Math.max(1e-9,feature.attributes.sum_composition);
+			var coeff=composition_slots_left / Math.max(1e-9,composition_sum);
 			for (var i=0;i < composition.length-1;i++) {
 				composition[i][1]=Math.max(1,Math.round(
 											composition[i][1] * coeff));
@@ -231,24 +231,24 @@ Drupal.openlayers.style_plugin.ldiw_waste_map_point_style_plugin.prototype=
 									if (a[0] < b[0]) return -1;
 									if (a[0] > b[0]) return 1;
 									return 0;});
+
 			for (var i=0;i < composition.length;i++)
 				composition[i]=composition[i].join(':');
 
-			return Drupal.settings.ldiw_waste_map_point_style_plugin_icons_base_url +
-					composition.join('_') + '.png';
+			feature.attributes.style_externalGraphic=Drupal.settings.
+						ldiw_waste_map_point_style_plugin_icons_base_url +
+											composition.join('_') + '.png';
+			},
+
+	calc_externalGraphic:function(feature)
+		{
+			this.parse_composition(feature);
+			return feature.attributes.style_externalGraphic;
 			},
 
 	calc_fillColor:function(feature)
 		{
 			this.parse_composition(feature);
-			var composition=feature.attributes.parsed_composition;
-
-			if (composition.length > 1)
-				return '';
-
-			if (!composition.length)
-				return '#a0a0a0';
-
-			return '#' + composition[0][0];
+			return feature.attributes.style_fillColor;
 			},
 	};
