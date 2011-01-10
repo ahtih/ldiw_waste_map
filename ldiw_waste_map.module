@@ -234,6 +234,74 @@ function ldiw_waste_map_openlayers_map_alter(&$map)
 	if (isset($map['behaviors']['ldiw_waste_map_behavior_addpointcontent'])) {
 		drupal_add_css(drupal_get_path('module','ldiw_waste_map') .
 														'/node-form.css');
+
+		//!!! Move this functionality to a behavior?
+		$geoip_result=geoip_city();
+		if ($geoip_result && isset($geoip_result->longitude) &&
+										isset($geoip_result->latitude)) {
+			$map['center']['initial']['centerpoint']=
+									$geoip_result->longitude . ', ' .
+									$geoip_result->latitude;
+
+			$geoclustering_params=ldiw_waste_map_geoclustering_tree_params();
+			$geoclustering_params=$geoclustering_params['ldiw_waste_map'];
+
+			$resolutions=openlayers_get_resolutions('4326');
+
+				/***********************************/
+				/*****                         *****/
+				/***** Set $map_size_in_pixels *****/
+				/*****                         *****/
+				/***********************************/
+
+			$map_size_in_pixels=array(0,0);
+			foreach (array('width','height') as $idx => $key) {
+				if (isset($map[$key]) && strpos($map[$key],'%') === FALSE) {
+					$map_size_in_pixels[$idx]=(int)$map[$key];
+					}
+				}
+			if ($map_size_in_pixels[0] <= 0) {
+				$map_size_in_pixels[0]=$map_size_in_pixels[1];
+				}
+			if ($map_size_in_pixels[1] <= 0) {
+				$map_size_in_pixels[1]=$map_size_in_pixels[0];
+				}
+			if ($map_size_in_pixels[0] <= 0) {
+				$map_size_in_pixels=array(500,500);
+				}
+
+				/*********************************************************/
+				/*****                                               *****/
+				/***** Loop over zoom levels and select the best one *****/
+				/*****                                               *****/
+				/*********************************************************/
+
+			$ideal_nr_of_nodes=50;
+
+			$last_nr_of_nodes=0;
+			for ($zoom=count($resolutions)-1;$zoom > 0;$zoom--) {
+				$delta=array($resolutions[$zoom]*$map_size_in_pixels[0] / 2,
+							 $resolutions[$zoom]*$map_size_in_pixels[1] / 2);
+				$nr_of_nodes=geoclustering_get_approximate_nr_of_nodes(
+							array(	$geoip_result->longitude-$delta[0],
+									$geoip_result->latitude-$delta[1],
+									$geoip_result->longitude+$delta[0],
+									$geoip_result->latitude+$delta[1]),
+							$geoclustering_params);
+				if ($nr_of_nodes > $ideal_nr_of_nodes) {
+					if ($last_nr_of_nodes &&
+								$ideal_nr_of_nodes-$last_nr_of_nodes <
+										$nr_of_nodes - $ideal_nr_of_nodes) {
+						$zoom++;
+						}
+					break;
+					}
+
+				$last_nr_of_nodes=$nr_of_nodes;
+				}
+
+			$map['center']['initial']['zoom']=$zoom;
+			}
 		}
 	}
 
