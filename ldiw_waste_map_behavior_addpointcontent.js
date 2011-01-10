@@ -245,6 +245,19 @@ function ldiw_waste_map_behavior_addpointcontent_state(data,options)
 					{
 						this.highlight(feature);
 						this.last_highlighted_feature=feature;
+
+							// Hack to work around problems caused by
+							//   popupSelect and hover_control sharing the
+							//   same layer.selectedFeatures[] object
+
+						Drupal.openlayers.popup.popupSelect.onBeforeSelect=
+								function() {
+									for (var i=this.map.popups.length-1;
+																i >= 0;i--)
+										this.map.removePopup(
+														this.map.popups[i]);
+									}
+
 						return false; // Prevent actual select from happening
 						}
 				});
