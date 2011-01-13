@@ -49,8 +49,8 @@ function ldiw_waste_map_geoclustering_tree_params()
 										'status' => 1);
 	$tree_params->summed_field_names=array(	'field_volume',
 											'field_nr_of_tires');
-	foreach (array_keys(content_fields(NULL,'waste_point')) as $fieldname) {
-		if (strpos($fieldname,
+	foreach (content_fields(NULL,'waste_point') as $fieldname => $field) {
+		if ($field['type_name'] == 'waste_point' && strpos($fieldname,
 						LDIW_WASTE_MAP_COMPOSITION_FIELDS_PREFIX) === 0) {
 			array_push($tree_params->summed_field_names,$fieldname);
 			}
@@ -428,4 +428,53 @@ function ldiw_waste_map_photo($node_id,$photo_id)
 		}
 
 	drupal_not_found();
+	}
+
+/***************************************************************************/
+/****************************                  *****************************/
+/**************************** hook_views_api() *****************************/
+/****************************                  *****************************/
+/***************************************************************************/
+
+function ldiw_waste_map_views_api()
+{
+	return array('api' => 2);
+	}
+
+/***************************************************************************/
+/*************************                         *************************/
+/************************* hook_views_data_alter() *************************/
+/*************************                         *************************/
+/***************************************************************************/
+
+function ldiw_waste_map_views_data_alter(&$data)
+{
+	$field_tables=array();
+	foreach (content_fields(NULL,'waste_point') as $field) {
+		//!!! Perhaps restrict CCK types to number or text? field_photos_id_width_height_value puhul $field['type']=='computed', and handler on ikka content_handler_field_multiple
+
+		if ($field['type_name'] == 'waste_point' && !$field['multiple']) {
+			$db_info=content_database_info($field);
+			if (isset($db_info['table']) &&
+						isset($db_info['columns']['value']['column']) &&
+						count($db_info['columns']) == 1) {
+				$field_tables[$db_info['columns']['value']['column']]=
+														$db_info['table'];
+				}
+			}
+		}
+
+	foreach ($data as $table_key => $table) {
+		foreach (array_intersect_key($table,$field_tables) as
+													$fieldname => $field) {
+			if (isset($field['field']['table']) &&
+					$field['field']['table'] == $field_tables[$fieldname] &&
+					isset($field['field']['handler']) && 
+					$field['field']['handler'] ==
+										'content_handler_field_multiple') {
+				$data[$table_key][$fieldname]['field']['handler']=
+										'content_handler_field_optimized';
+				}
+			}
+		}
 	}
