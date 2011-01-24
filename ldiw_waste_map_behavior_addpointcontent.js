@@ -232,6 +232,12 @@ function ldiw_waste_map_behavior_addpointcontent_state(data,options)
 														this.draw_menu);
 
 	data.openlayers.addControl(panel);
+	if (OpenLayers.Util.getBrowserName() != 'firefox' ||
+						(navigator.userAgent.indexOf('Firefox/1') < 0 &&
+						navigator.userAgent.indexOf('Firefox/2') < 0)) {
+		data.openlayers.layerContainerDiv.style.zIndex=null;
+		panel.div.style.zIndex=data.openlayers.Z_INDEX_BASE['Popup']-1;
+		}
    	panel.activate();
    	panel.redraw();
 
