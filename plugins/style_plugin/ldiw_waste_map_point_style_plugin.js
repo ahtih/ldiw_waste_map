@@ -1,6 +1,6 @@
 // $Id$
 
-Drupal.openlayers.style_plugin.ldiw_waste_map_point_style_plugin=
+Drupal.openlayers.style_plugin["ldiw_waste_map_point_style_plugin"]=
 													function(parameters) {
 
 Drupal.theme.openlayersAddPointContentNoNodeID=function(feature)
@@ -140,7 +140,7 @@ Drupal.theme.openlayersPopup=function(feature)
 	}
 }
 
-Drupal.openlayers.style_plugin.ldiw_waste_map_point_style_plugin.prototype=
+Drupal.openlayers.style_plugin["ldiw_waste_map_point_style_plugin"].prototype=
 {
 	calc_pointRadius:function(feature)
 		{
@@ -250,5 +250,5 @@ Drupal.openlayers.style_plugin.ldiw_waste_map_point_style_plugin.prototype=
 		{
 			this.parse_composition(feature);
 			return feature.attributes.style_fillColor;
-			},
+			}
 	};
