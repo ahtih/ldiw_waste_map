@@ -10,6 +10,19 @@ Drupal.theme.openlayersAddPointContentNoNodeID=function(feature)
 		{'@nr_of_nodes':feature.attributes.nr_of_nodes});
 	}
 
+ldiw_waste_map_point_style_plugin_zoom_in=function(map_id,lon,lat)
+{
+	var map_obj=$('#' + map_id).data('openlayers').openlayers;
+
+	map_obj.setCenter(new OpenLayers.LonLat(lon,lat),
+				map_obj.getZoomForResolution(map_obj.resolution / 8,true));
+
+		// Close popups
+
+	for (var i=map_obj.popups.length-1;i >= 0;i--)
+		map_obj.removePopup(map_obj.popups[i]);
+	}
+
 Drupal.theme.openlayersPopup=function(feature)
 {
 	var style_hack=document.getElementById(
@@ -52,13 +65,23 @@ Drupal.theme.openlayersPopup=function(feature)
 		composition='<br>Composition: ' + composition;
 
 	var output='';
+
+	if (feature.layer.map.getZoom()+1 <
+									feature.layer.map.getNumZoomLevels()) {
+		var coords=feature.geometry.getBounds().getCenterLonLat();
+		output+='<div style="float:right"><a href="#" onclick="' + 
+						'ldiw_waste_map_point_style_plugin_zoom_in(\'' + 
+						feature.layer.map.div.id +
+						'\',' + coords.lon + ',' + coords.lat +
+						')"><b>Zoom in here</b></a></div>';
+		}
+
 	if (attrs.nr_of_nodes && attrs.nr_of_nodes > 1) {
-		output=attrs.nr_of_nodes + ' waste points<br>' + 
+		output+=attrs.nr_of_nodes + ' waste points<br>' + 
 				'Total volume ' + volume_formatted + 'm&sup3;' +
 				composition;
 		}
 	else {
-		output='';
 		if (volume_formatted > 0)
 			output+='Volume <b>' + volume_formatted + 'm&sup3;</b>';
 		output+=composition;
