@@ -94,8 +94,22 @@ function ldiw_waste_map_openlayers_behaviors()
 			'behavior' => array(
 				'class' => 'ldiw_waste_map_behavior_addpointcontent',
 				'parent' => 'openlayers_behavior',
+				),
 			),
-		));
+		'ldiw_waste_map_behavior_automaticpopup' => array(
+			'title' => t('Popup random feature on map load'),
+			'description' => t('Automatically open a popup of a random ' .
+							'feature on initial map load. ' .
+							'"Pop Up" behavior must also be enabled.'),
+			'type' => 'layer',
+			'path' => drupal_get_path('module','ldiw_waste_map'),
+			'file' => 'ldiw_waste_map_behavior_automaticpopup.inc',
+			'behavior' => array(
+				'class' => 'ldiw_waste_map_behavior_automaticpopup',
+				'parent' => 'openlayers_behavior',
+				),
+			),
+		);
 	}
 
 /**

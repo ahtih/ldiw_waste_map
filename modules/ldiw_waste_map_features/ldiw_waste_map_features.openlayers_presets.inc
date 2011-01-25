@@ -33,6 +33,10 @@ function ldiw_waste_map_features_openlayers_presets() {
         'content_type' => 'waste_point',
         'features_layer' => 'waste_map_wfs',
       ),
+      'ldiw_waste_map_behavior_automaticpopup' => array(
+        'features_layer' => 'waste_map_wfs',
+        'required_feature_attribute' => 'field_photos_id_width_height_value',
+      ),
       'openlayers_behavior_attribution' => array(),
       'openlayers_behavior_popup' => array(
         'layers' => array(),
