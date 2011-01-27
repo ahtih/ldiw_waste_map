@@ -64,24 +64,25 @@ Drupal.theme.openlayersPopup=function(feature)
 	if (composition)
 		composition='<br>Composition: ' + composition;
 
-	var output='';
+	var output='<div style="float:right; text-align:right">';
 
 	if (feature.layer.map.getZoom()+1 <
 									feature.layer.map.getNumZoomLevels()) {
 		var coords=feature.geometry.getBounds().getCenterLonLat();
-		output+='<div style="float:right"><a href="#" onclick="' + 
+		output+='<a href="#" onclick="' + 
 						'ldiw_waste_map_point_style_plugin_zoom_in(\'' + 
 						feature.layer.map.div.id +
 						'\',' + coords.lon + ',' + coords.lat +
-						')"><b>Zoom in here</b></a></div>';
+						')"><b>Zoom in here</b></a>';
 		}
 
 	if (attrs.nr_of_nodes && attrs.nr_of_nodes > 1) {
-		output+=attrs.nr_of_nodes + ' waste points<br>' + 
+		output+='</div>' + attrs.nr_of_nodes + ' waste points<br>' + 
 				'Total volume ' + volume_formatted + 'm&sup3;' +
 				composition;
 		}
 	else {
+		output+='<br>ID&nbsp;#' + feature.fid + '<br></div>';
 		if (volume_formatted > 0)
 			output+='Volume <b>' + volume_formatted + 'm&sup3;</b>';
 		output+=composition;
