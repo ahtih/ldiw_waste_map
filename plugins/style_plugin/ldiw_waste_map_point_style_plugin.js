@@ -1,5 +1,19 @@
 // $Id$
 
+composition_fields={		//!!! Make this configurable
+		'field_composition_large_value' : {'color' : 'e41e2f',
+										'text' : 'large objects'},
+		'field_composition_pmp_value' : {'color' : 'f7c16b',
+										'text' : 'plastic/metal/packaging'},
+		'field_composition_paper_value' : {'color' : '3ab54a',
+										'text' : 'paper'},
+		'field_composition_other_value' : {'color' : '38439c',
+										'text' : 'other',
+										'text_solo' : 'other (misc waste)'},
+		'field_composition_glass_value' : {'color' : '38439c',
+										'text' : 'glass'}
+		};
+
 Drupal.openlayers.style_plugin["ldiw_waste_map_point_style_plugin"]=
 													function(parameters) {
 
@@ -37,24 +51,27 @@ Drupal.theme.openlayersPopup=function(feature)
 	if (volume_formatted == 0)
 		volume_formatted=0.1;
 
-	var composition_map={};
+	var composition_array=[];
 	var composition_sum=0;
-	for (var attrname in attrs) {
-		var type=attrname.replace(/^field_composition_(.*)_value/,'$1');
-		if (type != attrname && attrs[attrname]) {
+	for (var attrname in composition_fields) {
+		if (attrs[attrname]) {
 			var value=parseFloat(attrs[attrname]);
 			if (value > 0) {
-				composition_map[type]=value;
+				composition_array.push([attrname,value]);
 				composition_sum+=value;
 				}
 			}
 		}
 
-	var composition_array=[];
-	for (var type in composition_map)
-		composition_array.push(Math.max(1,
-				parseInt(composition_map[type] * 100 / composition_sum)) +
-				'% ' + type);
+	for (var i in composition_array) {
+		var attrname=composition_array[i][0];
+		var text=composition_fields[attrname]['text'];
+		if (composition_array.length == 1)
+			text=composition_fields[attrname]['text_solo'] || text;
+		composition_array[i]=Math.max(1,
+				parseInt(composition_array[i][1]*100 / composition_sum)) +
+				'%&nbsp;' + text;
+		}
 
 	if (attrs.field_nr_of_tires_value &&
 								attrs.field_nr_of_tires_value != '0')
@@ -203,26 +220,21 @@ Drupal.openlayers.style_plugin["ldiw_waste_map_point_style_plugin"].prototype=
 						4+3*Math.log(Math.sqrt(Math.max(1,
 								feature.attributes.field_volume_value)))));
 
-			//!!! make colors and fields configurable
-			var composition=[
-					['e41e2f',parseFloat(
-							attrs.field_composition_large_value || 0)],
-					['f7c16b',parseFloat(
-							attrs.field_composition_pmp_value || 0)],
-					['3ab54a',parseFloat(
-							attrs.field_composition_paper_value || 0)],
-					['38439c',parseFloat(
-								attrs.field_composition_other_value || 0) +
-							parseFloat(
-								attrs.field_composition_glass_value || 0)]];
-			composition.sort(function(a,b){return a[1]-b[1]});
-
-			while (composition.length && composition[0][1] <= 0)
-				composition.shift();
-
+			var composition=[];
 			var composition_sum=0;
-			for (var i=0;i < composition.length;i++)
-				composition_sum+=composition[i][1];
+
+			for (var attrname in composition_fields) {
+				if (attrs[attrname]) {
+					var value=parseFloat(attrs[attrname]);
+					if (value > 0) {
+						composition.push([
+								composition_fields[attrname]['color'],value]);
+						composition_sum+=value;
+						}
+					}
+				}
+
+			composition.sort(function(a,b){return a[1]-b[1]});
 
 			if (composition.length > 1) {
 				var threshold=composition_sum * (1 - 500 / Math.pow(
