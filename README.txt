@@ -28,6 +28,7 @@ Many patches to other modules are needed for Waste Map to really work:
 - http://drupal.org/files/issues/geo-filter-float.patch (http://drupal.org/node/883010)
 - http://drupal.org/files/issues/geo-ewkb-parsing.patch (http://drupal.org/node/883020)
 - http://drupal.org/files/issues/geo-table-prefixes-776436.patch (http://drupal.org/node/776436)
+- http://drupal.org/files/issues/geo-813482-updated.patch (http://drupal.org/node/813482)
 - http://drupal.org/files/issues/OpenLayers-popup-featureremoved.patch (http://drupal.org/node/1011980)
 
 You also need to make sure you are using dev version of OpenLayers Drupal

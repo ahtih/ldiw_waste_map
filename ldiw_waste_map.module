@@ -202,6 +202,11 @@ function ldiw_waste_map_menu()
 			'page arguments' => array(2,3),
 			'type' => MENU_CALLBACK,
 			),
+		'api/waste_points.csv' => array(
+			'page callback' => 'ldiw_waste_map_waste_points',
+			'access callback' => TRUE,
+			'type' => MENU_CALLBACK,
+			),
 
 		// Admin page
 		'admin/settings/ldiw_waste_map' => array(
@@ -491,4 +496,31 @@ function ldiw_waste_map_views_data_alter(&$data)
 				}
 			}
 		}
+	}
+
+/***************************************************************************/
+/**********************                               **********************/
+/********************** ldiw_waste_map_waste_points() **********************/
+/**********************                               **********************/
+/***************************************************************************/
+
+function ldiw_waste_map_waste_points()
+{
+	$view_arguments=array();
+	if (!empty($_REQUEST['BBOX'])) {
+		$bbox=explode(',',$_REQUEST['BBOX']);
+		if (count($bbox) != 4) {	
+			drupal_set_header('HTTP/1.1 400 Invalid BBOX argument value');
+			exit();
+			}
+		$view_arguments[]="POLYGON(($bbox[0] $bbox[1],$bbox[2] $bbox[1]," . 
+				"$bbox[2] $bbox[3],$bbox[0] $bbox[3],$bbox[0] $bbox[1]))";
+		}
+
+	$view=views_get_view('waste_map_geoclustering_wfs');
+	if ($view) {
+		return $view->execute_display('feed_1',$view_arguments);
+		}
+
+	return drupal_not_found();
 	}

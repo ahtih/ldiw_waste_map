@@ -529,6 +529,43 @@ function ldiw_waste_map_features_views_default_views() {
     ),
   ));
   $handler->override_option('arguments', array(
+    'field_coords_geo' => array(
+      'default_action' => 'ignore',
+      'style_plugin' => 'default_summary',
+      'style_options' => array(),
+      'wildcard' => 'all',
+      'wildcard_substitution' => 'All',
+      'title' => '',
+      'breadcrumb' => '',
+      'default_argument_type' => 'fixed',
+      'default_argument' => '',
+      'validate_type' => 'none',
+      'validate_fail' => 'not found',
+      'function' => 'intersects',
+      'group' => 'geo',
+      'id' => 'field_coords_geo',
+      'table' => 'node_data_field_coords',
+      'field' => 'field_coords_geo',
+      'validate_user_argument_type' => 'uid',
+      'validate_user_roles' => array(
+        '2' => 0,
+      ),
+      'relationship' => 'none',
+      'default_options_div_prefix' => '',
+      'default_argument_user' => 0,
+      'default_argument_fixed' => '',
+      'default_argument_php' => '',
+      'validate_argument_node_type' => array(
+        'cleanup_project' => 0,
+        'waste_point' => 0,
+        'page' => 0,
+        'story' => 0,
+      ),
+      'validate_argument_node_access' => 0,
+      'validate_argument_nid_type' => 'nid',
+      'validate_user_restrict_roles' => 0,
+      'validate_argument_php' => '',
+    ),
     'geoclustering_level' => array(
       'default_action' => 'default',
       'style_plugin' => 'default_summary',
@@ -598,6 +635,38 @@ function ldiw_waste_map_features_views_default_views() {
     'item_length' => 'default',
   ));
   $handler->override_option('path', 'waste_map_geoclustering.wfs');
+  $handler->override_option('menu', array(
+    'type' => 'none',
+    'title' => '',
+    'description' => '',
+    'weight' => 0,
+    'name' => 'navigation',
+  ));
+  $handler->override_option('tab_options', array(
+    'type' => 'none',
+    'title' => '',
+    'description' => '',
+    'weight' => 0,
+    'name' => 'navigation',
+  ));
+  $handler->override_option('displays', array());
+  $handler->override_option('sitename_title', FALSE);
+  $handler = $view->new_display('feed', 'Feed', 'feed_1');
+  $handler->override_option('style_plugin', 'views_csv');
+  $handler->override_option('style_options', array(
+    'mission_description' => FALSE,
+    'description' => '',
+    'attach_text' => 'CSV',
+    'provide_file' => 0,
+    'filename' => 'view-%view.csv',
+    'parent_sort' => 0,
+    'seperator' => ',',
+    'quote' => 1,
+    'trim' => 0,
+    'header' => 1,
+  ));
+  $handler->override_option('row_plugin', '');
+  $handler->override_option('path', 'waste_map_geoclustering.csv');
   $handler->override_option('menu', array(
     'type' => 'none',
     'title' => '',
