@@ -21,6 +21,8 @@ projects[openlayers][patch][] = "http://drupal.org/files/issues/OpenLayers-popup
 projects[wfs][patch][] = "http://drupal.org/files/issues/wfs-filter-changes.patch"
 
 projects[views_bonus][version] = 1.x-dev
+projects[views_bonus][patch][] = "http://drupal.org/files/issues/views_bonus_csv_strip_html.patch"
+projects[views_bonus][patch][] = "http://drupal.org/files/issues/views_bonus_csv_separator.patch"
 
 projects[geo][download][type] = "cvs"
 projects[geo][download][module] = "contributions/modules/geo"

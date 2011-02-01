@@ -660,9 +660,10 @@ function ldiw_waste_map_features_views_default_views() {
     'provide_file' => 0,
     'filename' => 'view-%view.csv',
     'parent_sort' => 0,
-    'seperator' => ',',
+    'separator' => ',',
     'quote' => 1,
     'trim' => 0,
+    'strip_html' => 0,
     'header' => 1,
   ));
   $handler->override_option('row_plugin', '');
