@@ -9,7 +9,7 @@ function ldiw_waste_map_features_views_default_views() {
   // Exported view: waste_map_display
   $view = new view;
   $view->name = 'waste_map_display';
-  $view->description = 'Waste Map WFS OpenLayers';
+  $view->description = 'Waste Map OpenLayers';
   $view->tag = '';
   $view->view_php = '';
   $view->base_table = 'files';
@@ -26,7 +26,7 @@ function ldiw_waste_map_features_views_default_views() {
   $handler->override_option('title', 'Waste Map');
   $handler->override_option('style_plugin', 'openlayers_map');
   $handler->override_option('style_options', array(
-    'preset' => 'waste_map_wfs',
+    'preset' => 'waste_map',
   ));
   $handler = $view->new_display('page', 'Page', 'page_1');
   $handler->override_option('path', 'waste_map');
@@ -47,10 +47,10 @@ function ldiw_waste_map_features_views_default_views() {
 
   $views[$view->name] = $view;
 
-  // Exported view: waste_map_geoclustering_wfs
+  // Exported view: waste_map_geoclustering
   $view = new view;
-  $view->name = 'waste_map_geoclustering_wfs';
-  $view->description = 'Waste Map WFS output with Geoclustering';
+  $view->name = 'waste_map_geoclustering';
+  $view->description = 'Waste Map CSV output with Geoclustering';
   $view->tag = '';
   $view->view_php = '';
   $view->base_table = 'node';
@@ -60,7 +60,7 @@ function ldiw_waste_map_features_views_default_views() {
   $handler = $view->new_display('default', 'Defaults', 'default');
   $handler->override_option('fields', array(
     'field_coords_geo' => array(
-      'label' => 'Longitude (field_coords)',
+      'label' => 'lon',
       'alter' => array(
         'alter_text' => 0,
         'text' => '',
@@ -70,14 +70,18 @@ function ldiw_waste_map_features_views_default_views() {
         'alt' => '',
         'prefix' => '',
         'suffix' => '',
+        'target' => '',
         'help' => '',
         'trim' => 0,
         'max_length' => '',
         'word_boundary' => 1,
         'ellipsis' => 1,
-        'strip_tags' => 0,
         'html' => 0,
+        'strip_tags' => 0,
       ),
+      'empty' => '',
+      'hide_empty' => 0,
+      'empty_zero' => 0,
       'exclude' => 0,
       'id' => 'field_coords_geo',
       'table' => 'node_data_field_coords',
@@ -136,7 +140,7 @@ function ldiw_waste_map_features_views_default_views() {
       'relationship' => 'none',
     ),
     'nid' => array(
-      'label' => 'Nid',
+      'label' => 'id',
       'alter' => array(
         'alter_text' => 0,
         'text' => '',
@@ -166,7 +170,7 @@ function ldiw_waste_map_features_views_default_views() {
       'relationship' => 'none',
     ),
     'field_coords_geo_1' => array(
-      'label' => 'Latitude (field_coords)',
+      'label' => 'lat',
       'alter' => array(
         'alter_text' => 0,
         'text' => '',
@@ -176,14 +180,18 @@ function ldiw_waste_map_features_views_default_views() {
         'alt' => '',
         'prefix' => '',
         'suffix' => '',
+        'target' => '',
         'help' => '',
         'trim' => 0,
         'max_length' => '',
         'word_boundary' => 1,
         'ellipsis' => 1,
-        'strip_tags' => 0,
         'html' => 0,
+        'strip_tags' => 0,
       ),
+      'empty' => '',
+      'hide_empty' => 0,
+      'empty_zero' => 0,
       'exclude' => 0,
       'id' => 'field_coords_geo_1',
       'table' => 'node_data_field_coords',
@@ -204,7 +212,7 @@ function ldiw_waste_map_features_views_default_views() {
       'simplify' => 0,
     ),
     'nr_of_nodes' => array(
-      'label' => 'Number of nodes',
+      'label' => 'nr_of_nodes',
       'alter' => array(
         'alter_text' => 0,
         'text' => '',
@@ -233,7 +241,7 @@ function ldiw_waste_map_features_views_default_views() {
       'relationship' => 'none',
     ),
     'body' => array(
-      'label' => 'Body',
+      'label' => 'description',
       'alter' => array(
         'alter_text' => 0,
         'text' => '',
@@ -612,45 +620,7 @@ function ldiw_waste_map_features_views_default_views() {
     'type' => 'none',
   ));
   $handler->override_option('items_per_page', 400);
-  $handler = $view->new_display('wfs', 'WFS', 'wfs_1');
-  $handler->override_option('style_plugin', 'wfs_feed');
-  $handler->override_option('style_options', array(
-    'mission_description' => FALSE,
-    'description' => '',
-    'data_source' => array(
-      'value' => array(
-        'latlon' => 'latlon',
-      ),
-    ),
-    'fields' => array(
-      'id' => 'nid',
-      'longitude' => 'field_coords_geo',
-      'latitude' => 'field_coords_geo_1',
-      'wkt' => '',
-    ),
-  ));
-  $handler->override_option('row_plugin', 'node_rss');
-  $handler->override_option('row_options', array(
-    'relationship' => 'none',
-    'item_length' => 'default',
-  ));
-  $handler->override_option('path', 'waste_map_geoclustering.wfs');
-  $handler->override_option('menu', array(
-    'type' => 'none',
-    'title' => '',
-    'description' => '',
-    'weight' => 0,
-    'name' => 'navigation',
-  ));
-  $handler->override_option('tab_options', array(
-    'type' => 'none',
-    'title' => '',
-    'description' => '',
-    'weight' => 0,
-    'name' => 'navigation',
-  ));
-  $handler->override_option('displays', array());
-  $handler->override_option('sitename_title', FALSE);
+  $handler->override_option('link_display', 'feed_1');
   $handler = $view->new_display('feed', 'Feed', 'feed_1');
   $handler->override_option('style_plugin', 'views_csv');
   $handler->override_option('style_options', array(

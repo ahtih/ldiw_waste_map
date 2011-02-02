@@ -1,17 +1,17 @@
 // $Id$
 
 composition_fields={		//!!! Make this configurable
-		'field_composition_large_value' : {'color' : 'e41e2f',
-										'text' : 'large objects'},
-		'field_composition_pmp_value' : {'color' : 'f7c16b',
-										'text' : 'plastic/metal/packaging'},
-		'field_composition_paper_value' : {'color' : '3ab54a',
-										'text' : 'paper'},
-		'field_composition_other_value' : {'color' : '38439c',
-										'text' : 'other',
-										'text_solo' : 'other (misc waste)'},
-		'field_composition_glass_value' : {'color' : '38439c',
-										'text' : 'glass'}
+		'composition_large' : {'color' : 'e41e2f',
+								'text' : 'large objects'},
+		'composition_pmp' : {'color' : 'f7c16b',
+								'text' : 'plastic/metal/packaging'},
+		'composition_paper' : {'color' : '3ab54a',
+								'text' : 'paper'},
+		'composition_other' : {'color' : '38439c',
+								'text' : 'other',
+								'text_solo' : 'other (misc waste)'},
+		'composition_glass' : {'color' : '38439c',
+								'text' : 'glass'}
 		};
 
 Drupal.openlayers.style_plugin["ldiw_waste_map_point_style_plugin"]=
@@ -46,8 +46,8 @@ Drupal.theme.openlayersPopup=function(feature)
 
 	var attrs=feature.attributes;
 
-	var coeff=attrs.field_volume_value >= 5 ? 1 : 10;
-	var volume_formatted=Math.round(attrs.field_volume_value * coeff) / coeff;
+	var coeff=attrs.volume >= 5 ? 1 : 10;
+	var volume_formatted=Math.round(attrs.volume * coeff) / coeff;
 	if (volume_formatted == 0)
 		volume_formatted=0.1;
 
@@ -73,9 +73,8 @@ Drupal.theme.openlayersPopup=function(feature)
 				'%&nbsp;' + text;
 		}
 
-	if (attrs.field_nr_of_tires_value &&
-								attrs.field_nr_of_tires_value != '0')
-		composition_array.push(attrs.field_nr_of_tires_value + ' tires');
+	if (attrs.nr_of_tires && attrs.nr_of_tires != '0')
+		composition_array.push(attrs.nr_of_tires + ' tires');
 
 	var composition=composition_array.join(', ');
 	if (composition)
@@ -99,15 +98,15 @@ Drupal.theme.openlayersPopup=function(feature)
 				composition;
 		}
 	else {
-		output+='<br>ID&nbsp;#' + feature.fid + '<br></div>';
+		output+='<br>ID&nbsp;#' + attrs.id + '<br></div>';
 		if (volume_formatted > 0)
 			output+='Volume <b>' + volume_formatted + 'm&sup3;</b>';
 		output+=composition;
-		if (attrs.body != '')
-			output+='<br><br>' + attrs.body;
-		if (attrs.field_photos_id_width_height_value != '') {
+		if (attrs.description != '')
+			output+='<br><br>' + attrs.description;
+		if (attrs.photos) {
 			var photo_divs=[];
-			var photos=attrs.field_photos_id_width_height_value.split(' ');
+			var photos=attrs.photos.split(' ');
 			var popup_width=0;
 			var max_photo_width=Math.min(
 						OpenLayers.Popup.FramedCloud.prototype.maxSize.w,
@@ -129,7 +128,7 @@ Drupal.theme.openlayersPopup=function(feature)
 				output+='<div id="' + div_id + '">' +
 						'<img src="' +
 							Drupal.settings.ldiw_waste_map_base_url +
-							'/photo/' + feature.fid + '/' + photo[0] + '" ' +
+							'/photo/' + attrs.id + '/' + photo[0] + '" ' +
 							'width="' + width + '"';
 				if (height)
 					output+=' height="' + height + '"';
@@ -149,7 +148,7 @@ Drupal.theme.openlayersPopup=function(feature)
 				}
 
 			$.post(Drupal.settings.ldiw_waste_map_base_url +
-						'/photos_ajax/' + feature.fid,
+						'/photos_ajax/' + attrs.id,
 					'',function(data) {
 							for (var i in photo_divs) {
 								var div=photo_divs[i];
@@ -218,7 +217,7 @@ Drupal.openlayers.style_plugin["ldiw_waste_map_point_style_plugin"].prototype=
 
 			feature.attributes.style_pointRadius=parseInt(Math.min(20,
 						4+3*Math.log(Math.sqrt(Math.max(1,
-								feature.attributes.field_volume_value)))));
+								feature.attributes.volume)))));
 
 			var composition=[];
 			var composition_sum=0;

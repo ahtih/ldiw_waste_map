@@ -8,7 +8,7 @@ function ldiw_waste_map_features_openlayers_presets() {
   $openlayers_presets = new stdClass;
   $openlayers_presets->disabled = FALSE; /* Edit this to true to make a default openlayers_presets disabled initially */
   $openlayers_presets->api_version = 1;
-  $openlayers_presets->name = 'waste_map_wfs';
+  $openlayers_presets->name = 'waste_map';
   $openlayers_presets->title = 'Waste Map';
   $openlayers_presets->description = 'Waste Map';
   $openlayers_presets->data = array(
@@ -31,11 +31,11 @@ function ldiw_waste_map_features_openlayers_presets() {
     'behaviors' => array(
       'ldiw_waste_map_behavior_addpointcontent' => array(
         'content_type' => 'waste_point',
-        'features_layer' => 'waste_map_wfs',
+        'features_layer' => 'waste_map_csv',
       ),
       'ldiw_waste_map_behavior_automaticpopup' => array(
-        'features_layer' => 'waste_map_wfs',
-        'required_feature_attribute' => 'field_photos_id_width_height_value',
+        'features_layer' => 'waste_map_csv',
+        'required_feature_attribute' => 'photos',
       ),
       'openlayers_behavior_attribution' => array(),
       'openlayers_behavior_popup' => array(
@@ -51,11 +51,11 @@ function ldiw_waste_map_features_openlayers_presets() {
     'default_layer' => 'osm_mapnik',
     'layers' => array(
       'osm_mapnik' => 'osm_mapnik',
-      'waste_map_wfs' => 'waste_map_wfs',
+      'waste_map_csv' => 'waste_map_csv',
     ),
     'layer_styles' => array(),
     'layer_activated' => array(
-      'waste_map_wfs' => 'waste_map_wfs',
+      'waste_map_csv' => 'waste_map_csv',
     ),
     'layer_switcher' => array(),
     'projection' => '900913',
@@ -67,6 +67,6 @@ function ldiw_waste_map_features_openlayers_presets() {
     ),
   );
 
-  $export['waste_map_wfs'] = $openlayers_presets;
+  $export['waste_map'] = $openlayers_presets;
   return $export;
 }

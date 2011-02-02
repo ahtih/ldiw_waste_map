@@ -64,17 +64,17 @@ function ldiw_waste_map_geoclustering_tree_params()
  */
 function ldiw_waste_map_openlayers_layer_types() {
   return array(
-    'ldiw_waste_map_layer_type_wfs' => array(
-      'title' => t('WFS BBOX Vector layer'),
-      'description' => t('A Vector map that uses WFS protocol to get features
-									and uses OpenLayers BBOX Strategy.'),
+    'ldiw_waste_map_layer_type_csv' => array(
+      'title' => t('CSV BBOX Vector layer'),
+      'description' => t('A Vector map that uses CSV ?BBOX=... protocol ' .
+					'to get features and uses OpenLayers BBOX Strategy.'),
       'layer_type' => array(
         'path' => drupal_get_path('module','ldiw_waste_map'),
-        'file' => 'wfs_layer_type.inc',
-        'class' => 'ldiw_waste_map_layer_type_wfs',
+        'file' => 'csv_layer_type.inc',
+        'class' => 'ldiw_waste_map_layer_type_csv',
         'parent' => 'openlayers_layer_type',
       ),
-    )
+    ),
   );
 }
 
@@ -517,10 +517,39 @@ function ldiw_waste_map_waste_points()
 				"$bbox[2] $bbox[3],$bbox[0] $bbox[3],$bbox[0] $bbox[1]))";
 		}
 
-	$view=views_get_view('waste_map_geoclustering_wfs');
-	if ($view) {
-		return $view->execute_display('feed_1',$view_arguments);
+	$view=views_get_view('waste_map_geoclustering');
+	if (!$view) {
+		return drupal_not_found();
 		}
 
-	return drupal_not_found();
+	return $view->execute_display('feed_1',$view_arguments);
+	}
+
+/***************************************************************************/
+/***********                                                    ************/
+/*********** ldiw_waste_map_preprocess_views_bonus_export_csv() ************/
+/***********                                                    ************/
+/***************************************************************************/
+
+function ldiw_waste_map_preprocess_views_bonus_export_csv(&$vars)
+{
+	if ($vars['view']->name != 'waste_map_geoclustering') {
+		return;
+		}
+
+		// Rename CSV column names of CCK fields from human-readable
+		//   field labels to machine-readable fieldnames
+
+	foreach ($vars['header'] as $key => $label) {
+		$new_column=preg_replace('/^field_(..*)_value$/','$1',$key);
+		if ($new_column == $key) {
+			$new_column=$label;
+			}
+
+		if ($key == 'field_photos_id_width_height_value') {	//!!! Remove hardcoding of this stuff
+			$new_column='photos';
+			}
+
+		$vars['header'][$key]=trim($new_column,'"');
+		}
 	}

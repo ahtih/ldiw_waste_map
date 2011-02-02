@@ -7,8 +7,8 @@ LDIW Waste Map module provides:
 - "Waste Point" content type, which has fields such as Geo coordinates,
 	photos, amount and composition of waste, etc.
 - Waste Map display, displaying the "Waste Point" nodes. This is implemented
-	using OpenLayers, WFS, and Geoclustering modules. If you have more than
-	ca thousand points, map level of detail will start to change dynamically
+	using OpenLayers and Geoclustering modules. If you have more than
+	ca 400 points, map level of detail will start to change dynamically
 	as you zoom in and out in map display. It should scale to over
 	100 000 waste points.
 
@@ -23,9 +23,7 @@ in the modules directory for your site and enable it on the
 (e.g. OpenLayers) which are pointed out to you when you enable the module.
 
 Many patches to other modules are needed for Waste Map to really work:
-- http://drupal.org/files/issues/wfs-filter-changes.patch (http://drupal.org/node/745200)
 - http://drupal.org/files/issues/geo_openlayers_0.patch (http://drupal.org/node/804878)
-- http://drupal.org/files/issues/geo-filter-float.patch (http://drupal.org/node/883010)
 - http://drupal.org/files/issues/geo-ewkb-parsing.patch (http://drupal.org/node/883020)
 - http://drupal.org/files/issues/geo-table-prefixes-776436.patch (http://drupal.org/node/776436)
 - http://drupal.org/files/issues/geo-813482-updated.patch (http://drupal.org/node/813482)

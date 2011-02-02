@@ -123,7 +123,7 @@ function ldiw_waste_map_behavior_addpointcontent_state(data,options)
 			if (feature_to_edit && feature_to_edit.renderIntent == 'select') {
 				layer.removeFeatures(layer.features);
 
-				var node_id=feature_to_edit.fid; //!!! Remove hardcoding of .fid
+				var node_id=feature_to_edit.attributes.id; //!!! Remove hardcoding of .id
 				if (isNaN(node_id)) {
 					var popup_text=Drupal.theme(
 									'openlayersAddPointContentNoNodeID',
