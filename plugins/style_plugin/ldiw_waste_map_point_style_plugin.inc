@@ -31,13 +31,26 @@ class openlayers_style_plugin_point_style_plugin
 		{
 			drupal_add_js(drupal_get_path('module','ldiw_waste_map') .
 				'/plugins/style_plugin/ldiw_waste_map_point_style_plugin.js');
-			drupal_add_js(array('ldiw_waste_map_point_style_plugin_icons_base_url' =>
-					url(file_directory_path() .
-							'/ldiw_waste_map/waste_point_icon/',
-						array('absolute'=>TRUE))),'setting');
-			drupal_add_js(array('ldiw_waste_map_base_url' =>
-					url('ldiw_waste_map',array('absolute'=>TRUE))),
-					'setting');
+
+			$composition=array();
+			foreach (variable_get('ldiw_waste_map_composition_fields',
+										array()) as $fieldname => $info) {
+				$info['color']=trim($info['color'],'#');
+				$composition[preg_replace('/^field_/','',$fieldname)]=$info;
+				}
+
+			drupal_add_js(array(
+					'ldiw_waste_map_point_style_plugin_icons_base_url' =>
+							url(file_directory_path() .
+										'/ldiw_waste_map/waste_point_icon/',
+								array('absolute' => TRUE)),
+
+					'ldiw_waste_map_base_url' =>
+							url('ldiw_waste_map',array('absolute' => TRUE)),
+
+					'ldiw_waste_map_composition_fields' => $composition,
+					),
+				'setting');
 			}
 	}
 

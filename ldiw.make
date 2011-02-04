@@ -14,6 +14,7 @@ projects[] = imagefield
 projects[] = strongarm
 projects[] = views
 projects[] = formfilter
+projects[] = colorpicker
 
 projects[openlayers][version] = 2.x-dev
 projects[openlayers][patch][] = "http://drupal.org/files/issues/OpenLayers-popup-featureremoved.patch"

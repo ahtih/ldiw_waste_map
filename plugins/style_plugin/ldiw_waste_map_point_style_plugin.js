@@ -1,19 +1,5 @@
 // $Id$
 
-composition_fields={		//!!! Make this configurable
-		'composition_large' : {'color' : 'e41e2f',
-								'text' : 'large objects'},
-		'composition_pmp' : {'color' : 'f7c16b',
-								'text' : 'plastic/metal/packaging'},
-		'composition_paper' : {'color' : '3ab54a',
-								'text' : 'paper'},
-		'composition_other' : {'color' : '38439c',
-								'text' : 'other',
-								'text_solo' : 'other (misc waste)'},
-		'composition_glass' : {'color' : '38439c',
-								'text' : 'glass'}
-		};
-
 Drupal.openlayers.style_plugin["ldiw_waste_map_point_style_plugin"]=
 													function(parameters) {
 
@@ -53,7 +39,7 @@ Drupal.theme.openlayersPopup=function(feature)
 
 	var composition_array=[];
 	var composition_sum=0;
-	for (var attrname in composition_fields) {
+	for (var attrname in Drupal.settings.ldiw_waste_map_composition_fields) {
 		if (attrs[attrname]) {
 			var value=parseFloat(attrs[attrname]);
 			if (value > 0) {
@@ -65,9 +51,11 @@ Drupal.theme.openlayersPopup=function(feature)
 
 	for (var i in composition_array) {
 		var attrname=composition_array[i][0];
-		var text=composition_fields[attrname]['text'];
+		var text=Drupal.settings.ldiw_waste_map_composition_fields
+													[attrname]['text'];
 		if (composition_array.length == 1)
-			text=composition_fields[attrname]['text_solo'] || text;
+			text=Drupal.settings.ldiw_waste_map_composition_fields
+											[attrname]['text_solo'] || text;
 		composition_array[i]=Math.max(1,
 				parseInt(composition_array[i][1]*100 / composition_sum)) +
 				'%&nbsp;' + text;
@@ -102,7 +90,7 @@ Drupal.theme.openlayersPopup=function(feature)
 		if (volume_formatted > 0)
 			output+='Volume <b>' + volume_formatted + 'm&sup3;</b>';
 		output+=composition;
-		if (attrs.description != '')
+		if (attrs.description)
 			output+='<br><br>' + attrs.description;
 		if (attrs.photos) {
 			var photo_divs=[];
@@ -222,12 +210,15 @@ Drupal.openlayers.style_plugin["ldiw_waste_map_point_style_plugin"].prototype=
 			var composition=[];
 			var composition_sum=0;
 
-			for (var attrname in composition_fields) {
+			for (var attrname in Drupal.settings.
+										ldiw_waste_map_composition_fields) {
 				if (attrs[attrname]) {
 					var value=parseFloat(attrs[attrname]);
 					if (value > 0) {
-						composition.push([
-								composition_fields[attrname]['color'],value]);
+						composition.push([Drupal.settings.
+								ldiw_waste_map_composition_fields
+														[attrname]['color'],
+								value]);
 						composition_sum+=value;
 						}
 					}

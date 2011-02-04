@@ -3,8 +3,6 @@
 
 DEFINE('LDIW_WASTE_MAP_DEFAULT_PHOTO_FIELDS',
 									'field_photo field_external_photo');
-DEFINE('LDIW_WASTE_MAP_COMPOSITION_FIELDS_PREFIX',
-									'field_composition_');
 
 /**
  * Implementation of hook_ctools_plugin_directory()
@@ -49,9 +47,11 @@ function ldiw_waste_map_geoclustering_tree_params()
 										'status' => 1);
 	$tree_params->summed_field_names=array(	'field_volume',
 											'field_nr_of_tires');
+	$composition_fields=variable_get('ldiw_waste_map_composition_fields',
+																array());
 	foreach (content_fields(NULL,'waste_point') as $fieldname => $field) {
-		if ($field['type_name'] == 'waste_point' && strpos($fieldname,
-						LDIW_WASTE_MAP_COMPOSITION_FIELDS_PREFIX) === 0) {
+		if ($field['type_name'] == 'waste_point' &&
+									isset($composition_fields[$fieldname])) {
 			array_push($tree_params->summed_field_names,$fieldname);
 			}
 		}
@@ -162,8 +162,10 @@ function ldiw_waste_map_form_alter(&$form,$form_state,$form_id)
 
 		$form['#attributes']['class'].=' vertically-condensed-form';
 
+		$composition_fields=variable_get('ldiw_waste_map_composition_fields',
+																array());
 		foreach ($form as $key => $element) {
-			if (strpos($key,LDIW_WASTE_MAP_COMPOSITION_FIELDS_PREFIX) === 0) {
+			if (isset($composition_fields[$key])) {
 				$form['composition'][$key]=$element;
 				unset($form[$key]);
 				}
@@ -212,6 +214,7 @@ function ldiw_waste_map_menu()
 		'admin/settings/ldiw_waste_map' => array(
 			'title' => 'LDIW Waste Map',
 			'description' => 'Configure the LDIW Waste Map.',
+			'file' => 'ldiw_waste_map.admin.inc',
 			'page callback' => 'drupal_get_form',
 			'page arguments' => array('ldiw_waste_map_admin_settings'),
 			'access arguments' => array('administer site configuration'),
@@ -220,26 +223,17 @@ function ldiw_waste_map_menu()
 	}
 
 /***************************************************************************/
-/***************************                     ***************************/
-/*************************** Admin settings page ***************************/
-/***************************                     ***************************/
+/******************************              *******************************/
+/****************************** hook_theme() *******************************/
+/******************************              *******************************/
 /***************************************************************************/
 
-function ldiw_waste_map_admin_settings()
+function ldiw_waste_map_theme()
 {
-	$form=array(
-		'ldiw_waste_map_photo_field_names' => array(
-				'#type' => 'textfield',
-				'#title' => t('Space-separated list of CCK Field names ' .
-										'containing Waste Point photos'),
-				'#default_value' => variable_get(
-						'ldiw_waste_map_photo_field_names',
-						LDIW_WASTE_MAP_DEFAULT_PHOTO_FIELDS),
-				'#size' => 32,
-				'#maxlength' => 1000,
-				),
-		);
-	return system_settings_form($form);
+	return array('ldiw_waste_map_admin_settings' => array(
+						'arguments' => array('form' => NULL),
+						'file' => 'ldiw_waste_map.admin.inc',
+						));
 	}
 
 /***************************************************************************/
