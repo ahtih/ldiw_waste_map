@@ -1,0 +1,3 @@
+<?php
+
+include_once('ldiw_waste_map_api_features.features.inc');

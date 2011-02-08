@@ -1,0 +1,103 @@
+<?php
+// $Id
+
+//!!! Implement requirements check that Services is 3.x. version
+
+/***************************************************************************/
+/*******************************             *******************************/
+/******************************* hook_menu() *******************************/
+/*******************************             *******************************/
+/***************************************************************************/
+
+function ldiw_api_menu()
+{
+	return array(
+		'get-api-base-url.json' => array(
+			'file' => 'ldiw_api.inc',
+			'page callback' => 'ldiw_api_get_api_base_url',
+			'access callback' => TRUE,
+			'type' => MENU_CALLBACK,
+			),
+		);
+	}
+
+/***************************************************************************/
+/**********************                               **********************/
+/********************** ldiw_api_services_resources() **********************/
+/**********************                               **********************/
+/***************************************************************************/
+
+function ldiw_api_services_resources()
+{
+	return array(
+		'wp' => array(
+			'create' => array(
+				'callback' => '_ldiw_api_create',
+				'file' => array('file' => 'inc','module' => 'ldiw_api'),
+				'args' => array(
+						array(
+							'name' => 'lon',
+							'optional' => FALSE,
+							'source' => 'data',
+							'type' => 'double',
+							'description' => 'Longitude, in WGS84',
+							),
+						array(
+							'name' => 'lat',
+							'optional' => FALSE,
+							'source' => 'data',
+							'type' => 'double',
+							'description' => 'Latitude, in WGS84',
+							),
+						array(
+							'name' => 'client_id',
+							'optional' => TRUE,
+							'source' => 'data',
+							'type' => 'string',
+							'description' => 'Semi-unique ID of ' .
+									'phone/computer of the user. Used for ' .
+									'anti-abuse, e.g. blocking specific ' .
+									'anonymous users',
+							),
+						//!!! Add more parameters
+						),
+				'access callback' => '_ldiw_api_access',
+				'access arguments' => array('create'),
+				'access arguments append' => TRUE,
+				),
+
+			'retrieve' => array(
+				'callback' => '_ldiw_api_retrieve',
+				'file' => array('file' => 'inc','module' => 'ldiw_api'),
+				'args' => array(
+						array(
+							'name' => 'id',
+							'optional' => FALSE,
+							'source' => array('path' => 0),
+							'type' => 'int',
+							'description' => 'The id of Waste Point to get',
+							),
+						array(
+							'name' => 'format',
+							'optional' => FALSE,
+							'source' => 'param',
+							'type' => 'string',
+							'description' => "Format of result data. " .
+										"Currently only 'html' is supported",
+							),
+						),
+				'access callback' => '_ldiw_api_access',
+				'access arguments' => array('view'),
+				'access arguments append' => TRUE,
+				),
+			),
+		);
+	}
+
+function _ldiw_api_access($op='view',$args=array()) {
+	$node='waste_point';
+	if ($op != 'create' && !empty($args)) {
+		$node=node_load($args[0]);
+		}
+	return node_access($op,$node);
+	}
