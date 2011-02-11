@@ -511,6 +511,14 @@ function ldiw_waste_map_waste_points()
 		return drupal_not_found();
 		}
 
+	if (!empty($_REQUEST['max_results'])) {
+		$max_results=0 + $_REQUEST['max_results'];
+		if (is_int($max_results) && $max_results) {
+			$view->display['default']->display_options['items_per_page']=
+															$max_results;
+			}
+		}
+
 	return $view->execute_display('feed_1',$view_arguments);
 	}
 

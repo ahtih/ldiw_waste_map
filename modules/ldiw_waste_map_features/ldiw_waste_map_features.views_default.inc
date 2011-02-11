@@ -619,7 +619,7 @@ function ldiw_waste_map_features_views_default_views() {
   $handler->override_option('cache', array(
     'type' => 'none',
   ));
-  $handler->override_option('items_per_page', 400);
+  $handler->override_option('items_per_page', 10);
   $handler->override_option('link_display', 'feed_1');
   $handler = $view->new_display('feed', 'Feed', 'feed_1');
   $handler->override_option('style_plugin', 'views_csv');

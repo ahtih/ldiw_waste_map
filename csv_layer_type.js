@@ -25,11 +25,12 @@ ldiw_waste_map_csv_protocol=OpenLayers.Class(OpenLayers.Protocol,{
 		OpenLayers.Util.applyDefaults(options,this.options||{});
 
 		var url=options.url;
+		url+=(url.indexOf('?') >= 0) ? '&' : '?';
+		url+='max_results=400';		//!!! Remove hardcoding of this
+
 		if (options.filter) {
 			var bbox=options.filter.value;
-
-			url+=(url.indexOf('?') >= 0) ? '&' : '?';
-			url+='BBOX=' +
+			url+='&BBOX=' +
 					[bbox.left,bbox.bottom,bbox.right,bbox.top].join(',');
 			}
 
