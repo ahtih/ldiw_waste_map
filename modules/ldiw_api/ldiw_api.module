@@ -78,12 +78,13 @@ function ldiw_api_services_resources()
 							'description' => 'The id of Waste Point to get',
 							),
 						array(
-							'name' => 'format',
-							'optional' => FALSE,
+							'name' => 'max_width',
+							'optional' => TRUE,
+							'default value' => 500,
 							'source' => 'param',
-							'type' => 'string',
-							'description' => "Format of result data. " .
-										"Currently only 'html' is supported",
+							'type' => 'int',
+							'description' => 'Maximum display width, in ' .
+									'pixels. This is important for photos',
 							),
 						),
 				'access callback' => '_ldiw_api_access',
@@ -94,7 +95,31 @@ function ldiw_api_services_resources()
 		);
 	}
 
+class LDIW_Plaintext_Formatter {
+	function __construct($data) { $this->data=$data; }
+	public function render() { return $this->data; }
+	}
+
+/***************************************************************************/
+/**************                                              ***************/
+/************** hook_rest_server_response_formatters_alter() ***************/
+/**************                                              ***************/
+/***************************************************************************/
+
+function ldiw_api_rest_server_response_formatters_alter(&$formatters)
+{
+	$formatters['html']=array(
+					'mime types' => array('text/html','text/plain'),
+					'view' => 'LDIW_Plaintext_Formatter'
+					);
+
+	return $formatters;
+	}
+
 function _ldiw_api_access($op='view',$args=array()) {
+	if ($op == 'view') {
+		return TRUE;
+		}
 	$node='waste_point';
 	if ($op != 'create' && !empty($args)) {
 		$node=node_load($args[0]);
