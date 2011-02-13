@@ -31,6 +31,9 @@ function ldiw_waste_map_api_features_default_services_endpoint() {
             'authorization' => '*',
           ),
         ),
+        'update' => array(
+          'enabled' => 1,
+        ),
       ),
     ),
     'user' => array(

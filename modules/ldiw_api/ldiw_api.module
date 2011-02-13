@@ -29,41 +29,82 @@ function ldiw_api_menu()
 
 function ldiw_api_services_resources()
 {
+	$create_update_args=array(
+				array(
+					'name' => 'lon',
+					'optional' => TRUE,
+					'source' => 'data',
+					'type' => 'double',
+					'description' => 'Longitude, in WGS84',
+					),
+				array(
+					'name' => 'lat',
+					'optional' => TRUE,
+					'source' => 'data',
+					'type' => 'double',
+					'description' => 'Latitude, in WGS84',
+					),
+				array(
+					'name' => 'client_id',
+					'optional' => TRUE,
+					'source' => 'data',
+					'type' => 'string',
+					'description' => 'Semi-unique ID of ' .
+							'phone/computer of the user. Used for ' .
+							'anti-abuse, e.g. blocking specific ' .
+							'anonymous users',
+					),
+		);
+
+	require_once('ldiw_api.inc');
+	foreach (_ldiw_api_get_photo_upload_fields() as $idx => $photo_field) {
+		$create_update_args[]=array(
+								'name' => 'photo_file_' . ($idx+1),
+								'optional' => TRUE,
+								'source' => 'data',
+								'type' => 'struct',
+								);
+		}
+
+	foreach (_ldiw_api_get_server_specific_fields() as $key => $info) {
+		$create_update_args[]=array(
+								'name' => $key,
+								'optional' => TRUE,
+								'source' => 'data',
+								'type' => 'string',
+								);
+		}
+
 	return array(
 		'wp' => array(
 			'create' => array(
 				'callback' => '_ldiw_api_create',
 				'file' => array('file' => 'inc','module' => 'ldiw_api'),
-				'args' => array(
-						array(
-							'name' => 'lon',
-							'optional' => FALSE,
-							'source' => 'data',
-							'type' => 'double',
-							'description' => 'Longitude, in WGS84',
-							),
-						array(
-							'name' => 'lat',
-							'optional' => FALSE,
-							'source' => 'data',
-							'type' => 'double',
-							'description' => 'Latitude, in WGS84',
-							),
-						array(
-							'name' => 'client_id',
-							'optional' => TRUE,
-							'source' => 'data',
-							'type' => 'string',
-							'description' => 'Semi-unique ID of ' .
-									'phone/computer of the user. Used for ' .
-									'anti-abuse, e.g. blocking specific ' .
-									'anonymous users',
-							),
-						//!!! Add more parameters
-						),
+				'args' => $create_update_args,
 				'access callback' => '_ldiw_api_access',
 				'access arguments' => array('create'),
 				'access arguments append' => TRUE,
+				'rest request parsers' => array('multipart/form-data' =>
+										'_ldiw_api_multipart_form_parser'),
+				),
+
+			'update' => array(
+				'callback' => '_ldiw_api_update',
+				'file' => array('file' => 'inc','module' => 'ldiw_api'),
+				'args' => array_merge($create_update_args,array(
+						array(
+							'name' => 'id',
+							'optional' => FALSE,
+							'source' => array('path' => 0),
+							'type' => 'int',
+							'description' => 'The id of Waste Point to update',
+							),
+						)),
+				'access callback' => '_ldiw_api_access',
+				'access arguments' => array('update'),
+				'access arguments append' => TRUE,
+				'rest request parsers' => array('multipart/form-data' =>
+										'_ldiw_api_multipart_form_parser'),
 				),
 
 			'retrieve' => array(
@@ -117,13 +158,28 @@ function ldiw_api_rest_server_response_formatters_alter(&$formatters)
 	return $formatters;
 	}
 
+/***************************************************************************/
+/********************                                   ********************/
+/******************** _ldiw_api_multipart_form_parser() ********************/
+/********************                                   ********************/
+/***************************************************************************/
+
+function _ldiw_api_multipart_form_parser($handle)
+{
+	if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+		return array_merge($_FILES,$_POST);
+		}
+
+	return array();	//!!! parse multipart/form-data
+	}
+
 function _ldiw_api_access($op='view',$args=array()) {
 	if ($op == 'view') {
 		return TRUE;
 		}
 	$node='waste_point';
 	if ($op != 'create' && !empty($args)) {
-		$node=node_load($args[0]);
+		$node=node_load(end($args));
 		}
 	return node_access($op,$node);
 	}

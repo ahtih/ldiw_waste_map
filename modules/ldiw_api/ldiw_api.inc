@@ -1,6 +1,46 @@
 <?php
 // $Id
 
+function _ldiw_api_get_server_specific_fields()
+{
+	$data=array();
+	$photo_field_names=explode(' ',variable_get(
+						'ldiw_waste_map_photo_field_names',
+						LDIW_WASTE_MAP_DEFAULT_PHOTO_FIELDS));
+
+	foreach (content_fields(NULL,'waste_point') as $fieldname => $field) {
+		if ($field['type_name'] == 'waste_point' && in_array($field['type'],
+						array('number_float','number_integer','text')) &&
+						!in_array($fieldname,$photo_field_names)) {
+			$data[preg_replace('/^field_(..*)$/','$1',$fieldname)]=
+										array($fieldname,$field['type']);
+			}
+		}
+
+	$data['description']=array('body','text');
+
+	asort($data);	// Ensure well-defined field order
+	return $data;
+	}
+
+function _ldiw_api_get_photo_upload_fields()
+{
+	$fieldnames=explode(' ',variable_get(
+						'ldiw_waste_map_photo_field_names',
+						LDIW_WASTE_MAP_DEFAULT_PHOTO_FIELDS));
+	$data=array();
+	foreach ($fieldnames as $fieldname) {
+		$fieldinfo=content_fields($fieldname,'waste_point');
+		if (!empty($fieldinfo) && $fieldinfo['type'] == 'filefield') {
+			for ($i=0;$i < max(1,$fieldinfo['multiple']);$i++) {
+				$data[]=array($fieldname,$i);
+				}
+			}
+		}
+
+	return $data;
+	}
+
 function ldiw_api_get_api_base_url()
 {
 	//!!! remove hardcoding of this data
@@ -10,15 +50,242 @@ function ldiw_api_get_api_base_url()
 			));
 	}
 
-function _ldiw_api_create()
+function _ldiw_api_create_update($args,$id=FALSE)
 {
 	global $user;
-
 	if (!$user->uid) {
-		//!!! If there is a SESSxxx cookie, return 401 Invalid session
+		foreach ($_COOKIE as $key => $value) {
+			if (strpos($key,'SESS') === 0) {
+				throw new ServicesException("Invalid session cookie",401);
+				}
+			}
 		}
 
-	return array($user->uid,func_get_args());	//!!!
+	$coords=array_splice($args,0,2);
+
+	if ($id === FALSE && isset($coords[0]) && isset($coords[1])) {
+		$db_info=content_database_info(
+							content_fields('field_coords','waste_point'));
+		$geo_handler=geo_load(array('table_name' => $db_info['table']));
+
+		//!!! $geo_handler->setIndexed(TRUE,TRUE);
+
+		$distance_threshold_meters=50;
+		$earth_circumference_meters=40030081;
+		$lat_tolerance=360 * $distance_threshold_meters /
+											$earth_circumference_meters;
+		$lon_tolerance=$lat_tolerance / max(0.001,cos(deg2rad($coords[1])));
+
+		$bbox_sql=geoclustering_get_bbox_sql($geo_handler,
+				array(	$coords[0]-$lon_tolerance,$coords[1]-$lat_tolerance,
+						$coords[0]+$lon_tolerance,$coords[1]+$lat_tolerance));
+
+		$distance_query=$geo_handler->distance($geo_handler,
+									"POINT(${coords[0]} ${coords[1]})");
+		$query="SELECT nid FROM {" . $db_info['table'] . "} " .
+						"WHERE $distance_query < %f AND ${bbox_sql[0]} " .
+						"ORDER BY $distance_query DESC LIMIT 1";
+		$row=db_fetch_array(db_query($query,array_merge(
+						array($distance_threshold_meters),$bbox_sql[1])));
+		if ($row) {
+			$id=$row['nid'];
+			$coords=array(NULL,NULL);
+			}
+		}
+
+	$node=($id !== FALSE) ? @node_load($id) :
+									(object)array('type' => 'waste_point');
+	$node->uid=$user->uid;
+	$node->name=$user->name;
+
+	$form_state=array();
+	$form_state['values']['op']=t('Save');
+
+		/***********************/
+		/*****             *****/
+		/***** Set lon/lat *****/
+		/*****             *****/
+		/***********************/
+
+	if ($id !== FALSE) {
+		$prev_coords=geoclustering_extract_coords_from_node(
+													$node,'field_coords');
+		if (!isset($coords[0])) {
+			$coords[0]=$prev_coords[0];
+			}
+		if (!isset($coords[1])) {
+			$coords[1]=$prev_coords[1];
+			}
+
+		if ($coords === $prev_coords) {
+			$coords=FALSE;
+			}
+		}
+
+	if (!empty($coords)) {
+		if (!isset($coords[0]) || !isset($coords[1])) {
+			throw new ServicesException("Missing required lon/lat fields",400);
+			}
+		$form_state['values']['field_coords'][0]['geo']=
+							array('lon' => $coords[0],'lat' => $coords[1]);
+		}
+
+	$client_id=array_shift($args);
+	//!!! Store client_id field
+
+		/**********************/
+		/*****            *****/
+		/***** Set photos *****/
+		/*****            *****/
+		/**********************/
+
+	$photo_fields=_ldiw_api_get_photo_upload_fields();
+
+	$file_fids=array();
+	foreach ($photo_fields as $idx => $photo_field) {
+		$photo_param=array_shift($args);
+		if (!$photo_param) {
+			continue;
+			}
+		if (is_object($photo_param)) {
+			$fname=$photo_param->tmp_name;
+			}
+		else {
+			$fname=file_destination(file_create_path(
+					file_directory_temp() . '/' . time()),FILE_EXISTS_RENAME);
+			$fp=fopen($fname,'w');
+			if ($fp === FALSE) {
+				continue;
+				}
+			fwrite($fp,$photo_param);
+			fclose($fp);
+			}
+		$fileinfo=field_file_save_file($fname,array(),
+					filefield_widget_file_path(content_fields(
+									$photo_field[0],'waste_point')));
+		@unlink($fname);
+		$form_state['values'][$photo_field[0]][$photo_field[1]]=$fileinfo;
+
+		$file_fids[]=$fileinfo['fid'];
+		}
+
+		/****************************************/
+		/*****                              *****/
+		/***** Write server-specific fields *****/
+		/*****                              *****/
+		/****************************************/
+
+	$server_specific_fields=_ldiw_api_get_server_specific_fields();
+	if ($args !== array_fill(0,count($args),null)) {
+		foreach ($server_specific_fields as $key => $info) {
+			$value=array_shift($args);
+			if ($info[1] == 'text' && !isset($value)) {
+				$value='';
+				}
+			if ($info[0] == 'body') {
+				$form_state['values'][$info[0]]=$value;
+				}
+			else {
+				$form_state['values'][$info[0]][0]['value']=$value;
+				}
+			}
+		}
+
+		/*********************/
+		/*****           *****/
+		/***** Save node *****/
+		/*****           *****/
+		/*********************/
+
+	if (function_exists('_element_info')) {	// Workaround for Geo bug http://drupal.org/node/1059916
+		module_implements('elements',FALSE,TRUE);
+		_element_info('',TRUE);
+		}
+
+	$prev_vid=isset($node->vid) ? $node->vid : null;
+	module_load_include('inc','node','node.pages');
+
+	@drupal_execute('waste_point_node_form',$form_state,$node);
+
+	foreach ($file_fids as $fid) {
+		field_file_load($fid,TRUE);	// Reload file cache; otherwise file is not found if "FileField Paths" module is used
+		}
+
+	$success=FALSE;
+	if (isset($form_state['nid'])) {
+		$node=@node_load(array('nid' => $form_state['nid']));	// This argument style does not use node cache
+		$success=($id === FALSE || $node->vid != $prev_vid);
+		}
+
+		/****************************/
+		/*****                  *****/
+		/***** Check for errors *****/
+		/*****                  *****/
+		/****************************/
+
+	$messages=drupal_get_messages();
+	if (!$success) {
+		$error="Unknown error";
+		if (!empty($messages['error'])) {
+			$error=strip_tags(implode(';',$messages['error']));
+			}
+		throw new ServicesException($error,400);
+		}
+
+		/******************************/
+		/*****                    *****/
+		/***** Build return value *****/
+		/*****                    *****/
+		/******************************/
+
+	$coords=geoclustering_extract_coords_from_node($node,'field_coords');
+	$wp=array('id' => '' . $node->nid,
+			'lon' => $coords[0],
+			'lat' => $coords[1],
+			);
+
+	if (!empty($node->field_photos_id_width_height[0]['value'])) {
+		$wp['photos']=$node->field_photos_id_width_height[0]['value'];
+		}
+
+	foreach ($server_specific_fields as $key => $info) {
+		if ($info[0] != 'body') {
+			if (!isset($node->{$info[0]}[0]['value'])) {
+				continue;
+				}
+			$value=$node->{$info[0]}[0]['value'];
+			}
+		else {
+			if (!isset($node->{$info[0]})) {
+				continue;
+				}
+			$value=$node->{$info[0]};
+			}
+
+		if ($info[1] == 'text') {
+			if ($value === '') {
+				continue;
+				}
+			}
+		else {
+			$value=0 + $value;
+			}
+		$wp[$key]=$value;
+		}
+
+	return array('wp' => $wp);
+	}
+
+function _ldiw_api_create()
+{
+	return _ldiw_api_create_update(func_get_args());
+	}
+
+function _ldiw_api_update()
+{
+	$args=func_get_args();
+	$id=array_pop($args);
+	return _ldiw_api_create_update($args,$id);
 	}
 
 function _ldiw_api_retrieve($id,$max_width)
