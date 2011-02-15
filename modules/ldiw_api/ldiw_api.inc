@@ -84,11 +84,13 @@ function _ldiw_api_waste_point_extra_fields()
 
 	$composition_fields=variable_get('ldiw_waste_map_composition_fields',
 																array());
-
+	$composition_section_started=FALSE;
 	foreach (_ldiw_api_get_server_specific_fields() as $key => $info) {
 		$field=$info[1];
 
-		if (isset($composition_fields[$info[0]])) {
+		if (isset($composition_fields[$info[0]]) &&
+										!$composition_section_started) {
+			$composition_section_started=TRUE;
 			$retval[]=array('type' => 'begin_section',
 						'label' => t('Composition percentages (in volume)'));
 			}
