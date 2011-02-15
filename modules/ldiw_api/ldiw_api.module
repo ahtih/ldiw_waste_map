@@ -18,7 +18,27 @@ function ldiw_api_menu()
 			'access callback' => TRUE,
 			'type' => MENU_CALLBACK,
 			),
+		'api/waste-point-extra-fields.json' => array(
+			'file' => 'ldiw_api.inc',
+			'page callback' => '_ldiw_api_waste_point_extra_fields',
+			'access callback' => TRUE,
+			'type' => MENU_CALLBACK,
+			),
 		);
+	}
+
+/***************************************************************************/
+/*************************                         *************************/
+/************************* hook_content_fieldapi() *************************/
+/*************************                         *************************/
+/***************************************************************************/
+
+function ldiw_api_content_fieldapi($op,$field)
+{
+	if (in_array($op,array('create instance','update instance',
+													'delete instance'))) {
+		cache_clear_all('services:','cache',TRUE);
+		}
 	}
 
 /***************************************************************************/

@@ -12,14 +12,36 @@ function _ldiw_api_get_server_specific_fields()
 		if ($field['type_name'] == 'waste_point' && in_array($field['type'],
 						array('number_float','number_integer','text')) &&
 						!in_array($fieldname,$photo_field_names)) {
-			$data[preg_replace('/^field_(..*)$/','$1',$fieldname)]=
-										array($fieldname,$field['type']);
+			$data[preg_replace('/^field_(..*)$/','$1',$fieldname)]=array(
+						isset($field['widget']['weight']) ?
+											$field['widget']['weight'] : 0,
+						$fieldname,
+						$field);
 			}
 		}
 
-	$data['description']=array('body','text');
+	$node_type=node_get_types('type','waste_point');
+	if ($node_type->has_body) {
+		$extra_weights=
+				variable_get('content_extra_weights_waste_point',array());
+		$data['description']=array(
+				isset($extra_weights['body_field']) ?
+										$extra_weights['body_field'] : 0,
+				'body',array(
+						'type' => 'text',
+						'widget' => array(
+								'label' => t($node_type->body_label)),
+						'max_length' =>
+								LDIW_WASTE_MAP_WP_DESCRIPTION_MAX_LENGTH)
+				);
+		}
 
 	asort($data);	// Ensure well-defined field order
+
+	foreach (array_keys($data) as $key) {
+		$data[$key]=array_slice($data[$key],1);
+		}
+
 	return $data;
 	}
 
@@ -49,6 +71,121 @@ function ldiw_api_get_api_base_url()
 			'safe_bbox' => '-180,-90,180,90',
 			));
 	}
+
+/***************************************************************************/
+/********************                                   ********************/
+/******************** ldiw_api_waste_point_extra_fields ********************/
+/********************                                   ********************/
+/***************************************************************************/
+
+function _ldiw_api_waste_point_extra_fields()
+{
+	$retval=array();
+
+	$composition_fields=variable_get('ldiw_waste_map_composition_fields',
+																array());
+
+	foreach (_ldiw_api_get_server_specific_fields() as $key => $info) {
+		$field=$info[1];
+
+		if (isset($composition_fields[$info[0]])) {
+			$retval[]=array('type' => 'begin_section',
+						'label' => t('Composition percentages (in volume)'));
+			}
+
+		$entry=array('field_name' => $key,
+					'type' => preg_replace('/^number_(..*)$/','$1',
+														$field['type']));
+
+		if ($entry['type'] == 'integer' &&
+					isset($field['min']) && isset($field['max']) &&
+					(''.$field['min']) == '0' && (''.$field['max']) == '1') {
+			$entry['type']='boolean';
+			}
+
+		if (!empty($field['suffix'])) {
+			$entry['suffix']=$field['suffix'];
+			}
+
+		if (!empty($field['widget']['label'])) {
+			$entry['label']=$field['widget']['label'];	//!!! run through t()?
+			}
+
+		if (!empty($field['widget']['description'])) {
+			$entry['edit_instructions']=$field['widget']['description'];	//!!! run through t()?
+			}
+
+		$allowed_values=content_allowed_values($field);
+		if ($allowed_values && $entry['type'] != 'boolean') {
+			$entry['allowed_values']=array();
+			foreach ($allowed_values as $key => $value) {
+				if (in_array($entry['type'],array('integer','float'))) {
+					$key=0 + $key;
+					}
+				$entry['allowed_values'][]=array($key,$value);
+				}
+			}
+		else {
+			if (in_array($entry['type'],array('integer','float'))) {
+				foreach (array('min','max') as $f) {
+					if (isset($field[$f])) {
+						$entry[$f]=0 + $field[$f];
+						}
+					}
+
+				if (isset($composition_fields[$info[0]])) {
+					$entry['typical_values']=array(
+												array(0,'0'),
+												array(10,'10'),
+												array(20,'20'),
+												array(30,'30'),
+												array(40,'40'),
+												array(50,'50'),
+												array(60,'60'),
+												array(70,'70'),
+												array(80,'80'),
+												array(90,'90'),
+												array(100,'100'),
+												);
+					}
+
+				if ($key == 'volume') {
+					$entry['typical_values']=array(
+							array(0.3 / 1000.0,
+								t("It all fits into my pocket")),
+							array(4 / 1000.0,
+								t("Fits in a plastic shopping bag")),
+							array(0.5,
+								t("Fits into luggage trunk of a car")),
+							array(3,
+								t("Fits into industrial truck/cargo vehicle")),
+							array(30,
+								t("It's even more than that")),
+							);
+					}
+
+				//!!! Make typical_values configurable for custom fields
+				}
+			}
+
+		if ($entry['type'] == 'text' && empty($entry['allowed_values']) &&
+											isset($field['max_length'])) {
+			$entry['max_length']=$field['max_length'];
+			}
+
+		$retval[]=$entry;
+		}
+
+	//!!! how to encode Unicode >255 chars?
+
+	print json_encode($retval);
+	}
+
+/***************************************************************************/
+/************************                          *************************/
+/************************ _ldiw_api_create_update( *************************/
+/************************                          *************************/
+/***************************************************************************/
 
 function _ldiw_api_create_update($args,$id=FALSE)
 {
@@ -179,7 +316,7 @@ function _ldiw_api_create_update($args,$id=FALSE)
 	if ($args !== array_fill(0,count($args),null)) {
 		foreach ($server_specific_fields as $key => $info) {
 			$value=array_shift($args);
-			if ($info[1] == 'text' && !isset($value)) {
+			if ($info[1]['type'] == 'text' && !isset($value)) {
 				$value='';
 				}
 			if ($info[0] == 'body') {
@@ -262,7 +399,7 @@ function _ldiw_api_create_update($args,$id=FALSE)
 			$value=$node->{$info[0]};
 			}
 
-		if ($info[1] == 'text') {
+		if ($info[1]['type'] == 'text') {
 			if ($value === '') {
 				continue;
 				}
