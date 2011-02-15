@@ -67,7 +67,7 @@ function ldiw_api_get_api_base_url()
 {
 	//!!! remove hardcoding of this data
 	print json_encode(array(
-			'api_base_url' => 'http://api.letsdoitworld.org/api',
+			'api_base_url' => 'http://api.letsdoitworld.org/?q=api',
 			'safe_bbox' => '-180,-90,180,90',
 			));
 	}
