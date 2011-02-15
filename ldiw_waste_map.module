@@ -3,6 +3,7 @@
 
 DEFINE('LDIW_WASTE_MAP_DEFAULT_PHOTO_FIELDS',
 									'field_photo field_external_photo');
+DEFINE('LDIW_WASTE_MAP_WP_DESCRIPTION_MAX_LENGTH',2000);
 
 /**
  * Implementation of hook_ctools_plugin_directory()
@@ -131,9 +132,12 @@ function ldiw_waste_map_form_alter(&$form,$form_state,$form_id)
 				array('attachments'),
 				));
 
-		$form['body_field']['body']['#type']='textfield';
-		$form['body_field']['body']['#maxlength']=2000;
-		$form['body_field']['body']['#size']=41;
+		if (!empty($form['body_field'])) {
+			$form['body_field']['body']['#type']='textfield';
+			$form['body_field']['body']['#maxlength']=
+								LDIW_WASTE_MAP_WP_DESCRIPTION_MAX_LENGTH;
+			$form['body_field']['body']['#size']=41;
+			}
 
 		drupal_add_css(drupal_get_path('module','ldiw_waste_map') .
 														'/node-form.css');
@@ -144,12 +148,15 @@ function ldiw_waste_map_form_alter(&$form,$form_state,$form_id)
 			$form[$key]['#suffix']='</span>';
 			}
 
-		$composition_weight=
-				$form['#content_extra_fields']['body_field']['weight'] + 1;
-		foreach ($form as $key => $element) {
-			if (is_array($element) && isset($element['#weight']) &&
-							$element['#weight'] >= $composition_weight) {
-				$form[$key]['#weight']+=1;
+		$composition_fields=variable_get('ldiw_waste_map_composition_fields',
+																array());
+		$composition_weight=NULL;
+		foreach ($composition_fields as $key => $value) {
+			if (isset($form[$key]['#weight'])) {
+				if (!isset($composition_weight) ||
+							$form[$key]['#weight'] < $composition_weight) {
+					$composition_weight=$form[$key]['#weight'];
+					}
 				}
 			}
 
@@ -162,8 +169,6 @@ function ldiw_waste_map_form_alter(&$form,$form_state,$form_id)
 
 		$form['#attributes']['class'].=' vertically-condensed-form';
 
-		$composition_fields=variable_get('ldiw_waste_map_composition_fields',
-																array());
 		foreach ($form as $key => $element) {
 			if (isset($composition_fields[$key])) {
 				$form['composition'][$key]=$element;
