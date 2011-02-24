@@ -2,6 +2,6 @@ name = "LDIW Waste Map API"
 description = "Provides a resource oriented service Waste Map."
 package = "LDIW"
 core = 6.x
-php = 5.x
+php = 5.2
 dependencies[] = "services"
 dependencies[] = "ldiw_waste_map"

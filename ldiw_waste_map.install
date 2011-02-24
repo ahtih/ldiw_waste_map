@@ -1,0 +1,28 @@
+<?php
+
+function _ldiw_waste_map_create_geo_index($geo)
+{
+	global $db_type;
+
+	if ($db_type == 'mysql' || $db_type == 'mysqli') {
+		foreach ($geo->sqlFieldDefinition() as $field => $definition) {
+			update_sql("ALTER TABLE " . $geo->tableName(TRUE) . " CHANGE " .
+					"$field $field ${definition['mysql_type']} NOT NULL");
+			}
+		}
+
+	$geo->setIndexed(TRUE,TRUE);
+	}
+
+function ldiw_waste_map_install()
+{
+	module_load_include('inc','geo','includes/geo.api');
+
+	$db_info=content_database_info(
+							content_fields('field_coords','waste_point'));
+	_ldiw_waste_map_create_geo_index(
+						geo_load(array('table_name' => $db_info['table'])));
+
+	_ldiw_waste_map_create_geo_index(geo_load(array('name' => 'field_geo')));
+	}
+?>

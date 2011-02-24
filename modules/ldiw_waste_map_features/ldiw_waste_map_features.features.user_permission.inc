@@ -93,6 +93,12 @@ function ldiw_waste_map_features_user_default_permissions() {
     ),
   );
 
+  // Exported permission: edit field_display_parent
+  $permissions['edit field_display_parent'] = array(
+    'name' => 'edit field_display_parent',
+    'roles' => array(),
+  );
+
   // Exported permission: edit field_external_photo
   $permissions['edit field_external_photo'] = array(
     'name' => 'edit field_external_photo',
@@ -102,6 +108,36 @@ function ldiw_waste_map_features_user_default_permissions() {
     ),
   );
 
+  // Exported permission: edit field_geo
+  $permissions['edit field_geo'] = array(
+    'name' => 'edit field_geo',
+    'roles' => array(),
+  );
+
+  // Exported permission: edit field_geo_areas
+  $permissions['edit field_geo_areas'] = array(
+    'name' => 'edit field_geo_areas',
+    'roles' => array(
+      '0' => 'anonymous user',
+      '1' => 'authenticated user',
+    ),
+  );
+
+  // Exported permission: edit field_geo_areas_json
+  $permissions['edit field_geo_areas_json'] = array(
+    'name' => 'edit field_geo_areas_json',
+    'roles' => array(
+      '0' => 'anonymous user',
+      '1' => 'authenticated user',
+    ),
+  );
+
+  // Exported permission: edit field_hierarchy_level
+  $permissions['edit field_hierarchy_level'] = array(
+    'name' => 'edit field_hierarchy_level',
+    'roles' => array(),
+  );
+
   // Exported permission: edit field_nr_of_tires
   $permissions['edit field_nr_of_tires'] = array(
     'name' => 'edit field_nr_of_tires',
@@ -109,6 +145,18 @@ function ldiw_waste_map_features_user_default_permissions() {
       '0' => 'anonymous user',
       '1' => 'authenticated user',
     ),
+  );
+
+  // Exported permission: edit field_parent
+  $permissions['edit field_parent'] = array(
+    'name' => 'edit field_parent',
+    'roles' => array(),
+  );
+
+  // Exported permission: edit field_parent_level
+  $permissions['edit field_parent_level'] = array(
+    'name' => 'edit field_parent_level',
+    'roles' => array(),
   );
 
   // Exported permission: edit field_photo
@@ -136,6 +184,12 @@ function ldiw_waste_map_features_user_default_permissions() {
       '0' => 'anonymous user',
       '1' => 'authenticated user',
     ),
+  );
+
+  // Exported permission: edit field_waste_point_display_label
+  $permissions['edit field_waste_point_display_label'] = array(
+    'name' => 'edit field_waste_point_display_label',
+    'roles' => array(),
   );
 
   // Exported permission: edit own waste_point content
@@ -201,6 +255,12 @@ function ldiw_waste_map_features_user_default_permissions() {
     ),
   );
 
+  // Exported permission: view field_display_parent
+  $permissions['view field_display_parent'] = array(
+    'name' => 'view field_display_parent',
+    'roles' => array(),
+  );
+
   // Exported permission: view field_external_photo
   $permissions['view field_external_photo'] = array(
     'name' => 'view field_external_photo',
@@ -210,6 +270,36 @@ function ldiw_waste_map_features_user_default_permissions() {
     ),
   );
 
+  // Exported permission: view field_geo
+  $permissions['view field_geo'] = array(
+    'name' => 'view field_geo',
+    'roles' => array(),
+  );
+
+  // Exported permission: view field_geo_areas
+  $permissions['view field_geo_areas'] = array(
+    'name' => 'view field_geo_areas',
+    'roles' => array(
+      '0' => 'anonymous user',
+      '1' => 'authenticated user',
+    ),
+  );
+
+  // Exported permission: view field_geo_areas_json
+  $permissions['view field_geo_areas_json'] = array(
+    'name' => 'view field_geo_areas_json',
+    'roles' => array(
+      '0' => 'anonymous user',
+      '1' => 'authenticated user',
+    ),
+  );
+
+  // Exported permission: view field_hierarchy_level
+  $permissions['view field_hierarchy_level'] = array(
+    'name' => 'view field_hierarchy_level',
+    'roles' => array(),
+  );
+
   // Exported permission: view field_nr_of_tires
   $permissions['view field_nr_of_tires'] = array(
     'name' => 'view field_nr_of_tires',
@@ -217,6 +307,18 @@ function ldiw_waste_map_features_user_default_permissions() {
       '0' => 'anonymous user',
       '1' => 'authenticated user',
     ),
+  );
+
+  // Exported permission: view field_parent
+  $permissions['view field_parent'] = array(
+    'name' => 'view field_parent',
+    'roles' => array(),
+  );
+
+  // Exported permission: view field_parent_level
+  $permissions['view field_parent_level'] = array(
+    'name' => 'view field_parent_level',
+    'roles' => array(),
   );
 
   // Exported permission: view field_photo
@@ -244,6 +346,12 @@ function ldiw_waste_map_features_user_default_permissions() {
       '0' => 'anonymous user',
       '1' => 'authenticated user',
     ),
+  );
+
+  // Exported permission: view field_waste_point_display_label
+  $permissions['view field_waste_point_display_label'] = array(
+    'name' => 'view field_waste_point_display_label',
+    'roles' => array(),
   );
 
   return $permissions;

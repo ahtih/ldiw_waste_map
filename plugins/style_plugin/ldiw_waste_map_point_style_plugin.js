@@ -90,6 +90,11 @@ Drupal.theme.openlayersPopup=function(feature)
 		if (volume_formatted > 0)
 			output+='Volume <b>' + volume_formatted + 'm&sup3;</b>';
 		output+=composition;
+		if (attrs.geo_areas_json) {
+			var geo_areas=JSON.parse(attrs.geo_areas_json);
+			for (var hierarchy in geo_areas)
+				output+='<br>' + hierarchy + ': ' + geo_areas[hierarchy];
+			}
 		if (attrs.description)
 			output+='<br><br>' + attrs.description;
 		if (attrs.photos) {

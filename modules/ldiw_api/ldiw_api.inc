@@ -207,8 +207,6 @@ function _ldiw_api_create_update($args,$id=FALSE)
 							content_fields('field_coords','waste_point'));
 		$geo_handler=geo_load(array('table_name' => $db_info['table']));
 
-		//!!! $geo_handler->setIndexed(TRUE,TRUE);
-
 		$distance_threshold_meters=50;
 		$earth_circumference_meters=40030081;
 		$lat_tolerance=360 * $distance_threshold_meters /

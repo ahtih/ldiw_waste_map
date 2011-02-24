@@ -3,6 +3,8 @@
 
 DEFINE('LDIW_WASTE_MAP_DEFAULT_PHOTO_FIELDS',
 									'field_photo field_external_photo');
+DEFINE('LDIW_WASTE_MAP_WASTE_POINTS_CSV_VIEW_NAME',
+									'waste_map_geoclustering');
 DEFINE('LDIW_WASTE_MAP_WP_DESCRIPTION_MAX_LENGTH',2000);
 
 /**
@@ -176,6 +178,8 @@ function ldiw_waste_map_form_alter(&$form,$form_state,$form_id)
 				}
 			}
 
+		unset($form['field_geo_areas']);
+		unset($form['field_geo_areas_json']);
 		unset($form['book']['plid']);
 		unset($form['book']['pick-book']);
 		unset($form['attachments']['wrapper']['new']['attach']);
@@ -511,7 +515,7 @@ function ldiw_waste_map_waste_points()
 				"$bbox[2] $bbox[3],$bbox[0] $bbox[3],$bbox[0] $bbox[1]))";
 		}
 
-	$view=views_get_view('waste_map_geoclustering');
+	$view=views_get_view(LDIW_WASTE_MAP_WASTE_POINTS_CSV_VIEW_NAME);
 	if (!$view) {
 		return drupal_not_found();
 		}
@@ -524,6 +528,8 @@ function ldiw_waste_map_waste_points()
 			}
 		}
 
+	//!!! Implement other output formats besides CSV
+
 	return $view->execute_display('feed_1',$view_arguments);
 	}
 
@@ -535,7 +541,7 @@ function ldiw_waste_map_waste_points()
 
 function ldiw_waste_map_preprocess_views_bonus_export_csv(&$vars)
 {
-	if ($vars['view']->name != 'waste_map_geoclustering') {
+	if ($vars['view']->name != LDIW_WASTE_MAP_WASTE_POINTS_CSV_VIEW_NAME) {
 		return;
 		}
 
@@ -553,5 +559,137 @@ function ldiw_waste_map_preprocess_views_bonus_export_csv(&$vars)
 			}
 
 		$vars['header'][$key]=trim($new_column,'"');
+		}
+	}
+
+/***************************************************************************/
+/******************                                      *******************/
+/****************** _ldiw_waste_map_geo_area_hierarchy() *******************/
+/******************                                      *******************/
+/***************************************************************************/
+
+function _ldiw_waste_map_geo_area_hierarchy()
+{
+	static $retval=NULL;
+	if (!isset($retval)) {
+		$retval=array();
+		$nodes=array();
+
+		$r=db_query("SELECT nid FROM {node} WHERE type='geo_hierarchy_level'");
+		while ($row=db_fetch_object($r)) {
+			$node=node_load($row->nid);
+			$nodes[$row->nid]=$node;
+
+			if (!empty($node->field_waste_point_display_label[0]['value'])) {
+				$retval[$node->field_waste_point_display_label[0]['value']]=
+						array(array($row->nid,!empty($node->
+										field_display_parent[0]['value'])));
+				}
+			}
+
+		foreach ($retval as $key => $value) {
+			$nid=$value[0][0];
+			while (isset($nodes[$nid]->field_parent_level[0]['nid'])) {
+				$nid=$nodes[$nid]->field_parent_level[0]['nid'];
+				array_push($retval[$key],
+							array($nid,!empty($nodes[$nid]->
+										field_display_parent[0]['value'])));
+				}
+			}
+		}
+
+	return $retval;
+	}
+
+/***************************************************************************/
+/*********************                                 *********************/
+/********************* _ldiw_waste_map_set_geo_areas() *********************/
+/*********************                                 *********************/
+/***************************************************************************/
+
+function _ldiw_waste_map_set_geo_areas($coords,&$node)
+{
+	$modified=FALSE;
+	$geo_handler=geo_load(array('name' => 'field_geo'));
+
+	$areas_table_name=$geo_handler->tableName(TRUE);
+	$geo_handler->setTableName("a",TRUE);
+	$r=db_query("SELECT a.field_hierarchy_level_nid AS level_nid," .
+						"a.nid AS area_nid,n.title AS area_title " .
+					"FROM $areas_table_name AS a " .
+							"INNER JOIN {node} AS n ON (n.nid=a.nid) " .
+					"WHERE " . $geo_handler->intersects($geo_handler,
+							"POINT(${coords[0]} ${coords[1]})") . " " .
+					"ORDER BY a.nid");
+
+	$field_geo_areas=array();
+
+	$levels=array();
+	while ($row=db_fetch_object($r)) {
+		if (!isset($levels[$row->level_nid])) {
+			$levels[$row->level_nid]=$row;
+			$field_geo_areas[]=array('nid' => $row->area_nid);
+			}
+		}
+
+	$prev_areas=array();
+	if (!empty($node->field_geo_areas)) {
+		foreach ($node->field_geo_areas as $entry) {
+			if (isset($entry['nid'])) {
+				$prev_areas[]=$entry;
+				}
+			}
+		}
+
+	if ($field_geo_areas != $prev_areas) {
+		$node->field_geo_areas=$field_geo_areas;
+		$modified=TRUE;
+		}
+
+	$object=array();
+	foreach (_ldiw_waste_map_geo_area_hierarchy() as
+											$title => $hierarchy_levels) {
+		$area_titles=array();
+		foreach ($hierarchy_levels as $level) {
+			list($level_nid,$display_parent)=$level;
+			if (isset($levels[$level_nid])) {
+				$area_titles[]=$levels[$level_nid]->area_title;
+				if (!$display_parent) {
+					break;
+					}
+				}
+			}
+
+		if (!empty($area_titles)) {
+			$object[$title]=implode(', ',$area_titles);
+			}
+		}
+
+	$json=empty($object) ? NULL : json_encode($object);
+	if ((empty($node->field_geo_areas_json[0]['value']) && !empty($json)) ||
+						$node->field_geo_areas_json[0]['value'] !== $json) {
+		$node->field_geo_areas_json=array(0 => array('value' => $json));
+		$modified=TRUE;
+		}
+
+	return $modified;
+	}
+
+/***************************************************************************/
+/*****************************                ******************************/
+/***************************** hook_nodeapi() ******************************/
+/*****************************                ******************************/
+/***************************************************************************/
+
+function ldiw_waste_map_nodeapi(&$node,$op)
+{
+	if ($node->type == 'waste_point' && $op == 'presave') {
+		$coords=geoclustering_extract_coords_from_node($node,'field_coords');
+
+		if (empty($node->nid) || $coords !=
+						geoclustering_extract_coords_from_node(
+									node_load($node->nid),'field_coords')) {
+			_ldiw_waste_map_set_geo_areas($coords,$node);
+			}
 		}
 	}

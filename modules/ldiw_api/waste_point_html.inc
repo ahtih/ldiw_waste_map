@@ -73,6 +73,14 @@ function _waste_point_html($attrs,$photos,$max_width_pixels)
 
 	$output.=$composition;
 
+	if (!empty($attrs['geo_areas_json'])) {
+		foreach (json_decode($attrs['geo_areas_json'],TRUE) as
+													$hierarchy => $areas) {
+			$output.='<br>' . mb_convert_encoding("$hierarchy: $areas",
+												'HTML-ENTITIES','UTF-8');
+			}
+		}
+
 	if (!empty($attrs['description'])) {
 		$output.='<br><br>' . mb_convert_encoding($attrs['description'],
 												'HTML-ENTITIES','UTF-8');

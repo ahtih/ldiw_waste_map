@@ -6,6 +6,341 @@
 function ldiw_waste_map_features_content_default_fields() {
   $fields = array();
 
+  // Exported field: field_geo
+  $fields['geo_area-field_geo'] = array(
+    'field_name' => 'field_geo',
+    'type_name' => 'geo_area',
+    'display_settings' => array(
+      'label' => array(
+        'format' => 'above',
+        'exclude' => 0,
+      ),
+      'teaser' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'full' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      '4' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'token' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+    ),
+    'widget_active' => '1',
+    'type' => 'geo',
+    'required' => '1',
+    'multiple' => '0',
+    'module' => 'geo',
+    'active' => '1',
+    'srid' => 4326,
+    'geo_type' => 'multipolygon',
+    'widget' => array(
+      'default_value' => array(
+        '0' => array(
+          'geo' => '',
+        ),
+      ),
+      'default_value_php' => NULL,
+      'label' => 'Geometry',
+      'weight' => '1',
+      'description' => 'The borders of this area in WKT format (usually a MULTIPOLYGON). This is usually very long text, often 100 000 characters or more; so take care when copy/pasting it.',
+      'type' => 'geo_wkt',
+      'module' => 'geo_field',
+    ),
+  );
+
+  // Exported field: field_hierarchy_level
+  $fields['geo_area-field_hierarchy_level'] = array(
+    'field_name' => 'field_hierarchy_level',
+    'type_name' => 'geo_area',
+    'display_settings' => array(
+      'label' => array(
+        'format' => 'above',
+        'exclude' => 0,
+      ),
+      'teaser' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'full' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      '4' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'token' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+    ),
+    'widget_active' => '1',
+    'type' => 'nodereference',
+    'required' => '1',
+    'multiple' => '0',
+    'module' => 'nodereference',
+    'active' => '1',
+    'referenceable_types' => array(
+      'geo_hierarchy_level' => 'geo_hierarchy_level',
+      'cleanup_project' => 0,
+      'geo_area' => 0,
+      'page' => 0,
+      'story' => 0,
+      'waste_point' => 0,
+    ),
+    'advanced_view' => '--',
+    'advanced_view_args' => '',
+    'widget' => array(
+      'autocomplete_match' => 'contains',
+      'size' => 60,
+      'default_value' => array(
+        '0' => array(
+          'nid' => '',
+        ),
+      ),
+      'default_value_php' => NULL,
+      'label' => 'Hierarchy level',
+      'weight' => '2',
+      'description' => 'The <em>Geographic area hierarchy level</em> this area belongs to; e.g. is it a country, or state, or municipality, or something else.',
+      'type' => 'nodereference_select',
+      'module' => 'nodereference',
+    ),
+  );
+
+  // Exported field: field_parent
+  $fields['geo_area-field_parent'] = array(
+    'field_name' => 'field_parent',
+    'type_name' => 'geo_area',
+    'display_settings' => array(
+      'label' => array(
+        'format' => 'above',
+        'exclude' => 0,
+      ),
+      'teaser' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'full' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      '4' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'token' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+    ),
+    'widget_active' => '1',
+    'type' => 'nodereference',
+    'required' => '0',
+    'multiple' => '0',
+    'module' => 'nodereference',
+    'active' => '1',
+    'referenceable_types' => array(
+      'geo_area' => 'geo_area',
+      'cleanup_project' => 0,
+      'geo_hierarchy_level' => 0,
+      'page' => 0,
+      'story' => 0,
+      'waste_point' => 0,
+    ),
+    'advanced_view' => '--',
+    'advanced_view_args' => '',
+    'widget' => array(
+      'autocomplete_match' => 'starts_with',
+      'size' => '60',
+      'default_value' => array(
+        '0' => array(
+          'nid' => NULL,
+          '_error_element' => 'default_value_widget][field_parent][0][nid][nid',
+        ),
+      ),
+      'default_value_php' => NULL,
+      'label' => 'Parent area name',
+      'weight' => '3',
+      'description' => 'If this geographic area is not at highest defined hierarchy level, then usually it is topologically part of a larger area one level up in hierarchy. If so, fill in the name of this larger area.',
+      'type' => 'nodereference_autocomplete',
+      'module' => 'nodereference',
+    ),
+  );
+
+  // Exported field: field_display_parent
+  $fields['geo_hierarchy_level-field_display_parent'] = array(
+    'field_name' => 'field_display_parent',
+    'type_name' => 'geo_hierarchy_level',
+    'display_settings' => array(
+      'label' => array(
+        'format' => 'above',
+        'exclude' => 0,
+      ),
+      'teaser' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'full' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      '4' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'token' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+    ),
+    'widget_active' => '1',
+    'type' => 'number_integer',
+    'required' => '1',
+    'multiple' => '0',
+    'module' => 'number',
+    'active' => '1',
+    'prefix' => '',
+    'suffix' => '',
+    'min' => '',
+    'max' => '',
+    'allowed_values' => '0|Do not display parent name
+1|Display parent name',
+    'allowed_values_php' => '',
+    'widget' => array(
+      'default_value' => array(
+        '0' => array(
+          'value' => 0,
+        ),
+      ),
+      'default_value_php' => NULL,
+      'label' => 'Display parent name',
+      'weight' => '32',
+      'description' => 'Check this if the <em>Name</em> of areas in this hiearchy level is not enough to uniquely identify them without parent area name being present. For example, in Germany not everybody might know where <em>Main-Spessart</em> is, so displaying the parent name (<em>Main-Spessart, Bavaria</em>) is good; similarly, in USA there are several <em>Fayette</em> counties, so <em>Fayette county, Texas</em> is appropriate to display. This is achieved by checking this checkbox for <em>County</em> hierarchy level.',
+      'type' => 'optionwidgets_onoff',
+      'module' => 'optionwidgets',
+    ),
+  );
+
+  // Exported field: field_parent_level
+  $fields['geo_hierarchy_level-field_parent_level'] = array(
+    'field_name' => 'field_parent_level',
+    'type_name' => 'geo_hierarchy_level',
+    'display_settings' => array(
+      'label' => array(
+        'format' => 'above',
+        'exclude' => 0,
+      ),
+      'teaser' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'full' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      '4' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'token' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+    ),
+    'widget_active' => '1',
+    'type' => 'nodereference',
+    'required' => '0',
+    'multiple' => '0',
+    'module' => 'nodereference',
+    'active' => '1',
+    'referenceable_types' => array(
+      'geo_hierarchy_level' => 'geo_hierarchy_level',
+      'cleanup_project' => 0,
+      'geo_area' => 0,
+      'page' => 0,
+      'story' => 0,
+      'waste_point' => 0,
+    ),
+    'advanced_view' => '--',
+    'advanced_view_args' => '',
+    'widget' => array(
+      'autocomplete_match' => 'contains',
+      'size' => 60,
+      'default_value' => array(
+        '0' => array(
+          'nid' => '',
+        ),
+      ),
+      'default_value_php' => NULL,
+      'label' => 'Parent hierarchy level',
+      'weight' => '31',
+      'description' => 'Select a hierarchy level which is one level up from the level you are creating/editing. For example, if you are editing a <em>County</em> hierarchy level, then you might want to select its parent to be the <em>Country</em> level. Select <em>None</em> if this is the highest hierarchy level you have.',
+      'type' => 'nodereference_select',
+      'module' => 'nodereference',
+    ),
+  );
+
+  // Exported field: field_waste_point_display_label
+  $fields['geo_hierarchy_level-field_waste_point_display_label'] = array(
+    'field_name' => 'field_waste_point_display_label',
+    'type_name' => 'geo_hierarchy_level',
+    'display_settings' => array(
+      'label' => array(
+        'format' => 'above',
+        'exclude' => 0,
+      ),
+      'teaser' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'full' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      '4' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'token' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+    ),
+    'widget_active' => '1',
+    'type' => 'text',
+    'required' => '0',
+    'multiple' => '0',
+    'module' => 'text',
+    'active' => '1',
+    'text_processing' => '0',
+    'max_length' => '',
+    'allowed_values' => '',
+    'allowed_values_php' => '',
+    'widget' => array(
+      'rows' => 5,
+      'size' => '60',
+      'default_value' => array(
+        '0' => array(
+          'value' => '',
+          '_error_element' => 'default_value_widget][field_waste_point_display_label][0][value',
+        ),
+      ),
+      'default_value_php' => NULL,
+      'label' => '"Waste point" display label',
+      'weight' => '33',
+      'description' => 'This controls how information about geographic areas is displayed for individual Waste points in Waste Map popups. If you write a label here for a hierarchy level, then popups will include this label and the area of this level where the Waste point belongs to. For example, having label "Administrative division" for United States <em>County</em> level makes <em>Administrative division: Fayette County, Texas</em> to be displayed in popups. More than one hierarchy level may have this set; this makes sense for example if one is administrative division, and another a state forestry division. Then popups show where Waste point belongs to according to both hierarchies.',
+      'type' => 'text_textfield',
+      'module' => 'text',
+    ),
+  );
+
   // Exported field: field_composition_glass
   $fields['waste_point-field_composition_glass'] = array(
     'field_name' => 'field_composition_glass',
@@ -374,6 +709,120 @@ function ldiw_waste_map_features_content_default_fields() {
     ),
   );
 
+  // Exported field: field_geo_areas
+  $fields['waste_point-field_geo_areas'] = array(
+    'field_name' => 'field_geo_areas',
+    'type_name' => 'waste_point',
+    'display_settings' => array(
+      'label' => array(
+        'format' => 'above',
+        'exclude' => 0,
+      ),
+      'teaser' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'full' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      '4' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'token' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+    ),
+    'widget_active' => '1',
+    'type' => 'nodereference',
+    'required' => '0',
+    'multiple' => '10',
+    'module' => 'nodereference',
+    'active' => '1',
+    'referenceable_types' => array(
+      'geo_area' => 'geo_area',
+      'cleanup_project' => 0,
+      'geo_hierarchy_level' => 0,
+      'page' => 0,
+      'story' => 0,
+      'waste_point' => 0,
+    ),
+    'advanced_view' => '--',
+    'advanced_view_args' => '',
+    'widget' => array(
+      'autocomplete_match' => 'starts_with',
+      'size' => '60',
+      'default_value' => array(
+        '0' => array(
+          'nid' => NULL,
+          '_error_element' => 'default_value_widget][field_geo_areas][0][nid][nid',
+        ),
+      ),
+      'default_value_php' => NULL,
+      'label' => 'Geographic areas',
+      'weight' => '14',
+      'description' => '',
+      'type' => 'nodereference_autocomplete',
+      'module' => 'nodereference',
+    ),
+  );
+
+  // Exported field: field_geo_areas_json
+  $fields['waste_point-field_geo_areas_json'] = array(
+    'field_name' => 'field_geo_areas_json',
+    'type_name' => 'waste_point',
+    'display_settings' => array(
+      'label' => array(
+        'format' => 'above',
+        'exclude' => 0,
+      ),
+      'teaser' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'full' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      '4' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'token' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+    ),
+    'widget_active' => '1',
+    'type' => 'text',
+    'required' => '0',
+    'multiple' => '0',
+    'module' => 'text',
+    'active' => '1',
+    'text_processing' => '0',
+    'max_length' => '',
+    'allowed_values' => '',
+    'allowed_values_php' => '',
+    'widget' => array(
+      'rows' => 5,
+      'size' => '60',
+      'default_value' => array(
+        '0' => array(
+          'value' => '',
+          '_error_element' => 'default_value_widget][field_geo_areas_json][0][value',
+        ),
+      ),
+      'default_value_php' => NULL,
+      'label' => 'Geographic area names',
+      'weight' => '15',
+      'description' => '',
+      'type' => 'text_textfield',
+      'module' => 'text',
+    ),
+  );
+
   // Exported field: field_nr_of_tires
   $fields['waste_point-field_nr_of_tires'] = array(
     'field_name' => 'field_nr_of_tires',
@@ -585,13 +1034,21 @@ function ldiw_waste_map_features_content_default_fields() {
 
   // Translatables
   // Included for use with string extractors like potx.
+  t('"Waste point" display label');
   t('Coordinates');
+  t('Display parent name');
   t('External photo');
+  t('Geographic area names');
+  t('Geographic areas');
+  t('Geometry');
   t('Glass (incl glass bottles)');
+  t('Hierarchy level');
   t('Large objects like furniture');
   t('Number of tires');
   t('Other');
   t('Paper or cardboard');
+  t('Parent area name');
+  t('Parent hierarchy level');
   t('Photo');
   t('Photos ID:Width:Height');
   t('Plastics, metals, packaging');

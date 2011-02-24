@@ -535,6 +535,44 @@ function ldiw_waste_map_features_views_default_views() {
       'field' => 'field_composition_pmp_value',
       'relationship' => 'none',
     ),
+    'field_geo_areas_json_value' => array(
+      'label' => 'Geographic area names',
+      'alter' => array(
+        'alter_text' => 0,
+        'text' => '',
+        'make_link' => 0,
+        'path' => '',
+        'link_class' => '',
+        'alt' => '',
+        'prefix' => '',
+        'suffix' => '',
+        'target' => '',
+        'help' => '',
+        'trim' => 0,
+        'max_length' => '',
+        'word_boundary' => 1,
+        'ellipsis' => 1,
+        'html' => 0,
+        'strip_tags' => 0,
+      ),
+      'empty' => '',
+      'hide_empty' => 0,
+      'empty_zero' => 0,
+      'link_to_node' => 0,
+      'label_type' => 'widget',
+      'format' => 'plain',
+      'multiple' => array(
+        'group' => TRUE,
+        'multiple_number' => '',
+        'multiple_from' => '',
+        'multiple_reversed' => FALSE,
+      ),
+      'exclude' => 0,
+      'id' => 'field_geo_areas_json_value',
+      'table' => 'node_data_field_geo_areas_json',
+      'field' => 'field_geo_areas_json_value',
+      'relationship' => 'none',
+    ),
   ));
   $handler->override_option('arguments', array(
     'field_coords_geo' => array(
@@ -619,7 +657,6 @@ function ldiw_waste_map_features_views_default_views() {
   $handler->override_option('cache', array(
     'type' => 'none',
   ));
-  $handler->override_option('items_per_page', 10);
   $handler->override_option('link_display', 'feed_1');
   $handler = $view->new_display('feed', 'Feed', 'feed_1');
   $handler->override_option('style_plugin', 'views_csv');
