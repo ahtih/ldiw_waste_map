@@ -4,19 +4,126 @@
 function _ldiw_api_get_server_specific_fields()
 {
 	$data=array();
-	$photo_field_names=explode(' ',variable_get(
+	$fields_to_omit=explode(' ',variable_get(
 						'ldiw_waste_map_photo_field_names',
 						LDIW_WASTE_MAP_DEFAULT_PHOTO_FIELDS));
 
-	foreach (content_fields(NULL,'waste_point') as $fieldname => $field) {
+	$content_fields=content_fields(NULL,'waste_point');
+	$composition_fields=variable_get('ldiw_waste_map_composition_fields',
+																array());
+
+	if (variable_get('ldiw_waste_map_single_composition_value',FALSE)) {
+		$composition_weight=NULL;
+		$composition_values=array();
+		foreach ($composition_fields as $key => $info) {
+			$fields_to_omit[]=$key;
+			$composition_values[]=array($key,
+								$content_fields[$key]['widget']['label']);
+			if (isset($content_fields[$key]['widget']['weight']) &&
+					(!isset($composition_weight) ||
+					$content_fields[$key]['widget']['weight'] <
+													$composition_weight)) {
+				$composition_weight=$content_fields[$key]['widget']['weight'];
+				}
+			}
+		$data['composition']=array(
+				$composition_weight,
+				'composition',
+				array('type' => 'text',
+						'label' => t('Composition'),
+						'allowed_values' => $composition_values,
+						),
+				);
+		}
+
+	foreach ($content_fields as $fieldname => $field) {
 		if ($field['type_name'] == 'waste_point' && in_array($field['type'],
 						array('number_float','number_integer','text')) &&
-						!in_array($fieldname,$photo_field_names)) {
-			$data[preg_replace('/^field_(..*)$/','$1',$fieldname)]=array(
-						isset($field['widget']['weight']) ?
+						!in_array($fieldname,$fields_to_omit)) {
+			$key=preg_replace('/^field_(..*)$/','$1',$fieldname);
+
+			$entry=array('type' => preg_replace('/^number_(..*)$/','$1',
+														$field['type']));
+
+			if ($entry['type'] == 'integer' &&
+					isset($field['min']) && isset($field['max']) &&
+					(''.$field['min']) == '0' && (''.$field['max']) == '1') {
+				$entry['type']='boolean';
+				}
+
+			if (!empty($field['suffix'])) {
+				$entry['suffix']=$field['suffix'];
+				}
+
+			if (!empty($field['widget']['label'])) {
+				$entry['label']=$field['widget']['label'];	//!!! run through t()?
+				}
+
+			if (!empty($field['widget']['description'])) {
+				$entry['edit_instructions']=$field['widget']['description'];	//!!! run through t()?
+				}
+
+			$allowed_values=content_allowed_values($field);
+			if ($allowed_values && $entry['type'] != 'boolean') {
+				$entry['allowed_values']=array();
+				foreach ($allowed_values as $tag => $value) {
+					if (in_array($entry['type'],array('integer','float'))) {
+						$tag=0 + $tag;
+						}
+					$entry['allowed_values'][]=array($tag,$value);
+					}
+				}
+			else {
+				if (in_array($entry['type'],array('integer','float'))) {
+					foreach (array('min','max') as $f) {
+						if (isset($field[$f])) {
+							$entry[$f]=0 + $field[$f];
+							}
+						}
+
+					if (isset($composition_fields[$fieldname])) {
+						$entry['typical_values']=array(
+												array(0,'0'),
+												array(10,'10'),
+												array(20,'20'),
+												array(30,'30'),
+												array(40,'40'),
+												array(50,'50'),
+												array(60,'60'),
+												array(70,'70'),
+												array(80,'80'),
+												array(90,'90'),
+												array(100,'100'),
+												);
+						}
+
+					if ($key == 'volume') {
+						$entry['typical_values']=array(
+								array(0.3 / 1000.0,
+									t("It all fits into my pocket")),
+								array(4 / 1000.0,
+									t("Fits in a plastic shopping bag")),
+								array(0.5,
+									t("Fits into luggage trunk of a car")),
+								array(3,
+									t("Fits into industrial truck/cargo vehicle")),
+								array(30,
+									t("It's even more than that")),
+								);
+						}
+
+					//!!! Make typical_values configurable for custom fields
+					}
+				}
+
+			if ($entry['type'] == 'text' && empty($entry['allowed_values']) &&
+											isset($field['max_length'])) {
+				$entry['max_length']=$field['max_length'];
+				}
+
+			$data[$key]=array(isset($field['widget']['weight']) ?
 											$field['widget']['weight'] : 0,
-						$fieldname,
-						$field);
+								$fieldname,$entry);
 			}
 		}
 
@@ -29,8 +136,7 @@ function _ldiw_api_get_server_specific_fields()
 										$extra_weights['body_field'] : 0,
 				'body',array(
 						'type' => 'text',
-						'widget' => array(
-								'label' => t($node_type->body_label)),
+						'label' => t($node_type->body_label),
 						'max_length' =>
 								LDIW_WASTE_MAP_WP_DESCRIPTION_MAX_LENGTH)
 				);
@@ -40,6 +146,7 @@ function _ldiw_api_get_server_specific_fields()
 
 	foreach (array_keys($data) as $key) {
 		$data[$key]=array_slice($data[$key],1);
+		$data[$key][1]['field_name']=$key;
 		}
 
 	return $data;
@@ -86,8 +193,6 @@ function _ldiw_api_waste_point_extra_fields()
 																array());
 	$composition_section_started=FALSE;
 	foreach (_ldiw_api_get_server_specific_fields() as $key => $info) {
-		$field=$info[1];
-
 		if (isset($composition_fields[$info[0]]) &&
 										!$composition_section_started) {
 			$composition_section_started=TRUE;
@@ -95,87 +200,7 @@ function _ldiw_api_waste_point_extra_fields()
 						'label' => t('Composition percentages (in volume)'));
 			}
 
-		$entry=array('field_name' => $key,
-					'type' => preg_replace('/^number_(..*)$/','$1',
-														$field['type']));
-
-		if ($entry['type'] == 'integer' &&
-					isset($field['min']) && isset($field['max']) &&
-					(''.$field['min']) == '0' && (''.$field['max']) == '1') {
-			$entry['type']='boolean';
-			}
-
-		if (!empty($field['suffix'])) {
-			$entry['suffix']=$field['suffix'];
-			}
-
-		if (!empty($field['widget']['label'])) {
-			$entry['label']=$field['widget']['label'];	//!!! run through t()?
-			}
-
-		if (!empty($field['widget']['description'])) {
-			$entry['edit_instructions']=$field['widget']['description'];	//!!! run through t()?
-			}
-
-		$allowed_values=content_allowed_values($field);
-		if ($allowed_values && $entry['type'] != 'boolean') {
-			$entry['allowed_values']=array();
-			foreach ($allowed_values as $key => $value) {
-				if (in_array($entry['type'],array('integer','float'))) {
-					$key=0 + $key;
-					}
-				$entry['allowed_values'][]=array($key,$value);
-				}
-			}
-		else {
-			if (in_array($entry['type'],array('integer','float'))) {
-				foreach (array('min','max') as $f) {
-					if (isset($field[$f])) {
-						$entry[$f]=0 + $field[$f];
-						}
-					}
-
-				if (isset($composition_fields[$info[0]])) {
-					$entry['typical_values']=array(
-												array(0,'0'),
-												array(10,'10'),
-												array(20,'20'),
-												array(30,'30'),
-												array(40,'40'),
-												array(50,'50'),
-												array(60,'60'),
-												array(70,'70'),
-												array(80,'80'),
-												array(90,'90'),
-												array(100,'100'),
-												);
-					}
-
-				if ($key == 'volume') {
-					$entry['typical_values']=array(
-							array(0.3 / 1000.0,
-								t("It all fits into my pocket")),
-							array(4 / 1000.0,
-								t("Fits in a plastic shopping bag")),
-							array(0.5,
-								t("Fits into luggage trunk of a car")),
-							array(3,
-								t("Fits into industrial truck/cargo vehicle")),
-							array(30,
-								t("It's even more than that")),
-							);
-					}
-
-				//!!! Make typical_values configurable for custom fields
-				}
-			}
-
-		if ($entry['type'] == 'text' && empty($entry['allowed_values']) &&
-											isset($field['max_length'])) {
-			$entry['max_length']=$field['max_length'];
-			}
-
-		$retval[]=$entry;
+		$retval[]=$info[1];
 		}
 
 	//!!! how to encode Unicode >255 chars?
@@ -319,7 +344,7 @@ function _ldiw_api_create_update($args,$id=FALSE)
 			if ($info[1]['type'] == 'text' && !isset($value)) {
 				$value='';
 				}
-			if ($info[0] == 'body') {
+			if ($info[0] == 'body' || $info[0] == 'composition') {
 				$form_state['values'][$info[0]]=$value;
 				}
 			else {

@@ -144,12 +144,6 @@ function ldiw_waste_map_form_alter(&$form,$form_state,$form_id)
 		drupal_add_css(drupal_get_path('module','ldiw_waste_map') .
 														'/node-form.css');
 
-		foreach (array('field_volume','field_nr_of_tires','body_field')
-																as $key) {
-			$form[$key]['#prefix']='<span class="label-left-of-input">';
-			$form[$key]['#suffix']='</span>';
-			}
-
 		$composition_fields=variable_get('ldiw_waste_map_composition_fields',
 																array());
 		$composition_weight=NULL;
@@ -162,21 +156,56 @@ function ldiw_waste_map_form_alter(&$form,$form_state,$form_id)
 				}
 			}
 
-		$form['composition']=array(
-				'#type' => 'fieldset',
-				'#title' => t('Composition percentages (in volume)'),
-				'#weight' => $composition_weight,
-				'#attributes' => array('class' => 'label-left-of-input-23em'),
+		if (variable_get('ldiw_waste_map_single_composition_value',FALSE)) {
+			$form['composition']=array(
+				'#type' => 'select',
+				'#title' => t('Composition'),
+				'#options' => array('' => ''),
+				'#default_value' => '',
 				);
 
-		$form['#attributes']['class'].=' vertically-condensed-form';
+			$max_value=0;
+			foreach ($form as $key => $element) {
+				if (isset($composition_fields[$key])) {
+					$form['composition']['#options'][$key]=$element['#title'];
 
-		foreach ($form as $key => $element) {
-			if (isset($composition_fields[$key])) {
-				$form['composition'][$key]=$element;
-				unset($form[$key]);
+					$value=(float)$element[0]['#default_value']['value'];
+					if ($max_value < $value) {
+						$max_value=$value;
+						$form['composition']['#default_value']=$key;
+						}
+
+					$form[$key]['#type']='hidden';
+					}
+				}
+
+			$form['#submit'][]='ldiw_waste_map_composition_singlevalue_submit';
+			}
+		else {
+			$form['composition']=array(
+					'#type' => 'fieldset',
+					'#title' => t('Composition percentages (in volume)'),
+					'#weight' => $composition_weight,
+					'#attributes' => array('class' => 'label-left-of-input-23em'),
+					);
+
+			foreach ($form as $key => $element) {
+				if (isset($composition_fields[$key])) {
+					$form['composition'][$key]=$element;
+					unset($form[$key]);
+					}
 				}
 			}
+
+		foreach (array('field_volume','field_nr_of_tires','body_field',
+												'composition') as $key) {
+			if (isset($form[$key])) {
+				$form[$key]['#prefix']='<span class="label-left-of-input">';
+				$form[$key]['#suffix']='</span>';
+				}
+			}
+
+		$form['#attributes']['class'].=' vertically-condensed-form';
 
 		unset($form['field_geo_areas']);
 		unset($form['field_geo_areas_json']);
@@ -184,6 +213,26 @@ function ldiw_waste_map_form_alter(&$form,$form_state,$form_id)
 		unset($form['book']['pick-book']);
 		unset($form['attachments']['wrapper']['new']['attach']);
 		unset($form['buttons']['preview']);
+		}
+	}
+
+/***************************************************************************/
+/**************                                               **************/
+/************** ldiw_waste_map_waste_point_node_form_submit() **************/
+/**************                                               **************/
+/***************************************************************************/
+
+function ldiw_waste_map_composition_singlevalue_submit($form,&$form_state)
+{
+	$composition=empty($form_state['values']['composition']) ? '' :
+									$form_state['values']['composition'];
+	$composition_fields=variable_get('ldiw_waste_map_composition_fields',
+																array());
+	foreach ($form as $key => $element) {
+		if (isset($composition_fields[$key])) {
+			$form_state['values'][$key][0]['value']=
+										($key == $composition) ? 100 : 0;
+			}
 		}
 	}
 

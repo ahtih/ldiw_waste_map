@@ -43,6 +43,16 @@ function ldiw_waste_map_admin_settings()
 			}
 		}
 
+	$form['ldiw_waste_map_single_composition_value']=array(
+				'#type' => 'checkbox',
+				'#title' => t('For each Waste point, select only the main ' .
+						'composition type, instead of percentages of ' .
+						'all composition types'),
+				'#default_value' => variable_get(
+								'ldiw_waste_map_single_composition_value',
+								FALSE),
+				);
+
 	$form['ldiw_waste_map_photo_field_names']=array(
 				'#type' => 'textfield',
 				'#title' => t('Space-separated list of CCK Field names ' .
@@ -110,7 +120,8 @@ function theme_ldiw_waste_map_admin_settings($form)
 
 function ldiw_waste_map_admin_settings_submit($form,&$form_state)
 {
-	$vars=array('ldiw_waste_map_photo_field_names');
+	$vars=array('ldiw_waste_map_photo_field_names',
+				'ldiw_waste_map_single_composition_value');
 
 	if (isset($form_state['values']['op'])) {
 		if ($form_state['values']['op'] == t('Reset to defaults')) {
@@ -135,6 +146,8 @@ function ldiw_waste_map_admin_settings_submit($form,&$form_state)
 		}
 
 	variable_set('ldiw_waste_map_composition_fields',$composition);
+
+	cache_clear_all('services:','cache',TRUE);
 
 	drupal_set_message(t('The configuration options have been saved.'));
 	}
