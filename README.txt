@@ -23,12 +23,12 @@ in the modules directory for your site and enable it on the
 `admin/build/modules` page. There are a number of dependencies as well
 (e.g. OpenLayers) which are pointed out to you when you enable the module.
 
-Many patches to other modules are needed for Waste Map to really work:
-- http://drupal.org/files/issues/geo_openlayers_0.patch (http://drupal.org/node/804878)
-- http://drupal.org/files/issues/geo-ewkb-parsing.patch (http://drupal.org/node/883020)
-- http://drupal.org/files/issues/geo-table-prefixes-776436.patch (http://drupal.org/node/776436)
-- http://drupal.org/files/issues/geo-813482-updated.patch (http://drupal.org/node/813482)
-- http://drupal.org/files/issues/geo-667034.patch (http://drupal.org/node/667034)
+"Geo" module needs to be extensively patched for Waste Map to work,
+and the simplest way is to get a patched version of Geo using
+	git clone --branch master git@git.drupal.org:sandbox/ahtih/1081362.git <your-destination-dir>
+This is Geo HEAD version patched with http://drupal.org/node/{804878,883020,776436,813482,667034}
+
+"Views Bonus Pack" module needs the following patches:
 - http://drupal.org/files/issues/views_bonus_csv_strip_html.patch (http://drupal.org/node/205741)
 - http://drupal.org/files/issues/views_bonus_csv_separator.patch (http://drupal.org/node/890544)
 
