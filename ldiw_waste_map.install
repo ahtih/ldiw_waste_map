@@ -25,4 +25,26 @@ function ldiw_waste_map_install()
 
 	_ldiw_waste_map_create_geo_index(geo_load(array('name' => 'field_geo')));
 	}
+
+function ldiw_waste_map_requirements($phase)
+{
+	$requirements=array();
+	if ($phase == 'runtime') {
+		$req=array('title' => t('OpenLayers supports style plugins'),
+					'severity' => REQUIREMENT_OK,
+					'value' => t('Yes'),
+					);
+		if (!class_exists('openlayers_style_plugin')) {
+			$req['severity']=REQUIREMENT_ERROR;
+			$req['value']=t('No');
+			$req['description']=t('OpenLayers module does not support ' .
+					'style plugins, which are needed for LDIW Waste Map. ' .
+					'Use dev version of OpenLayers module or manually ' .
+					'apply patch from http://drupal.org/node/710908');
+			}
+		$requirements['ldiw_waste_map_openlayers_style_plugin']=$req;
+		}
+	return $requirements;
+	}
+
 ?>

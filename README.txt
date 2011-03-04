@@ -32,9 +32,9 @@ Many patches to other modules are needed for Waste Map to really work:
 - http://drupal.org/files/issues/views_bonus_csv_strip_html.patch (http://drupal.org/node/205741)
 - http://drupal.org/files/issues/views_bonus_csv_separator.patch (http://drupal.org/node/890544)
 
-You also need to make sure you are using dev version of OpenLayers Drupal
-module, or else apply patch es for http://drupal.org/node/945728 and
-http://drupal.org/node/1011980 yourself.
+You also need to make sure you are using 6.x-2.x-dev version of OpenLayers
+Drupal module, or else apply patches for http://drupal.org/node/710908 ,
+http://drupal.org/node/945728 and http://drupal.org/node/1011980 yourself.
 
 You also need to patch OpenLayers JavaScript library:
 - http://trac.osgeo.org/openlayers/ticket/2891
