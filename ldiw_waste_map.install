@@ -30,6 +30,13 @@ function ldiw_waste_map_requirements($phase)
 {
 	$requirements=array();
 	if ($phase == 'runtime') {
+
+			/*************************************************/
+			/*****                                       *****/
+			/***** Check OpenLayers style plugin support *****/
+			/*****                                       *****/
+			/*************************************************/
+
 		$req=array('title' => t('OpenLayers supports style plugins'),
 					'severity' => REQUIREMENT_OK,
 					'value' => t('Yes'),
@@ -43,6 +50,26 @@ function ldiw_waste_map_requirements($phase)
 					'apply patch from http://drupal.org/node/710908');
 			}
 		$requirements['ldiw_waste_map_openlayers_style_plugin']=$req;
+
+			/********************************************/
+			/*****                                  *****/
+			/***** Check icon directory writability *****/
+			/*****                                  *****/
+			/********************************************/
+
+		$req=array('title' => t('LDIW Waste Map icon cache directory'),
+					'severity' => REQUIREMENT_OK,
+					'value' => t('Exists and is writable'),
+					);
+		$path=file_directory_path() . '/ldiw_waste_map/waste_point_icon';
+		if (!file_check_directory($path)) {
+			$req['severity']=REQUIREMENT_ERROR;
+			$req['value']=t('Does not exist or is not writable');
+			$req['description']=t('LDIW Waste Map needs its icon cache ' .
+					'directory !path to be writable for webserver process.',
+					array('!path' => $path));
+			}
+		$requirements['ldiw_waste_map_icon_cache']=$req;
 		}
 	return $requirements;
 	}
