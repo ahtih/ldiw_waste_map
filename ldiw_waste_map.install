@@ -70,6 +70,28 @@ function ldiw_waste_map_requirements($phase)
 					array('!path' => $path));
 			}
 		$requirements['ldiw_waste_map_icon_cache']=$req;
+
+			/********************************************/
+			/*****                                  *****/
+			/***** Check views_handler_argument_geo *****/
+			/*****                                  *****/
+			/********************************************/
+
+		$req=array('title' => t('views_handler_argument_geo'),
+					'severity' => REQUIREMENT_OK,
+					'value' => t('Exists'),
+					);
+		views_include('base');
+		views_include('handlers');
+		views_module_include('views.inc');
+		if (!views_fetch_handler_data('views_handler_argument_geo')) {
+			$req['severity']=REQUIREMENT_ERROR;
+			$req['value']=t('Does not exist');
+			$req['description']=t('LDIW Waste Map needs Geo module ' .
+					'to support views_handler_argument_geo. Apply Geo ' .
+					'patch from http://drupal.org/node/813482');
+			}
+		$requirements['ldiw_waste_map_geo_argument_handler']=$req;
 		}
 	return $requirements;
 	}
