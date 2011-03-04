@@ -73,5 +73,4 @@ function ldiw_waste_map_requirements($phase)
 		}
 	return $requirements;
 	}
-
 ?>

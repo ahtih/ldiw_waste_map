@@ -1,0 +1,30 @@
+<?php
+
+function ldiw_api_requirements($phase)
+{
+	$requirements=array();
+	if ($phase == 'runtime') {
+
+			/**********************************/
+			/*****                        *****/
+			/***** Check Services version *****/
+			/*****                        *****/
+			/**********************************/
+
+		$req=array('title' => t('Services version is 3.x'),
+					'severity' => REQUIREMENT_OK,
+					'value' => t('Yes'),
+					);
+
+		if (strpos(drupal_get_installed_schema_version('services'),
+														'63') !== 0) {
+			$req['severity']=REQUIREMENT_ERROR;
+			$req['value']=t('No');
+			$req['description']=t('LDIW Waste Map API needs the Services ' .
+											'module to be at 3.x version');
+			}
+		$requirements['ldiw_waste_map_api_services_version']=$req;
+		}
+	return $requirements;
+	}
+?>
