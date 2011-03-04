@@ -42,6 +42,9 @@ You also need to patch OpenLayers JavaScript library:
 The LDIW Waste Map API (ldiw_api submodule of this module) requires
 Services module to have at least 3.x version.
 
+Drupal status report at `admin/reports/status` checks some of these
+requirements/patches and reports whether the setup is OK.
+
 Adding data to Waste Map
 ------------------------
 To see anything useful on Waste Map, you need to add some content
