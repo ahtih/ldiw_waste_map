@@ -61,9 +61,27 @@ function ldiw_waste_map_waste_point_icon()
 
 	//!!! validate fname (must not have invalid chars, must start with non-.)
 
-	$cache_fname=file_directory_path() . '/ldiw_waste_map/' . $fname;
+	$cache_directory='ldiw_waste_map/waste_point_icon';
+	$cache_fname=file_directory_path() . "/$cache_directory/$fname";
 
 	if (!is_file($cache_fname)) {
+		$path=file_directory_path() . "/$cache_directory";
+		if (!file_check_directory($path)) {
+			$path=file_directory_path();
+			foreach (explode('/',$cache_directory) as $p) {
+				$path.="/$p";
+				if (!file_check_directory($path,FILE_CREATE_DIRECTORY)) {
+					drupal_not_found();
+					return;
+					}
+				}
+
+			drupal_get_messages();	// clear messages set by file_check_directory()
+
+			//!!! delete cache directory upon uninstall
+			//!!! implement hook_requirements() to check for directory writability
+			}
+
 		$args=explode('_',preg_replace('/\..*$/','',$fname),20);
 
 		$total_segments=0;
@@ -84,6 +102,10 @@ function ldiw_waste_map_waste_point_icon()
 	$headers=array('Content-Type: image/png');
 	if ($fileinfo=stat($cache_fname)) {
 		$headers[]='Content-Length: ' . $fileinfo[7];
+
+		$last_modified=gmdate('D, d M Y H:i:s',$fileinfo[9]) . ' GMT';
+		$headers[]='Last-Modified: ' . $last_modified;
+		$headers[]='ETag: "' . md5($last_modified) . '"';
 		}
 
 	$max_age=14*24*3600;
@@ -91,19 +113,9 @@ function ldiw_waste_map_waste_point_icon()
 					gmdate('D, d M Y H:i:s',time() + $max_age) . ' GMT';
 	$headers[]='Cache-Control: store, public, max-age=' . $max_age;
 
-	$last_modified=gmdate('D, d M Y H:i:s',$fileinfo[9]) . ' GMT';	//!!! fileinfo might be invalid here
-	$etag='"' . md5($last_modified) . '"';
-
 	//!!! check if-modified-since
 
-	$headers[]='Last-Modified: ' . $last_modified;
-	$headers[]='ETag: ' . $etag;
-
 	file_transfer($cache_fname,$headers);
-
-	//!!! Create cache directory during install
-	//!!! delete cache directory upon uninstall
-	//!!! implement hook_requirements() to check for directory writability
 	}
 
 function ldiw_waste_map_waste_point_generate_icon($dest_fname,
