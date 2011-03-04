@@ -38,6 +38,13 @@ http://drupal.org/node/945728 and http://drupal.org/node/1011980 yourself.
 
 You also need to patch OpenLayers JavaScript library:
 - http://trac.osgeo.org/openlayers/ticket/2891
+To do so:
+	* Download it from http://www.openlayers.org/api/2.9/OpenLayers.js
+						to sites/all/modules/openlayers/
+	* Patch it with http://trac.osgeo.org/openlayers/ticket/2891
+	* After installing Drupal OpenLayers module, configure the
+						"OpenLayers Source" at `admin/build/openlayers` as
+						"sites/all/modules/openlayers/OpenLayers.js"
 
 The LDIW Waste Map API (ldiw_api submodule of this module) requires
 Services module to have at least 3.x version.
