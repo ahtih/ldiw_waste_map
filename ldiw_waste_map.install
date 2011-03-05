@@ -4,6 +4,10 @@ function _ldiw_waste_map_create_geo_index($geo)
 {
 	global $db_type;
 
+	if (!method_exists($geo,'setIndexed')) {
+		return;		// Let's ignore this the error to not abort install
+		}
+
 	if ($db_type == 'mysql' || $db_type == 'mysqli') {
 		foreach ($geo->sqlFieldDefinition() as $field => $definition) {
 			update_sql("ALTER TABLE " . $geo->tableName(TRUE) . " CHANGE " .
