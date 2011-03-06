@@ -96,6 +96,35 @@ function ldiw_waste_map_requirements($phase)
 					'patch from http://drupal.org/node/813482');
 			}
 		$requirements['ldiw_waste_map_geo_argument_handler']=$req;
+
+			/******************************************/
+			/*****                                *****/
+			/***** Check for installed Geo fields *****/
+			/*****                                *****/
+			/******************************************/
+
+		foreach (array('field_coords','field_geo') as $fieldname) {
+			$req=array('title' => t('LDIW Waste Map Geo field %fieldname',
+										array('%fieldname' => $fieldname)));
+			if (db_result(db_query("SELECT COUNT(*) from {geo} " .
+											"WHERE name='%s'",$fieldname))) {
+				$req['severity']=REQUIREMENT_OK;
+				$req['value']=t('OK');
+				}
+			else {
+				$req['severity']=REQUIREMENT_ERROR;
+				$req['value']=t('Is not configured');
+				$req['description']=t("Geo dataset for %fieldname does " .
+						"exist in {geo} table. To fix this, you can try " .
+						"disabling and then re-enabling LDIW modules, " .
+						"or see if there are any errors on " .
+						"<a href='@features_url'>Features admin page</a>.",
+						array('%fieldname' => $fieldname,
+							'@features_url' => url(
+								'admin/build/features/ldiw_waste_map_features')));
+				}
+			$requirements['ldiw_waste_map_' . $fieldname]=$req;
+			}
 		}
 	return $requirements;
 	}
