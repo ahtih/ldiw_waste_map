@@ -114,7 +114,7 @@ function ldiw_waste_map_requirements($phase)
 			else {
 				$req['severity']=REQUIREMENT_ERROR;
 				$req['value']=t('Is not configured');
-				$req['description']=t("Geo dataset for %fieldname does " .
+				$req['description']=t("Geo dataset for %fieldname does not " .
 						"exist in {geo} table. To fix this, you can try " .
 						"disabling and then re-enabling LDIW modules, " .
 						"or see if there are any errors on " .
