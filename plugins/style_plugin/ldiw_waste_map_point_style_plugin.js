@@ -32,8 +32,9 @@ Drupal.theme.openlayersPopup=function(feature)
 
 	var attrs=feature.attributes;
 
-	var coeff=attrs.volume >= 5 ? 1 : 10;
-	var volume_formatted=Math.round(attrs.volume * coeff) / coeff;
+	var volume=parseFloat(attrs.volume || '0');
+	var coeff=volume >= 5 ? 1 : 10;
+	var volume_formatted=Math.round(volume * coeff) / coeff;
 	if (volume_formatted == 0)
 		volume_formatted=0.1;
 
@@ -69,27 +70,36 @@ Drupal.theme.openlayersPopup=function(feature)
 		composition='<br>Composition: ' + composition;
 
 	var output='<div style="float:right; text-align:right">';
+	var reserve_text='';
 
 	if (feature.layer.map.getZoom()+1 <
 									feature.layer.map.getNumZoomLevels()) {
 		var coords=feature.geometry.getBounds().getCenterLonLat();
+		var reserve_text='<b>Zoom in here</b>';
 		output+='<a href="#" onclick="' + 
 						'ldiw_waste_map_point_style_plugin_zoom_in(\'' + 
 						feature.layer.map.div.id +
 						'\',' + coords.lon + ',' + coords.lat +
-						')"><b>Zoom in here</b></a>';
+						')">' + reserve_text + '</a>';
 		}
 
 	if (attrs.nr_of_nodes && attrs.nr_of_nodes > 1) {
-		output+='</div>' + attrs.nr_of_nodes + ' waste points<br>' + 
-				'Total volume ' + volume_formatted + 'm&sup3;' +
+		output+='</div><b>' + attrs.nr_of_nodes + ' waste points</b><br>' + 
+				'Total volume <b>' + volume_formatted + 'm&sup3;</b>' +
 				composition;
 		}
 	else {
 		output+='<br>ID&nbsp;#' + attrs.id + '<br></div>';
-		if (volume_formatted > 0)
-			output+='Volume <b>' + volume_formatted + 'm&sup3;</b>';
-		output+=composition;
+
+		var volume_text='Volume <b>';
+		if (volume)
+			volume_text+=volume_formatted + 'm&sup3;';
+		else
+			volume_text+='unknown';
+		volume_text+='</b>';
+		reserve_text=volume_text + reserve_text;
+
+		output+=volume_text + composition;
 		if (attrs.geo_areas_json) {
 			var geo_areas=JSON.parse(attrs.geo_areas_json);
 			for (var hierarchy in geo_areas)
@@ -167,6 +177,9 @@ Drupal.theme.openlayersPopup=function(feature)
 							},
 					'json');
 			}
+		else
+			output+='<br><span style="opacity:0; filter:alpha(opacity=0);">' +
+													reserve_text + '</span>';
 		}
 
 	return '<div class="openlayers-popup">' + output + '</div>';
@@ -210,7 +223,7 @@ Drupal.openlayers.style_plugin["ldiw_waste_map_point_style_plugin"].prototype=
 
 			feature.attributes.style_pointRadius=parseInt(Math.min(20,
 						4+3*Math.log(Math.sqrt(Math.max(1,
-								feature.attributes.volume)))));
+							parseFloat(feature.attributes.volume || '0'))))));
 
 			var composition=[];
 			var composition_sum=0;
