@@ -7,6 +7,7 @@ function _ldiw_api_get_server_specific_fields()
 	$fields_to_omit=explode(' ',variable_get(
 						'ldiw_waste_map_photo_field_names',
 						LDIW_WASTE_MAP_DEFAULT_PHOTO_FIELDS));
+	$fields_to_omit[]='field_geo_areas_json';
 
 	$content_fields=content_fields(NULL,'waste_point');
 	$composition_fields=variable_get('ldiw_waste_map_composition_fields',
