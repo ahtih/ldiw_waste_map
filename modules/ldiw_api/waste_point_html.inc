@@ -1,6 +1,39 @@
 <?php
 // $Id
 
+function _waste_point_html_separator()
+{
+	foreach (func_get_args() as $arg) {
+		if (empty($arg)) {
+			return '';
+			}
+		}
+	return "<hr>\n";
+	}
+
+function _waste_point_html_section($class_name,$label,$values)
+{
+	if (empty($values)) {
+		return '';
+		}
+
+	$output="<span class='${class_name}'>\n" .
+			"\t<span class='field_label'>${label}:</span>\n";
+	foreach ($values as $value) {
+		$output.="\t<div class='value";
+		if (is_array($value)) {
+			$output.=" ${value[0]}";
+			$value=$value[1];
+			}
+		$output.="'>${value}</div>\n";
+		}
+	$output.="</span>\n\n";
+
+	return $output;
+	}
+
+//!!! Move this to theme system
+
 function _waste_point_html($attrs,$photos,$max_width_pixels)
 {
 		/****************************/
@@ -15,29 +48,29 @@ function _waste_point_html($attrs,$photos,$max_width_pixels)
 												as $fieldname => $info) {
 		$attrname=preg_replace('/^field_/','',$fieldname);
 		if (!empty($attrs[$attrname])) {
-			$composition_array[]=array($info,$attrs[$attrname]);
+			$composition_array[]=array($attrname,$info,$attrs[$attrname]);
 			$composition_sum+=$attrs[$attrname];
 			}
 		}
 
 	foreach ($composition_array as $key => $entry) {
-		list($info,$value)=$entry;
+		list($attrname,$info,$value)=$entry;
 		$text=$info['text'];
 		if (count($composition_array) == 1 && !empty($info['text_solo'])) {
 			$text=$info['text_solo'];
 			}
-		$composition_array[$key]=
-							max(1,round($value*100 / $composition_sum)) .
-														'%&nbsp;' . $text;
+		else {
+			$text=max(1,round($value*100 / $composition_sum)) . "% ${text}";
+			}
+		$composition_array[$key]=array($attrname,$text);
 		}
 
-	if (!empty($attrs['nr_of_tires']))
-		$composition_array[]=$attrs['nr_of_tires'] . ' tires';
-
-	$composition=implode(', ',$composition_array);
-	if ($composition) {
-		$composition='<br>Composition: ' . $composition;
+	if (!empty($attrs['nr_of_tires'])) {
+		$composition_array[]=array('tires',$attrs['nr_of_tires'] . ' tires');
 		}
+
+	$composition=_waste_point_html_section('composition','Composition',
+													$composition_array);
 
 		/*********************************/
 		/*****                       *****/
@@ -61,30 +94,16 @@ function _waste_point_html($attrs,$photos,$max_width_pixels)
 		/***********************/
 
 	if (!empty($attrs['nr_of_nodes']) && $attrs['nr_of_nodes'] > 1) {
-		return '</div>' . $attrs['nr_of_nodes'] . ' waste points<br>' .
-				'Total volume ' . $volume_formatted . 'm&sup3;' .
+		return _waste_point_html_section('cluster_nodes','Cluster',
+							array("${attrs['nr_of_nodes']} waste points")) .
+				_waste_point_html_separator() .
+				_waste_point_html_section('volume','Total volume',
+							array("${volume_formatted}m&sup3;")) .
+				_waste_point_html_separator() .
 				$composition;
 		}
 
 	$output='';
-	if ($volume_formatted) {
-		$output.='Volume <b>' . $volume_formatted . 'm&sup3;</b>';
-		}
-
-	$output.=$composition;
-
-	if (!empty($attrs['geo_areas_json'])) {
-		foreach (json_decode($attrs['geo_areas_json'],TRUE) as
-													$hierarchy => $areas) {
-			$output.='<br>' . mb_convert_encoding("$hierarchy: $areas",
-												'HTML-ENTITIES','UTF-8');
-			}
-		}
-
-	if (!empty($attrs['description'])) {
-		$output.='<br><br>' . mb_convert_encoding($attrs['description'],
-												'HTML-ENTITIES','UTF-8');
-		}
 
 	foreach ($photos as $photo) {
 		list($id,,$serialized_data)=$photo;
@@ -121,6 +140,33 @@ function _waste_point_html($attrs,$photos,$max_width_pixels)
 			}
 
 		$output.=$html;
+		}
+
+	if ($volume_formatted) {
+		$output.=_waste_point_html_separator($output) .
+				_waste_point_html_section('volume','Volume',
+									array("${volume_formatted}m&sup3;"));
+		}
+
+	$output.=_waste_point_html_separator($output,$composition) . $composition;
+
+	if (!empty($attrs['geo_areas_json'])) {
+		$areas_array=array();
+		foreach (json_decode($attrs['geo_areas_json'],TRUE) as
+													$hierarchy => $areas) {
+			$areas_array[]=mb_convert_encoding("$hierarchy: $areas",
+												'HTML-ENTITIES','UTF-8');
+			}
+		$output.=_waste_point_html_separator($output,$areas_array) .
+				_waste_point_html_section('geographic_areas','Location',
+															$areas_array);
+		}
+
+	if (!empty($attrs['description'])) {
+		$output.=_waste_point_html_separator($output) .
+				_waste_point_html_section('description','Description',
+						array(mb_convert_encoding($attrs['description'],
+												'HTML-ENTITIES','UTF-8')));
 		}
 
 	return $output;
