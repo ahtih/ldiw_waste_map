@@ -32,6 +32,7 @@ projects[geo][patch][] = "http://drupal.org/files/issues/geo-ewkb-parsing.patch"
 projects[geo][patch][] = "http://drupal.org/files/issues/geo-table-prefixes-776436.patch"
 projects[geo][patch][] = "http://drupal.org/files/issues/geo-813482-updated.patch"
 projects[geo][patch][] = "http://drupal.org/files/issues/geo-667034.patch"
+projects[geo][patch][] = "http://drupal.org/files/issues/geo-883032.patch"
 
 projects[geoclustering][type] = "module"
 projects[geoclustering][download][type] = "git"
