@@ -132,6 +132,7 @@ function ldiw_waste_map_form_alter(&$form,$form_state,$form_id)
 				array('body_field','teaser_include'),
 				array('book'),
 				array('attachments'),
+				array('path'),
 				));
 
 		if (!empty($form['body_field'])) {
