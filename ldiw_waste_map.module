@@ -156,43 +156,45 @@ function ldiw_waste_map_form_alter(&$form,$form_state,$form_id)
 				}
 			}
 
-		if (variable_get('ldiw_waste_map_single_composition_value',FALSE)) {
-			$form['composition']=array(
-				'#type' => 'select',
-				'#title' => t('Composition'),
-				'#options' => array('' => ''),
-				'#default_value' => '',
-				);
-
-			$max_value=0;
-			foreach ($form as $key => $element) {
-				if (isset($composition_fields[$key])) {
-					$form['composition']['#options'][$key]=$element['#title'];
-
-					$value=(float)$element[0]['#default_value']['value'];
-					if ($max_value < $value) {
-						$max_value=$value;
-						$form['composition']['#default_value']=$key;
-						}
-
-					$form[$key]['#type']='hidden';
-					}
-				}
-
-			$form['#submit'][]='ldiw_waste_map_composition_singlevalue_submit';
-			}
-		else {
-			$form['composition']=array(
-					'#type' => 'fieldset',
-					'#title' => t('Composition percentages (in volume)'),
-					'#weight' => $composition_weight,
-					'#attributes' => array('class' => 'label-left-of-input-23em'),
+		if (!empty($composition_fields)) {
+			if (variable_get('ldiw_waste_map_single_composition_value',FALSE)) {
+				$form['composition']=array(
+					'#type' => 'select',
+					'#title' => t('Composition'),
+					'#options' => array('' => ''),
+					'#default_value' => '',
 					);
 
-			foreach ($form as $key => $element) {
-				if (isset($composition_fields[$key])) {
-					$form['composition'][$key]=$element;
-					unset($form[$key]);
+				$max_value=0;
+				foreach ($form as $key => $element) {
+					if (isset($composition_fields[$key])) {
+						$form['composition']['#options'][$key]=$element['#title'];
+
+						$value=(float)$element[0]['#default_value']['value'];
+						if ($max_value < $value) {
+							$max_value=$value;
+							$form['composition']['#default_value']=$key;
+							}
+
+						$form[$key]['#type']='hidden';
+						}
+					}
+
+				$form['#submit'][]='ldiw_waste_map_composition_singlevalue_submit';
+				}
+			else {
+				$form['composition']=array(
+						'#type' => 'fieldset',
+						'#title' => t('Composition percentages (in volume)'),
+						'#weight' => $composition_weight,
+						'#attributes' => array('class' => 'label-left-of-input-23em'),
+						);
+
+				foreach ($form as $key => $element) {
+					if (isset($composition_fields[$key])) {
+						$form['composition'][$key]=$element;
+						unset($form[$key]);
+						}
 					}
 				}
 			}
