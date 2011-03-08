@@ -20,6 +20,9 @@ function _ldiw_waste_map_create_geo_index($geo)
 
 function ldiw_waste_map_install()
 {
+	// Update module weight to make our hook_form_alter() run after CCK
+	db_query("UPDATE {system} SET weight=1 WHERE name='ldiw_waste_map'");
+
 	module_load_include('inc','geo','includes/geo.api');
 
 	$db_info=content_database_info(
