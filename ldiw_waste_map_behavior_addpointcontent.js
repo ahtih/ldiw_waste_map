@@ -154,7 +154,7 @@ function ldiw_waste_map_behavior_addpointcontent_state(data,options)
 			var state=this;
 			this.form_popup=new OpenLayers.Popup.FramedCloud(
 					'ldiw_waste_map_behavior_addpointcontent_form',
-					coords,null,'Loading...',null,true,
+					coords,null,Drupal.t('Loading...'),null,true,
 					function(e)
 						{
 							state.restart_editing_mode();

@@ -63,11 +63,12 @@ Drupal.theme.openlayersPopup=function(feature)
 		}
 
 	if (attrs.nr_of_tires && attrs.nr_of_tires != '0')
-		composition_array.push(attrs.nr_of_tires + ' tires');
+		composition_array.push(Drupal.t('@nr_of_tires tires',
+									{'@nr_of_tires':attrs.nr_of_tires}));
 
 	var composition=composition_array.join(', ');
 	if (composition)
-		composition='<br>Composition: ' + composition;
+		composition='<br>' + Drupal.t('Composition:') + ' ' + composition;
 
 	var output='<div style="float:right; text-align:right">';
 	var reserve_text='';
@@ -75,7 +76,7 @@ Drupal.theme.openlayersPopup=function(feature)
 	if (feature.layer.map.getZoom()+1 <
 									feature.layer.map.getNumZoomLevels()) {
 		var coords=feature.geometry.getBounds().getCenterLonLat();
-		var reserve_text='<b>Zoom in here</b>';
+		var reserve_text='<b>' + Drupal.t('Zoom in here') + '</b>';
 		output+='<a href="#" onclick="' + 
 						'ldiw_waste_map_point_style_plugin_zoom_in(\'' + 
 						feature.layer.map.div.id +
@@ -84,18 +85,21 @@ Drupal.theme.openlayersPopup=function(feature)
 		}
 
 	if (attrs.nr_of_nodes && attrs.nr_of_nodes > 1) {
-		output+='</div><b>' + attrs.nr_of_nodes + ' waste points</b><br>' + 
-				'Total volume <b>' + volume_formatted + 'm&sup3;</b>' +
+		output+='</div><b>' + Drupal.t('@nr_of_points waste points',
+									{'@nr_of_points':attrs.nr_of_nodes}) +
+				'</b><br>' +
+				Drupal.t('Total volume <b>@volumem&sup3;</b>',
+											{'@volume':volume_formatted}) +
 				composition;
 		}
 	else {
-		output+='<br>ID&nbsp;#' + attrs.id + '<br></div>';
+		output+='<br>' + Drupal.t('ID') + '&nbsp;#' + attrs.id + '<br></div>';
 
-		var volume_text='Volume <b>';
+		var volume_text=Drupal.t('Volume') + ' <b>';
 		if (volume)
 			volume_text+=volume_formatted + 'm&sup3;';
 		else
-			volume_text+='unknown';
+			volume_text+=Drupal.t('unknown');
 		volume_text+='</b>';
 		reserve_text=volume_text + reserve_text;
 
