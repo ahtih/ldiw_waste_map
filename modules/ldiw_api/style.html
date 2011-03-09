@@ -1,22 +1,35 @@
 <style type="text/css">
+body {
+	font-family: "ttf-droid", "sans-serif";
+	background-color: #f0f0f0;
+	}
 .value {
 	float: left;
-	margin-left: 10px;
 	padding: 5px;
+	margin-left: 10px;
 	font-weight: bold;
-	font-family: "ttf-droid";
 	}
 .field_label {
 	color: #77B34A;
 	font-weight: bold;
-	font-family: "ttf-droid";
 	}
 hr {
+	width: 100%;
+	height: 3px;
 	clear: both;
-	border: 0;
-	height: 2px;
+	border-width: 0px 0px 1px 0px;
+	border-color: #ffffff;
 	color: #b0b0b0;
 	background-color: #b0b0b0;
+	}
+.volume .field_label, .id .field_label {
+	padding-top: 5px;
+	padding-bottom: 5px;
+	float: left;
+	}
+
+.id, .id .value {
+	float: right;
 	}
 
 .composition .value {
@@ -27,7 +40,7 @@ hr {
 	}
 
 .composition .composition_glass { background-image: url('composition_glass.png'); }
-.composition .composition_large { background-image: url('composition_glass.png'); }
-.composition .composition_other { background-image: url('composition_glass.png'); }
+.composition .composition_large { background-image: url('composition_large.png'); }
+.composition .composition_other { background-image: url('composition_other.png'); }
 
 </style>

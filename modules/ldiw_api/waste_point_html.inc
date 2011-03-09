@@ -148,7 +148,16 @@ function _waste_point_html($attrs,$photos,$max_width_pixels)
 									array("${volume_formatted}m&sup3;"));
 		}
 
+	$output.=_waste_point_html_section('id','ID',array($attrs['id']));
+
 	$output.=_waste_point_html_separator($output,$composition) . $composition;
+
+	if (!empty($attrs['description'])) {
+		$output.=_waste_point_html_separator($output) .
+				_waste_point_html_section('description','Description',
+						array(mb_convert_encoding($attrs['description'],
+												'HTML-ENTITIES','UTF-8')));
+		}
 
 	if (!empty($attrs['geo_areas_json'])) {
 		$areas_array=array();
@@ -160,13 +169,6 @@ function _waste_point_html($attrs,$photos,$max_width_pixels)
 		$output.=_waste_point_html_separator($output,$areas_array) .
 				_waste_point_html_section('geographic_areas','Location',
 															$areas_array);
-		}
-
-	if (!empty($attrs['description'])) {
-		$output.=_waste_point_html_separator($output) .
-				_waste_point_html_section('description','Description',
-						array(mb_convert_encoding($attrs['description'],
-												'HTML-ENTITIES','UTF-8')));
 		}
 
 	return $output;
