@@ -18,7 +18,7 @@ function _waste_point_html_section($class_name,$label,$values)
 		}
 
 	$output="<span class='${class_name}'>\n" .
-			"\t<span class='field_label'>${label}:</span>\n";
+			"\t<div class='field_label'>${label}:</div>\n";
 	foreach ($values as $value) {
 		$output.="\t<div class='value";
 		if (is_array($value)) {
