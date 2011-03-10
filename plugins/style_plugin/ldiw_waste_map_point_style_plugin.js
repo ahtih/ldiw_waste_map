@@ -68,7 +68,7 @@ Drupal.theme.openlayersPopup=function(feature)
 
 	var composition=composition_array.join(', ');
 	if (composition)
-		composition='<br>' + Drupal.t('Composition:') + ' ' + composition;
+		composition='<br>' + Drupal.t('Composition') + ': ' + composition;
 
 	var output='<div style="float:right; text-align:right">';
 	var reserve_text='';

@@ -190,6 +190,8 @@ function _ldiw_api_waste_point_extra_fields()
 {
 	$retval=array();
 
+		//!!! Add language_code parameter
+
 	$composition_fields=variable_get('ldiw_waste_map_composition_fields',
 																array());
 	$composition_section_started=FALSE;
@@ -451,7 +453,7 @@ function _ldiw_api_update()
 	return _ldiw_api_create_update($args,$id);
 	}
 
-function _ldiw_api_retrieve($id,$max_width)
+function _ldiw_api_retrieve($id,$max_width,$language_code)
 {
 	$attrs=array('id' => $id);
 	$photos=array();
@@ -485,5 +487,5 @@ function _ldiw_api_retrieve($id,$max_width)
 		}
 
 	require_once(dirname(__FILE__) . '/waste_point_html.inc');
-	return _waste_point_html($attrs,$photos,$max_width);
+	return _waste_point_html($attrs,$photos,$max_width,$language_code);
 	}

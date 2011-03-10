@@ -147,7 +147,17 @@ function ldiw_api_services_resources()
 							'description' => 'Maximum display width, in ' .
 									'pixels. This is important for photos',
 							),
-						//!!! Add language_code parameter
+						array(
+							'name' => 'language_code',
+							'optional' => TRUE,
+							'default value' => NULL,
+							'source' => 'param',
+							'type' => 'string',
+							'description' => "RFC 4646 compliant language " .
+									"code, e.g. 'es'. If it is " .
+									"unrecognised or missing, then " .
+									"server language is used",
+							),
 						),
 				'access callback' => '_ldiw_api_access',
 				'access arguments' => array('view'),
