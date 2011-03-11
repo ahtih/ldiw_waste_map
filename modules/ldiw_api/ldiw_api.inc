@@ -173,11 +173,84 @@ function _ldiw_api_get_photo_upload_fields()
 
 function ldiw_api_get_api_base_url()
 {
-	//!!! remove hardcoding of this data
-	print json_encode(array(
+	$result=array(
 			'api_base_url' => 'http://api.letsdoitworld.org/?q=api',
 			'safe_bbox' => '-180,-90,180,90',
-			));
+			);
+
+	if (isset($_REQUEST['lon']) && isset($_REQUEST['lat'])) {
+		$coords=array((float)$_REQUEST['lon'],(float)$_REQUEST['lat']);
+		$views_result=views_get_view_result('api_servers_for_point',NULL,
+									'POINT(' . implode(' ',$coords) . ')');
+		$servers=array();
+		foreach ($views_result as $entry) {
+			$servers[$entry->node_node_data_field_hierarchy_level_nid]=
+														$entry->node_title;
+			}
+
+			/**************************************************/
+			/*****                                        *****/
+			/***** Eliminate parent areas from $servers[] *****/
+			/*****                                        *****/
+			/**************************************************/
+
+		$processed_level_nids=array();
+		$unprocessed_level_nids=$servers;
+
+		while (count($servers) >= 2 && $unprocessed_level_nids) {
+			$keys=array_keys($unprocessed_level_nids);
+			$nid=$keys[0];
+			unset($unprocessed_level_nids[$nid]);
+			$processed_level_nids[$nid]=TRUE;
+
+			$node=node_load($nid);
+			if (!empty($node->field_parent_level[0]['nid'])) {
+				$parent_nid=$node->field_parent_level[0]['nid'];
+				$unprocessed_level_nids[$parent_nid]=TRUE;
+				unset($servers[$parent_nid]);
+				}
+			}
+
+		if (!empty($servers)) {
+			$result['api_base_url']=array_pop($servers);
+			}
+
+			/*************************/
+			/*****               *****/
+			/***** Set safe_bbox *****/
+			/*****               *****/
+			/*************************/
+
+		$geo_handler=geo_load(array('name' => 'field_geo'));
+		$areas_table_name=$geo_handler->tableName(TRUE);
+		$geo_handler->setTableName("a",TRUE);
+
+		for ($coords_delta=2;;$coords_delta /= 4.0) {
+			$safe_bbox=array(	$coords[0]-$coords_delta,
+								$coords[1]-$coords_delta,
+								$coords[0]+$coords_delta,
+								$coords[1]+$coords_delta);
+			$result['safe_bbox']=implode(',',$safe_bbox);
+			if ($coords_delta < 1e-4) {
+				break;
+				}
+			list($wkt,$query_params)=geoclustering_polygon_sql($safe_bbox);
+
+			//!!! This query often takes 150ms
+			if (!db_fetch_array(db_query("SELECT 1 " .
+						"FROM $areas_table_name AS a " .
+								"INNER JOIN {node} AS n ON (n.nid=a.nid) " .
+						"WHERE " . $geo_handler->intersects($geo_handler,
+												$wkt) . " AND NOT " .
+						$geo_handler->contains($geo_handler,$wkt) . " " .
+						"LIMIT 1",
+						array_merge($query_params,$query_params)))) {
+				break;
+				}
+			}
+		}
+
+	print json_encode($result);
 	}
 
 /***************************************************************************/
