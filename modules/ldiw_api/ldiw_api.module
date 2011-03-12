@@ -200,7 +200,8 @@ function _ldiw_api_multipart_form_parser($handle)
 		return array_merge($_FILES,$_POST);
 		}
 
-	return array();	//!!! parse multipart/form-data
+	return array();	//!!! To support PUT method, we have to parse
+					//		multipart/form-data by ourselves here
 	}
 
 function _ldiw_api_access($op='view',$args=array()) {
