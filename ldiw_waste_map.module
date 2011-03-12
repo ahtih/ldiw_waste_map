@@ -556,7 +556,8 @@ function ldiw_waste_map_views_data_alter(&$data)
 
 function ldiw_waste_map_waste_points()
 {
-	$view_arguments=array();
+	$view_arguments=array(NULL);
+
 	if (!empty($_REQUEST['BBOX'])) {
 		$bbox=explode(',',$_REQUEST['BBOX']);
 		if (count($bbox) != 4) {	
@@ -578,6 +579,52 @@ function ldiw_waste_map_waste_points()
 			$view->display['default']->display_options['items_per_page']=
 															$max_results;
 			}
+		}
+
+	if (!empty($_REQUEST['nearest_points_to'])) {
+		$nearest_points_to=explode(',',$_REQUEST['nearest_points_to']);
+		if (count($nearest_points_to) != 2) {	
+			drupal_set_header('HTTP/1.1 400 Invalid nearest_points_to ' .
+						'argument value (must be "lat_float,lon_float")');
+			exit();
+			}
+
+		$nearest_points_to[0]=(float)$nearest_points_to[0];
+		$nearest_points_to[1]=(float)$nearest_points_to[1];
+
+		$view_arguments[0]=-2;	// Set geoclustering_level to "nodes"
+
+			//!!! To improve DB query performance with 50k+ points, try
+			//		this query iteratively with different BBOXes, and also
+			//		add a distance filter corresponding to this BBOX
+
+		$view->add_item('default','sort',$view->display['default']->
+				display_options['arguments']['field_coords_geo']['table'],
+				'field_coords_geo',
+				array('order' => 'ASC',
+						'function' => 'distanceSpheroid',
+						'target' => array('geo_latlon' =>
+									array(	'lon' => $nearest_points_to[0],
+											'lat' => $nearest_points_to[1])),
+						'input' => 'geo_latlon',
+						)
+				);
+
+		$view->add_item('default','field',$view->display['default']->
+				display_options['arguments']['field_coords_geo']['table'],
+				'field_coords_geo',
+				array('label' => 'distance_meters',
+						'alter' => array('trim' => 1,
+										'word_boundary' => 0,
+										'max_length' => 8,
+										'ellipsis' => 0),
+						'function' => 'distanceSpheroid',
+						'target' => array('geo_latlon' =>
+									array(	'lon' => $nearest_points_to[0],
+											'lat' => $nearest_points_to[1])),
+						'input' => 'geo_latlon',
+						)
+				);
 		}
 
 	//!!! Implement other output formats besides CSV
