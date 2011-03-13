@@ -138,7 +138,8 @@ function theme_ldiw_waste_map_admin_settings($form)
 function ldiw_waste_map_admin_settings_submit($form,&$form_state)
 {
 	$vars=array('ldiw_waste_map_photo_field_names',
-				'ldiw_waste_map_single_composition_value');
+				'ldiw_waste_map_single_composition_value',
+				'ldiw_waste_map_minimum_initial_zoom');
 
 	if (isset($form_state['values']['op'])) {
 		if ($form_state['values']['op'] == t('Reset to defaults')) {
