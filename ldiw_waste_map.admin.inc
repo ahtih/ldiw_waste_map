@@ -64,6 +64,23 @@ function ldiw_waste_map_admin_settings()
 				'#maxlength' => 1000,
 				);
 
+	$form['ldiw_waste_map_minimum_initial_zoom']=array(
+				'#type' => 'textfield',
+				'#title' => t('Minimum initial zoom level of Waste Map'),
+				'#description' => t('When the user opens Waste Map, the ' .
+						'map position and zoom is selected automatically ' .
+						'based on GeoIP and number of Waste points nearby. ' .
+						'This setting allows you to impose a minimum ' .
+						'limit to this automatically selected zoom. ' .
+						'0 corresponds to maximally zoomed out map; ' .
+						'increasing it progressively zooms in.'),
+				'#default_value' => variable_get(
+								'ldiw_waste_map_minimum_initial_zoom',
+								LDIW_WASTE_MAP_DEFAULT_MINIMUM_INITIAL_ZOOM),
+				'#size' => 4,
+				'#maxlength' => 4,
+				);
+
 	$form['recalculate_geo_areas']=array(
 				'#type' => 'submit',
 				'#value' => t("Recalculate Geographic Areas data " .

@@ -3,6 +3,7 @@
 
 DEFINE('LDIW_WASTE_MAP_DEFAULT_PHOTO_FIELDS',
 									'field_photo field_external_photo');
+DEFINE('LDIW_WASTE_MAP_DEFAULT_MINIMUM_INITIAL_ZOOM','5');
 DEFINE('LDIW_WASTE_MAP_WASTE_POINTS_CSV_VIEW_NAME',
 									'waste_map_geoclustering');
 DEFINE('LDIW_WASTE_MAP_WP_DESCRIPTION_MAX_LENGTH',2000);
@@ -353,7 +354,10 @@ function ldiw_waste_map_openlayers_map_alter(&$map)
 			$ideal_nr_of_nodes=50;
 
 			$last_nr_of_nodes=0;
-			for ($zoom=count($resolutions)-1;$zoom > 0;$zoom--) {
+			$min_zoom=(int)variable_get(
+								'ldiw_waste_map_minimum_initial_zoom',
+								LDIW_WASTE_MAP_DEFAULT_MINIMUM_INITIAL_ZOOM);
+			for ($zoom=count($resolutions)-1;$zoom > $min_zoom;$zoom--) {
 				$delta=array($resolutions[$zoom]*$map_size_in_pixels[0] / 2,
 							 $resolutions[$zoom]*$map_size_in_pixels[1] / 2);
 				$nr_of_nodes=geoclustering_get_approximate_nr_of_nodes(
