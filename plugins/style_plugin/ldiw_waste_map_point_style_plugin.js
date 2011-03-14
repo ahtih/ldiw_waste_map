@@ -105,9 +105,11 @@ Drupal.theme.openlayersPopup=function(feature)
 
 		output+=volume_text + composition;
 		if (attrs.geo_areas_json) {
-			var geo_areas=JSON.parse(attrs.geo_areas_json);
-			for (var hierarchy in geo_areas)
-				output+='<br>' + hierarchy + ': ' + geo_areas[hierarchy];
+			try {	// Catch/ignore missing JSON support in IE before 8.0
+				var geo_areas=JSON.parse(attrs.geo_areas_json);
+				for (var hierarchy in geo_areas)
+					output+='<br>' + hierarchy + ': ' + geo_areas[hierarchy];
+				} catch (e) {}
 			}
 		if (attrs.description)
 			output+='<br><br>' + attrs.description;
