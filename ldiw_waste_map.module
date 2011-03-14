@@ -585,6 +585,8 @@ function ldiw_waste_map_waste_points()
 			}
 		}
 
+	module_load_include('inc','content','includes/views/content.views');
+
 	if (!empty($_REQUEST['nearest_points_to'])) {
 		$nearest_points_to=explode(',',$_REQUEST['nearest_points_to']);
 		if (count($nearest_points_to) != 2) {	
@@ -629,6 +631,25 @@ function ldiw_waste_map_waste_points()
 						'input' => 'geo_latlon',
 						)
 				);
+		}
+
+	$fields_to_omit=explode(' ',variable_get(
+								'ldiw_waste_map_photo_field_names',
+								LDIW_WASTE_MAP_DEFAULT_PHOTO_FIELDS));
+	$fields_to_omit[]='field_geo_areas_json';
+	$fields_to_omit[]='field_volume';
+
+	foreach (content_fields(NULL,'waste_point') as $fieldname => $field) {
+		if ($field['type_name'] == 'waste_point' &&
+					in_array($field['type'],
+						array('number_float','number_integer','text')) &&
+					!in_array($fieldname,$fields_to_omit)) {
+			$db_info=content_database_info($field);
+			$view->add_item('default','field',
+								content_views_tablename($field),
+								$db_info['columns']['value']['column'],
+								array('format' => 'unformatted'));
+			}
 		}
 
 	//!!! Implement other output formats besides CSV
