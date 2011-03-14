@@ -198,7 +198,7 @@ function ldiw_waste_map_behavior_addpointcontent_state(data,options)
 					Drupal.t('Temporary Features Layer'),
 					{projection: new OpenLayers.Projection('EPSG:4326'),
 					styleMap: new OpenLayers.StyleMap(
-								{'default':data.map.styles.temporary}),
+								{'default':data.map.styles.temporary})
 					});
 	data.openlayers.addLayer(this.temp_features_layer);
 
