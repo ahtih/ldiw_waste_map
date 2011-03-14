@@ -24,9 +24,25 @@ ldiw_waste_map_csv_protocol=OpenLayers.Class(OpenLayers.Protocol,{
 		options=OpenLayers.Util.extend({},options);
 		OpenLayers.Util.applyDefaults(options,this.options||{});
 
+		var max_results=100;
+
+		if (options.scope.layer.renderer.CLASS_NAME ==
+												'OpenLayers.Renderer.SVG')
+			max_results=400;
+
+		var screen_size;	// Screen size is a rough proxy for CPU speed
+		if (window.innerWidth)
+			screen_size=window.innerWidth + window.innerHeight;
+        else
+			screen_size=document.body.clientWidth +
+												document.body.clientHeight;
+		if (screen_size)
+			max_results=parseInt(Math.min(400,max_results*
+									Math.max(0.1,screen_size / 2400.0)));
+
 		var url=options.url;
 		url+=(url.indexOf('?') >= 0) ? '&' : '?';
-		url+='max_results=400';		//!!! Remove hardcoding of this
+		url+='max_results=' + max_results;
 
 		if (options.filter) {
 			var bbox=options.filter.value;
