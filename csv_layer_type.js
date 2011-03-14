@@ -122,9 +122,8 @@ Drupal.openlayers.layer.ldiw_waste_map_csv=function(title,map,options) {
 		projection: "EPSG:4326",
 		buffer: 0,
 		rendererOptions: {zIndexing: true},
-		protocol: new ldiw_waste_map_csv_protocol({
-								url: options.base_url + options.url,
-								})
+		protocol: new ldiw_waste_map_csv_protocol(
+									{url: options.base_url + options.url})
 		};
 
 	var layer=new OpenLayers.Layer.Vector(title,layer_options);
