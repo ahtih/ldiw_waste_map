@@ -90,7 +90,7 @@ ldiw_waste_map_csv_protocol=OpenLayers.Class(OpenLayers.Protocol,{
 
 		ldiw_waste_map_csv_protocol.add_feature(features,columns,cur_row);
 		return features;
-		},
+		}
 	});
 
 ldiw_waste_map_csv_protocol.add_feature=function(features,columns,row) {
