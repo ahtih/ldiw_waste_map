@@ -44,6 +44,7 @@ function ldiw_waste_map_behavior_addpointcontent_state(data,options)
 					//  Show the new form then
 				var form=doc.find('form:first').parent().children().
 							not('.breadcrumb,.title,#tabs-wrapper,#footer');
+				form.find('a[href*="formfilter_id="]').css('display','none');
 				$(this.form_popup.contentDiv).html(form);
 				this.fixup_form();
 
