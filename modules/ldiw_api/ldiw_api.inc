@@ -177,9 +177,13 @@ function ldiw_api_get_api_base_url()
 			'api_base_url' => 'http://api.letsdoitworld.org/?q=api',
 			'safe_bbox' => '-180,-90,180,90',
 			);
+	$display_coords='empty coords';
 
 	if (isset($_REQUEST['lon']) && isset($_REQUEST['lat'])) {
-		$coords=array((float)$_REQUEST['lon'],(float)$_REQUEST['lat']);
+	
+		$coords=array(floatval($_REQUEST['lon']),floatval($_REQUEST['lat']));
+		$display_coords=implode(',',$coords);
+
 		$views_result=views_get_view_result('api_servers_for_point',NULL,
 									'POINT(' . implode(' ',$coords) . ')');
 		$servers=array();
@@ -249,6 +253,12 @@ function ldiw_api_get_api_base_url()
 				}
 			}
 		}
+
+	watchdog('ldiw_api',"Client requested API base_url for %coords, " .
+															"returned %url",
+							array('%coords' => $display_coords,
+								'%url' => $result['api_base_url']),
+							WATCHDOG_NOTICE);
 
 	print json_encode($result);
 	}
