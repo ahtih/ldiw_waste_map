@@ -420,6 +420,10 @@ function _ldiw_api_create_update($args,$id=FALSE)
 			if ($info[1]['type'] == 'text' && !isset($value)) {
 				$value='';
 				}
+			if ($info[1]['type'] == 'float' && isset($value) &&
+													floatval($value)) {
+				$value=floatval($value);
+				}
 			if ($info[0] == 'body' || $info[0] == 'composition') {
 				$form_state['values'][$info[0]]=$value;
 				}
