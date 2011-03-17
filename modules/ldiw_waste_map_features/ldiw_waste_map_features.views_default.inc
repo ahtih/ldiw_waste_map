@@ -232,7 +232,7 @@ function ldiw_waste_map_features_views_default_views() {
       'relationship' => 'none',
     ),
     'field_volume_value' => array(
-      'label' => 'Volume',
+      'label' => 'volume',
       'alter' => array(
         'alter_text' => 0,
         'text' => '',
@@ -255,7 +255,7 @@ function ldiw_waste_map_features_views_default_views() {
       'hide_empty' => 0,
       'empty_zero' => 0,
       'link_to_node' => 0,
-      'label_type' => 'widget',
+      'label_type' => 'custom',
       'format' => 'unformatted',
       'multiple' => array(
         'group' => TRUE,
@@ -270,7 +270,7 @@ function ldiw_waste_map_features_views_default_views() {
       'relationship' => 'none',
     ),
     'field_photos_id_width_height_value' => array(
-      'label' => 'Photos ID:Width:Height',
+      'label' => 'photos',
       'alter' => array(
         'alter_text' => 0,
         'text' => '',
@@ -293,7 +293,7 @@ function ldiw_waste_map_features_views_default_views() {
       'hide_empty' => 0,
       'empty_zero' => 0,
       'link_to_node' => 0,
-      'label_type' => 'widget',
+      'label_type' => 'custom',
       'format' => 'default',
       'multiple' => array(
         'group' => TRUE,
@@ -308,7 +308,7 @@ function ldiw_waste_map_features_views_default_views() {
       'relationship' => 'none',
     ),
     'field_geo_areas_json_value' => array(
-      'label' => 'Geographic area names',
+      'label' => 'geo_areas_json',
       'alter' => array(
         'alter_text' => 0,
         'text' => '',
@@ -331,7 +331,7 @@ function ldiw_waste_map_features_views_default_views() {
       'hide_empty' => 0,
       'empty_zero' => 0,
       'link_to_node' => 0,
-      'label_type' => 'widget',
+      'label_type' => 'custom',
       'format' => 'plain',
       'multiple' => array(
         'group' => TRUE,

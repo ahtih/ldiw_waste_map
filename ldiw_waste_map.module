@@ -885,9 +885,11 @@ function ldiw_waste_map_waste_points()
 					!in_array($fieldname,$fields_to_omit)) {
 			$db_info=content_database_info($field);
 			$view->add_item('default','field',
-								content_views_tablename($field),
-								$db_info['columns']['value']['column'],
-								array('format' => 'unformatted'));
+					content_views_tablename($field),
+					$db_info['columns']['value']['column'],
+					array('format' => 'unformatted',
+						'label_type' => 'custom',
+						'label' => preg_replace('/^field_/','',$fieldname)));
 			}
 		}
 
@@ -904,24 +906,10 @@ function ldiw_waste_map_waste_points()
 
 function ldiw_waste_map_preprocess_views_bonus_export_csv(&$vars)
 {
-	if ($vars['view']->name != LDIW_WASTE_MAP_WASTE_POINTS_CSV_VIEW_NAME) {
-		return;
-		}
-
-		// Rename CSV column names of CCK fields from human-readable
-		//   field labels to machine-readable fieldnames
-
-	foreach ($vars['header'] as $key => $label) {
-		$new_column=preg_replace('/^field_(..*)_value$/','$1',$key);
-		if ($new_column == $key) {
-			$new_column=$label;
+	if ($vars['view']->name == LDIW_WASTE_MAP_WASTE_POINTS_CSV_VIEW_NAME) {
+		foreach ($vars['header'] as $key => $label) {
+			$vars['header'][$key]=trim($label,'"');
 			}
-
-		if ($key == 'field_photos_id_width_height_value') {	//!!! Remove hardcoding of this stuff
-			$new_column='photos';
-			}
-
-		$vars['header'][$key]=trim($new_column,'"');
 		}
 	}
 
