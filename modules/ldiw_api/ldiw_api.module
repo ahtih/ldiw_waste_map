@@ -77,7 +77,8 @@ function ldiw_api_services_resources()
 		);
 
 	require_once('ldiw_api.inc');
-	foreach (_ldiw_api_get_photo_upload_fields() as $idx => $photo_field) {
+	foreach (ldiw_waste_map_get_photo_upload_fields() as
+													$idx => $photo_field) {
 		$create_update_args[]=array(
 								'name' => 'photo_file_' . ($idx+1),
 								'optional' => TRUE,

@@ -266,6 +266,11 @@ function ldiw_waste_map_menu()
 			'page arguments' => array(2,3),
 			'type' => MENU_CALLBACK,
 			),
+		'ldiw_waste_map/upload_photo_ajax' => array(
+			'page callback' => 'ldiw_waste_map_upload_photo_ajax',
+			'access callback' => TRUE,
+			'type' => MENU_CALLBACK,
+			),
 		'api/waste_points.csv' => array(
 			'page callback' => 'ldiw_waste_map_waste_points',
 			'access callback' => TRUE,
@@ -501,6 +506,240 @@ function ldiw_waste_map_photo($node_id,$photo_id)
 		}
 
 	drupal_not_found();
+	}
+
+/***************************************************************************/
+/***************                                             ***************/
+/*************** ldiw_waste_map_prepare_adding_waste_point() ***************/
+/***************                                             ***************/
+/***************************************************************************/
+
+function ldiw_waste_map_prepare_adding_waste_point(&$coords,$id=FALSE)
+{
+	global $user;
+
+	if ($id === FALSE && isset($coords[0]) && isset($coords[1])) {
+		$db_info=content_database_info(
+							content_fields('field_coords','waste_point'));
+		$geo_handler=geo_load(array('table_name' => $db_info['table']));
+
+		$distance_threshold_meters=50;
+		$earth_circumference_meters=40030081;
+		$lat_tolerance=360 * $distance_threshold_meters /
+											$earth_circumference_meters;
+		$lon_tolerance=$lat_tolerance / max(0.001,cos(deg2rad($coords[1])));
+
+		$bbox_sql=geoclustering_get_bbox_sql($geo_handler,
+				array(	$coords[0]-$lon_tolerance,$coords[1]-$lat_tolerance,
+						$coords[0]+$lon_tolerance,$coords[1]+$lat_tolerance));
+
+		$distance_query=$geo_handler->distance($geo_handler,
+									"POINT(${coords[0]} ${coords[1]})");
+		$query="SELECT nid FROM {" . $db_info['table'] . "} " .
+						"WHERE $distance_query < %f AND ${bbox_sql[0]} " .
+						"ORDER BY $distance_query DESC LIMIT 1";
+		$row=db_fetch_array(db_query($query,array_merge(
+						array($distance_threshold_meters),$bbox_sql[1])));
+		if ($row) {
+			$id=$row['nid'];
+			$coords=array(NULL,NULL);
+			}
+		}
+
+	$node=($id !== FALSE) ? @node_load($id) :
+									(object)array('type' => 'waste_point');
+	$node->uid=$user->uid;
+	$node->name=$user->name;
+
+		/***********************/
+		/*****             *****/
+		/***** Set lon/lat *****/
+		/*****             *****/
+		/***********************/
+
+	if ($id !== FALSE) {
+		$prev_coords=geoclustering_extract_coords_from_node(
+													$node,'field_coords');
+		if (!isset($coords[0])) {
+			$coords[0]=$prev_coords[0];
+			}
+		if (!isset($coords[1])) {
+			$coords[1]=$prev_coords[1];
+			}
+
+		if ($coords === $prev_coords) {
+			$coords=FALSE;
+			}
+		}
+
+	$form_state=array();
+	$form_state['values']['op']=t('Save');
+
+	if ($coords !== FALSE && isset($coords[0]) && isset($coords[1])) {
+		$form_state['values']['field_coords'][0]['geo']=
+							array('lon' => $coords[0],'lat' => $coords[1]);
+		}
+
+	return array($node,$form_state);
+	}
+
+function ldiw_waste_map_submit_waste_point_form($node,$form_state,
+													$file_fids=array())
+{
+	if (function_exists('_element_info')) {	// Workaround for Geo bug http://drupal.org/node/1059916
+		module_implements('elements',FALSE,TRUE);
+		_element_info('',TRUE);
+		}
+
+	$prev_vid=isset($node->vid) ? $node->vid : null;
+	module_load_include('inc','node','node.pages');
+
+	@drupal_execute('waste_point_node_form',$form_state,$node);
+
+	foreach ($file_fids as $fid) {
+		field_file_load($fid,TRUE);	// Reload file cache; otherwise file is not found if "FileField Paths" module is used
+		}
+
+	$success=FALSE;
+	if (isset($form_state['nid'])) {
+		$node=@node_load(array('nid' => $form_state['nid']));	// This argument style does not use node cache
+		$success=($id === FALSE || $node->vid != $prev_vid);
+		}
+
+	$messages=drupal_get_messages();
+
+	if ($success) {
+		return $node;
+		}
+
+	if (!empty($messages['error'])) {
+		return strip_tags(implode(';',$messages['error']));
+		}
+	return "Unknown drupal_execute() error";
+	}
+
+/***************************************************************************/
+/****************                                          *****************/
+/**************** ldiw_waste_map_get_photo_upload_fields() *****************/
+/****************                                          *****************/
+/***************************************************************************/
+
+function ldiw_waste_map_get_photo_upload_fields()
+{
+	$fieldnames=explode(' ',variable_get(
+						'ldiw_waste_map_photo_field_names',
+						LDIW_WASTE_MAP_DEFAULT_PHOTO_FIELDS));
+	$data=array();
+	foreach ($fieldnames as $fieldname) {
+		$fieldinfo=content_fields($fieldname,'waste_point');
+		if (!empty($fieldinfo) && $fieldinfo['type'] == 'filefield') {
+			for ($i=0;$i < max(1,$fieldinfo['multiple']);$i++) {
+				$data[]=array($fieldname,$i);
+				}
+			}
+		}
+
+	return $data;
+	}
+
+/***************************************************************************/
+/*******************                                     *******************/
+/******************* _ldiw_waste_map_decode_exif_coord() *******************/
+/*******************                                     *******************/
+/***************************************************************************/
+
+function _ldiw_waste_map_decode_exif_coord($coord,$set_negative)
+{
+	$value=0;
+	$divisor=1;
+	foreach (array_slice($coord,0,3) as $val) {
+		$parts=explode('/',$val);
+		$val=$parts ? floatval($parts[0]) : 0;
+		if (count($parts) >= 2) {
+			$val/=floatval($parts[1]);
+			}
+		$value+=$val / $divisor;
+		$divisor*=60.0;
+		}
+	return $set_negative ? -$value : $value;
+	}
+
+/***************************************************************************/
+/*******************                                    ********************/
+/******************* ldiw_waste_map_upload_photo_ajax() ********************/
+/*******************                                    ********************/
+/***************************************************************************/
+
+function ldiw_waste_map_upload_photo_ajax()
+{
+	$error_text=NULL;
+
+	if (isset($_FILES['qqfile']['tmp_name'])) {
+		$fname=$_FILES['qqfile']['tmp_name'];
+		}
+	else {
+		$fname=file_destination(file_create_path(
+				file_directory_temp() . '/' . time()),FILE_EXISTS_RENAME);
+		$fp=fopen($fname,'w');
+
+		if ($fp === FALSE) {
+			$error_text=t('Server error in writing temp file.');
+			}
+		else {
+			$input=fopen('php://input','r');
+			stream_copy_to_stream($input,$fp);
+			fclose($input);
+			fclose($fp);
+			}
+		}
+
+	$photo_fields=ldiw_waste_map_get_photo_upload_fields();
+	if (!$error_text && empty($photo_fields)) {
+		$error_text="No photo fields defined for Waste point";
+		}
+
+	if (!$error_text) {
+		$photo_field=$photo_fields[0];
+		$fileinfo=field_file_save_file($fname,array(),
+					filefield_widget_file_path(content_fields(
+											$photo_field[0],'waste_point')));
+		if (!$fileinfo || empty($fileinfo['filepath'])) {
+			$error_text="field_file_save_file() error";
+			}
+		else {
+			$coords=array(NULL,NULL);
+
+			$exif=exif_read_data($fileinfo['filepath']);
+			if (!empty($exif['GPSLatitude']) &&
+										!empty($exif['GPSLatitudeRef']) &&
+					!empty($exif['GPSLongitude']) &&
+										!empty($exif['GPSLongitudeRef'])) {
+				$coords=array(	_ldiw_waste_map_decode_exif_coord(
+											$exif['GPSLongitude'],
+											$exif['GPSLongitudeRef'] == 'W'),
+								_ldiw_waste_map_decode_exif_coord(
+											$exif['GPSLatitude'],
+											$exif['GPSLatitudeRef'] == 'S'));
+				}
+
+			list($node,$form_state)=
+						ldiw_waste_map_prepare_adding_waste_point($coords);
+			$form_state['values'][$photo_field[0]][$photo_field[1]]=$fileinfo;
+
+			$node_or_errormsg=ldiw_waste_map_submit_waste_point_form(
+								$node,$form_state,array($fileinfo['fid']));
+
+			if (!is_object($node_or_errormsg)) {
+				$error_text=$node_or_errormsg;
+				}
+			}
+		}
+
+	@unlink($fname);
+
+	print htmlspecialchars(json_encode(empty($error_text) ?
+				array('success' => true) : array('error' => $error_text)),
+				ENT_NOQUOTES);
 	}
 
 /***************************************************************************/

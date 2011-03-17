@@ -153,24 +153,6 @@ function _ldiw_api_get_server_specific_fields()
 	return $data;
 	}
 
-function _ldiw_api_get_photo_upload_fields()
-{
-	$fieldnames=explode(' ',variable_get(
-						'ldiw_waste_map_photo_field_names',
-						LDIW_WASTE_MAP_DEFAULT_PHOTO_FIELDS));
-	$data=array();
-	foreach ($fieldnames as $fieldname) {
-		$fieldinfo=content_fields($fieldname,'waste_point');
-		if (!empty($fieldinfo) && $fieldinfo['type'] == 'filefield') {
-			for ($i=0;$i < max(1,$fieldinfo['multiple']);$i++) {
-				$data[]=array($fieldname,$i);
-				}
-			}
-		}
-
-	return $data;
-	}
-
 function ldiw_api_get_api_base_url()
 {
 	$result=array(
@@ -313,69 +295,11 @@ function _ldiw_api_create_update($args,$id=FALSE)
 
 	$coords=array_splice($args,0,2);
 
-	if ($id === FALSE && isset($coords[0]) && isset($coords[1])) {
-		$db_info=content_database_info(
-							content_fields('field_coords','waste_point'));
-		$geo_handler=geo_load(array('table_name' => $db_info['table']));
+	list($node,$form_state)=ldiw_waste_map_prepare_adding_waste_point(
+															$coords,$id);
 
-		$distance_threshold_meters=50;
-		$earth_circumference_meters=40030081;
-		$lat_tolerance=360 * $distance_threshold_meters /
-											$earth_circumference_meters;
-		$lon_tolerance=$lat_tolerance / max(0.001,cos(deg2rad($coords[1])));
-
-		$bbox_sql=geoclustering_get_bbox_sql($geo_handler,
-				array(	$coords[0]-$lon_tolerance,$coords[1]-$lat_tolerance,
-						$coords[0]+$lon_tolerance,$coords[1]+$lat_tolerance));
-
-		$distance_query=$geo_handler->distance($geo_handler,
-									"POINT(${coords[0]} ${coords[1]})");
-		$query="SELECT nid FROM {" . $db_info['table'] . "} " .
-						"WHERE $distance_query < %f AND ${bbox_sql[0]} " .
-						"ORDER BY $distance_query DESC LIMIT 1";
-		$row=db_fetch_array(db_query($query,array_merge(
-						array($distance_threshold_meters),$bbox_sql[1])));
-		if ($row) {
-			$id=$row['nid'];
-			$coords=array(NULL,NULL);
-			}
-		}
-
-	$node=($id !== FALSE) ? @node_load($id) :
-									(object)array('type' => 'waste_point');
-	$node->uid=$user->uid;
-	$node->name=$user->name;
-
-	$form_state=array();
-	$form_state['values']['op']=t('Save');
-
-		/***********************/
-		/*****             *****/
-		/***** Set lon/lat *****/
-		/*****             *****/
-		/***********************/
-
-	if ($id !== FALSE) {
-		$prev_coords=geoclustering_extract_coords_from_node(
-													$node,'field_coords');
-		if (!isset($coords[0])) {
-			$coords[0]=$prev_coords[0];
-			}
-		if (!isset($coords[1])) {
-			$coords[1]=$prev_coords[1];
-			}
-
-		if ($coords === $prev_coords) {
-			$coords=FALSE;
-			}
-		}
-
-	if (!empty($coords)) {
-		if (!isset($coords[0]) || !isset($coords[1])) {
-			throw new ServicesException("Missing required lon/lat fields",400);
-			}
-		$form_state['values']['field_coords'][0]['geo']=
-							array('lon' => $coords[0],'lat' => $coords[1]);
+	if ($coords !== FALSE && (!isset($coords[0]) || !isset($coords[1]))) {
+		throw new ServicesException("Missing required lon/lat fields",400);
 		}
 
 	$client_id=array_shift($args);
@@ -387,7 +311,7 @@ function _ldiw_api_create_update($args,$id=FALSE)
 		/*****            *****/
 		/**********************/
 
-	$photo_fields=_ldiw_api_get_photo_upload_fields();
+	$photo_fields=ldiw_waste_map_get_photo_upload_fields();
 
 	$file_fids=array();
 	foreach ($photo_fields as $idx => $photo_field) {
@@ -449,40 +373,14 @@ function _ldiw_api_create_update($args,$id=FALSE)
 		/*****           *****/
 		/*********************/
 
-	if (function_exists('_element_info')) {	// Workaround for Geo bug http://drupal.org/node/1059916
-		module_implements('elements',FALSE,TRUE);
-		_element_info('',TRUE);
+	$node_or_errormsg=ldiw_waste_map_submit_waste_point_form(
+											$node,$form_state,$file_fids);
+
+	if (!is_object($node_or_errormsg)) {
+		throw new ServicesException($node_or_errormsg,400);
 		}
 
-	$prev_vid=isset($node->vid) ? $node->vid : null;
-	module_load_include('inc','node','node.pages');
-
-	@drupal_execute('waste_point_node_form',$form_state,$node);
-
-	foreach ($file_fids as $fid) {
-		field_file_load($fid,TRUE);	// Reload file cache; otherwise file is not found if "FileField Paths" module is used
-		}
-
-	$success=FALSE;
-	if (isset($form_state['nid'])) {
-		$node=@node_load(array('nid' => $form_state['nid']));	// This argument style does not use node cache
-		$success=($id === FALSE || $node->vid != $prev_vid);
-		}
-
-		/****************************/
-		/*****                  *****/
-		/***** Check for errors *****/
-		/*****                  *****/
-		/****************************/
-
-	$messages=drupal_get_messages();
-	if (!$success) {
-		$error="Unknown error";
-		if (!empty($messages['error'])) {
-			$error=strip_tags(implode(';',$messages['error']));
-			}
-		throw new ServicesException($error,400);
-		}
+	$node=$node_or_errormsg;
 
 		/******************************/
 		/*****                    *****/
