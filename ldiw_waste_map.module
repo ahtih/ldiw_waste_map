@@ -672,44 +672,79 @@ function _ldiw_waste_map_decode_exif_coord($coord,$set_negative)
 
 function ldiw_waste_map_upload_photo_ajax()
 {
+	$retval=array();
 	$error_text=NULL;
-
-	if (isset($_FILES['qqfile']['tmp_name'])) {
-		$fname=$_FILES['qqfile']['tmp_name'];
-		}
-	else {
-		$fname=file_destination(file_create_path(
-				file_directory_temp() . '/' . time()),FILE_EXISTS_RENAME);
-		$fp=fopen($fname,'w');
-
-		if ($fp === FALSE) {
-			$error_text=t('Server error in writing temp file.');
-			}
-		else {
-			$input=fopen('php://input','r');
-			stream_copy_to_stream($input,$fp);
-			fclose($input);
-			fclose($fp);
-			}
-		}
 
 	$photo_fields=ldiw_waste_map_get_photo_upload_fields();
 	if (!$error_text && empty($photo_fields)) {
-		$error_text="No photo fields defined for Waste point";
+		$error_text=t("No photo fields defined for Waste point");
+		}
+	else {
+		$photo_field=$photo_fields[0];
+		}
+
+	if (!empty($_POST['fid'])) {
+		$fileinfo=field_file_load($_POST['fid']);
+		if (empty($fileinfo['fid']) || empty($fileinfo['filepath'])) {
+			$error_text=t("field_file_load() error");
+			}
+		}
+	else {
+		if (isset($_FILES['qqfile']['tmp_name'])) {
+			$fname=$_FILES['qqfile']['tmp_name'];
+			}
+		else {
+			$fname=file_destination(file_create_path(
+					file_directory_temp() . '/' . time()),FILE_EXISTS_RENAME);
+			$fp=fopen($fname,'w');
+
+			if ($fp === FALSE) {
+				$error_text=t('Server error in writing temp file.');
+				}
+			else {
+				$input=fopen('php://input','r');
+				stream_copy_to_stream($input,$fp);
+				fclose($input);
+				fclose($fp);
+				}
+			}
+
+		if (!$error_text && !@getimagesize($fname)) {
+			$error_text=t("Uploaded file is not an image");
+			}
+
+		if (!$error_text) {
+			$fileinfo=field_file_save_file($fname,array(),
+						filefield_widget_file_path(content_fields(
+											$photo_field[0],'waste_point')));
+			if (empty($fileinfo['fid']) || empty($fileinfo['filepath'])) {
+				$error_text=t("field_file_save_file() error");
+				}
+			}
+
+		@unlink($fname);
 		}
 
 	if (!$error_text) {
-		$photo_field=$photo_fields[0];
-		$fileinfo=field_file_save_file($fname,array(),
-					filefield_widget_file_path(content_fields(
-											$photo_field[0],'waste_point')));
-		if (!$fileinfo || empty($fileinfo['filepath'])) {
-			$error_text="field_file_save_file() error";
+		$coords=array(NULL,NULL);
+
+		if (isset($_POST['lon']) && isset($_POST['lat'])) {
+
+				//!!! Support other coordinate formats as well
+
+			$sscanf=sscanf($_POST['lon'],'%g%s');
+			$coords[0]=isset($sscanf[1]) ? NULL : $sscanf[0];
+
+			$sscanf=sscanf($_POST['lat'],'%g%s');
+			$coords[1]=isset($sscanf[1]) ? NULL : $sscanf[0];
+
+			if (!isset($coords[0]) || !isset($coords[1])) {
+				$error_text=t('Unrecognized coordinate format. Please ' .
+					'write coordinates in decimal degrees, like "-70.221"');
+				}
 			}
 		else {
-			$coords=array(NULL,NULL);
-
-			$exif=exif_read_data($fileinfo['filepath']);
+			$exif=@exif_read_data($fileinfo['filepath']);
 			if (!empty($exif['GPSLatitude']) &&
 										!empty($exif['GPSLatitudeRef']) &&
 					!empty($exif['GPSLongitude']) &&
@@ -721,6 +756,11 @@ function ldiw_waste_map_upload_photo_ajax()
 											$exif['GPSLatitude'],
 											$exif['GPSLatitudeRef'] == 'S'));
 				}
+			}
+
+		if (!$error_text && isset($coords[0]) && isset($coords[1])) {
+			$retval['lon']=$coords[0];
+			$retval['lat']=$coords[1];
 
 			list($node,$form_state)=
 						ldiw_waste_map_prepare_adding_waste_point($coords);
@@ -731,15 +771,22 @@ function ldiw_waste_map_upload_photo_ajax()
 
 			if (!is_object($node_or_errormsg)) {
 				$error_text=$node_or_errormsg;
+				$retval['missing_coords_fid']=$fileinfo['fid'];
 				}
+			}
+		else {
+			$retval['missing_coords_fid']=$fileinfo['fid'];
 			}
 		}
 
-	@unlink($fname);
+	if (!empty($error_text)) {
+		$retval['error']=$error_text;
+		}
+	else {
+		$retval['success']=true;
+		}
 
-	print htmlspecialchars(json_encode(empty($error_text) ?
-				array('success' => true) : array('error' => $error_text)),
-				ENT_NOQUOTES);
+	print htmlspecialchars(json_encode($retval),ENT_NOQUOTES);
 	}
 
 /***************************************************************************/

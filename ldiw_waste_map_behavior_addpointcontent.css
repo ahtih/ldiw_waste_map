@@ -1,15 +1,29 @@
 /* $Id$ */
 
+.ldiw_waste_map_coords_form_control { 
+	float: right;
+	right: 18em;
+	margin: 4px;
+	width: 30em;
+	padding: 5px;
+	border-style: solid;
+	border-color: #666666;
+	text-align: center;
+	font-weight: bold;
+	border-width: 3px;
+	background-color: #c900a2;
+	}
+
 .olControlPanel  {
-	float:right;
+	float: right;
 	right: 0px;
 	height: 60px; 
 	width: 15em;
 	}
 
 .olControlPanel div { 
-	float:right;
-	width:  15em;
+	float: right;
+	width: 15em;
 	height: 24px;
 	line-height: 24px;
 	border-style: solid;
@@ -18,26 +32,27 @@
 	font-weight: bold;
 	}
 
-.olControlPanel .olControlNavigationItemActive { 
+.olControlPanel .olControlNavigationItemActive,
+.olControlPanel .olControlDrawFeaturePointItemActive,
+.UploadButtonItemActive {
 	background-color: #f1c02a; 
 	border-width: 3px;
 	margin: 4px;
 	}
 
-.olControlPanel .olControlNavigationItemInactive { 
+.olControlPanel .olControlNavigationItemInactive,
+.olControlPanel .olControlDrawFeaturePointItemInactive,
+.UploadButtonItemInactive {
 	background-color: #e9e7e3;
 	border-width: 2px;
 	margin: 5px;
 	}
 
-.olControlPanel .olControlDrawFeaturePointItemActive { 
-	background-color: #f1c02a; 
-	border-width: 3px;
-	margin: 4px;
+.qq-upload-button {
+	border-width: 0px;
 	}
 
-.olControlPanel .olControlDrawFeaturePointItemInactive { 
-	background-color: #e9e7e3;
-	border-width: 2px;
-	margin: 5px;
+.UploadCoordsForm input {
+	margin-left: 5px;
+	margin-right: 5px;
 	}

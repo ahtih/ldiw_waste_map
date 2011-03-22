@@ -1,5 +1,114 @@
 // $Id$
 
+ldiw_waste_map_coords_form_control=OpenLayers.Class(OpenLayers.Control,{
+	type: OpenLayers.Control.TYPE_BUTTON,
+	trigger: function() {},
+
+	stop_openlayers_events: function(evt) {
+		OpenLayers.Event.stop(evt,true);
+		return false;
+		},
+
+	draw: function() {
+		OpenLayers.Control.prototype.draw.apply(this,arguments);
+		$(this.div).stop(true);
+		$(this.div).hide();
+		OpenLayers.Event.stopObservingElement(this.div);	// Prevent OpenLayers hijacking clicks
+		OpenLayers.Event.observe(this.div,"mousedown",
+					OpenLayers.Function.bindAsEventListener(
+										this.stop_openlayers_events,this));
+		return this.div;
+		},
+
+	ajax_done: function(response_json) {
+		$(this.div).stop(true);
+		$(this.div).show();
+
+		this.div.innerHTML='';
+		if (response_json.error)
+			this.div.innerHTML=response_json.error;
+
+		if (response_json.missing_coords_fid) {
+			if (!response_json.error)
+				this.div.innerHTML+=Drupal.t('This photo is not ' +
+						'geotagged, so please enter coordinates manually:');
+			this.div.innerHTML+='<p>' +
+					'<form class="UploadCoordsForm" method="post">' +
+					Drupal.t('Longitude') +
+					':<input type="text" name="lon" size="6" maxlength="30">' +
+					Drupal.t('Latitude') +
+					':<input type="text" name="lat" size="6" maxlength="30">' +
+					'<input type="hidden" name="fid" value="' +
+						response_json.missing_coords_fid + '">' +
+					'<input type="submit" value="' + Drupal.t('Done') + '">' +
+					'</form>';
+			var form=$(this.div).find('form');
+			var obj=this;
+			form.submit(function() {
+					//!!! Disable submit button until fields are filled in
+					$.post(obj.ajax_url,form.serialize(),
+									function(data) { obj.ajax_done(data); },
+									'json');
+					return false;
+					});
+			}
+		else if (!response_json.error) {
+			this.map.panTo(new OpenLayers.LonLat(
+								response_json.lon,response_json.lat).
+							transform(new OpenLayers.Projection('EPSG:4326'),
+								this.map.projection));
+			if (this.map.getZoom() < 10)
+				this.map.zoomTo(10);
+
+			this.div.innerHTML=Drupal.t('Photo added. Thank you for your ' + 
+											'contribution to Waste Map!');
+			$(this.div).fadeTo(8000,1).fadeOut(1000);
+			}
+		},
+
+	CLASS_NAME: 'ldiw_waste_map_coords_form_control'
+	});
+
+ldiw_waste_map_upload_photo_control=OpenLayers.Class(OpenLayers.Control,{
+	type: OpenLayers.Control.TYPE_BUTTON,
+	trigger: function() {},
+
+	stop_openlayers_events: function(evt) {
+		OpenLayers.Event.stop(evt,true);
+		return false;
+		},
+
+	draw: function() {
+		OpenLayers.Control.prototype.draw.apply(this,arguments);
+
+		this.panel_div.innerHTML="<div class='qq-upload-button' " + 
+					"id='file-uploader-button'>" + this.title + "</div>";
+		var coords_form_control=this.coords_form_control;
+		new qq.FileUploaderBasic({
+	        element: this.panel_div,
+    	    button: this.panel_div.children[0],
+			multiple: false,
+	        action: coords_form_control.ajax_url,
+			onComplete: function(id,fileName,response_json) {
+							coords_form_control.ajax_done(response_json);
+							},
+			showMessage: function(message) {}
+			});
+
+		OpenLayers.Event.stopObservingElement(this.panel_div);	// Prevent OpenLayers hijacking clicks
+		OpenLayers.Event.observe(this.panel_div,"mousedown",
+					OpenLayers.Function.bindAsEventListener(
+										this.stop_openlayers_events,this));
+		OpenLayers.Event.observe(this.panel_div,"click",
+					OpenLayers.Function.bindAsEventListener(
+										this.stop_openlayers_events,this));
+
+		return this.div;
+		},
+
+	CLASS_NAME: 'ldiw_waste_map_upload_photo_control'
+	});
+
 Drupal.theme.prototype.openlayersAddPointContentNoNodeID=function(feature)
 {
 	return Drupal.t('Selected feature has no Node ID to edit');
@@ -193,6 +302,14 @@ function ldiw_waste_map_behavior_addpointcontent_state(data,options)
 	this.options=options;
 	this.form_popup=null;
 
+		// Create hidden control for upload photo coordinates form
+
+	var coords_form_control=new ldiw_waste_map_coords_form_control({
+						displayClass: 'ldiw_waste_map_coords_form_control',
+						ajax_url: this.options.upload_photo_url });
+
+	data.openlayers.addControl(coords_form_control);
+
 		// Create temporary features layer
 
 	this.temp_features_layer=new OpenLayers.Layer.Vector(
@@ -210,20 +327,23 @@ function ldiw_waste_map_behavior_addpointcontent_state(data,options)
 	this.drawfeature_control=new OpenLayers.Control.DrawFeature(
 						this.temp_features_layer,
 						OpenLayers.Handler.Point,
-						{'displayClass':'olControlDrawFeaturePoint',
-						'title':Drupal.t('Add/Edit Waste Point'),
-						'handlerOptions':{layerOptions:{
-											styleMap:invisible_stylemap}}}
+						{displayClass: 'olControlDrawFeaturePoint',
+						title: Drupal.t('Add/Edit Waste Point'),
+						handlerOptions: {layerOptions:{
+											styleMap: invisible_stylemap}}}
 						);
 	var panel=new OpenLayers.Control.Panel();
-	panel.addControls([	new OpenLayers.Control.Navigation(
-							{'title':Drupal.t('Move map')}),
-							this.drawfeature_control]);
+	panel.addControls([	new OpenLayers.Control.Navigation({
+								title: Drupal.t('Move map')}),
+						this.drawfeature_control,
+						new ldiw_waste_map_upload_photo_control({
+								title: Drupal.t('Upload geotagged photo'),
+								displayClass: 'UploadButton',
+								coords_form_control: coords_form_control})]);
 	panel.defaultControl=panel.controls[0];
 
-	for (var i=0;i < panel.controls.length;i++) {
+	for (var i=0;i < panel.controls.length;i++)
 		$(panel.controls[i].panel_div).text(panel.controls[i].title);
-		}
 
 	this.drawfeature_control.events.register('deactivate',this,
 														this.close_form);
