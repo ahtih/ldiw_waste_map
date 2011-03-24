@@ -288,6 +288,8 @@ function _ldiw_api_create_update($args,$id=FALSE)
 	if (!$user->uid) {
 		foreach ($_COOKIE as $key => $value) {
 			if (strpos($key,'SESS') === 0) {
+				watchdog('ldiw_api',
+							"Invalid session cookie sent by API client");
 				throw new ServicesException("Invalid session cookie",401);
 				}
 			}
@@ -299,6 +301,8 @@ function _ldiw_api_create_update($args,$id=FALSE)
 															$coords,$id);
 
 	if ($coords !== FALSE && (!isset($coords[0]) || !isset($coords[1]))) {
+		watchdog('ldiw_api',"Missing required lon/lat fields " .
+										"in request sent by API client");
 		throw new ServicesException("Missing required lon/lat fields",400);
 		}
 
@@ -377,6 +381,8 @@ function _ldiw_api_create_update($args,$id=FALSE)
 											$node,$form_state,$file_fids);
 
 	if (!is_object($node_or_errormsg)) {
+		watchdog('ldiw_api',"Error in request sent by API client: %error",
+									array('%error' => $node_or_errormsg));
 		throw new ServicesException($node_or_errormsg,400);
 		}
 
