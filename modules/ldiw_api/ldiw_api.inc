@@ -429,6 +429,14 @@ function _ldiw_api_create_update($args,$id=FALSE)
 		$wp[$key]=$value;
 		}
 
+	foreach (variable_get('ldiw_waste_map_composition_fields',array())
+													as $key => $info) {
+		$dest_key=preg_replace('/^field_(..*)$/','$1',$key);
+		if (isset($node->{$key}[0]['value'])) {
+			$wp[$dest_key]=0 + $node->{$key}[0]['value'];
+			}
+		}
+
 	return array('wp' => $wp);
 	}
 
