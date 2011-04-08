@@ -29,7 +29,7 @@ function ldiw_waste_map_features_openlayers_styles() {
     'strokeDashstyle' => 'solid',
     'graphicOpacity' => 1,
     'graphicZIndex' => 1,
-    'backgroundGraphic' => 'sites/all/modules/ldiw_waste_map/img/selected-marker.png',
+    'backgroundGraphic' => '/sites/all/modules/ldiw_waste_map/img/selected-marker.png',
     'backgroundWidth' => array(
       'plugin' => 'ldiw_waste_map_point_style_plugin',
     ),
