@@ -52,6 +52,56 @@ Services module to have at least 3.x version.
 Drupal status report at `admin/reports/status` checks some of these
 requirements/patches and reports whether the setup is OK.
 
+Configuring Waste Point data fields
+-----------------------------------
+The module supports configurable data fields for Waste Points.
+For example, you can define a "Terrain type" field, with a "Select list"
+input widget; or a checkbox "Contains hazardous substances" or
+"Located on private property". To do so, just edit the Waste Point
+content type at `admin/content/node-type/waste-point/fields`
+and add/remove fields as you wish. Only the "Coordinates", "Volume",
+"Photos ID:Width:Height", "Geographic areas", and "Geographic area names"
+fields are mandatory, do not remove these.
+
+After adding new fields, you must also give permissions to view/edit
+these fields for anonymous users at `admin/user/permissions`, otherwise
+they do not appear in Waste point edit form due to lack of permissions.
+
+If you want to determine waste quantity by other means than asking
+for volume in cubic meters, you can change the "Volume" field to
+be a Computed Field, and calculate its value (always in cubic meters)
+based on other fields using a PHP code snippet
+(see http://drupal.org/project/computed_field ).
+
+Configuring Waste Point composition data fields
+-----------------------------------------------
+Some of Waste Point data fields describe composition of waste
+(plastics, paper, ...). By default there are 5 composition fields:
+field_composition_pmp, field_composition_paper etc. If these are not
+suitable for you, you can configure these as well.
+
+First modify the "Waste point" content type so that the composition
+fields are such that you need: `admin/content/node-type/waste-point/fields`
+
+You can delete default composition fields and replace them with fields
+suitable for you. Add all of them as Float fields. You can name them any
+way you want. In "Configuration" for these fields, use the same settings
+as default composition fields (min value 0, max value 100, suffix %,
+and not "Required").
+
+When you have added these fields, you can go to LDIW settings at
+`admin/settings/ldiw_waste_map` and specify that those fields are meant
+to be composition fields. To do that, specify a map label and marker
+color for each of them. These labels/colors specify how the composition
+is displayed in map and mobile app. Colors do not need to be unique:
+you can have several composition types share the same color.
+
+There is also a checkbox "For each Waste point, select only the main
+composition type, instead of percentages of all composition types".
+This means that instead of inputting/displaying these fields as percentages
+("80% glass, 20% large"), only the largest composition type is
+input/displayed ("glass" in this example).
+
 Adding data to Waste Map
 ------------------------
 To see anything useful on Waste Map, you need to add some content
