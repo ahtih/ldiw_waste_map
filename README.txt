@@ -46,6 +46,13 @@ To do so:
 						"OpenLayers Source" at `admin/build/openlayers` as
 						"sites/all/modules/openlayers/OpenLayers.js"
 
+When users view the Waste Map, the map can automatically zoom in to users
+location, determined using geoip module. To enable this, you need
+to download the http://geolite.maxmind.com/download/geoip/database/GeoLiteCity.dat.gz
+(or the paid version at http://www.maxmind.com/app/city ) file, and
+uncompress it to sites/all/libraries/geoip directory (create the directory
+if it does not exist).
+
 The LDIW Waste Map API (ldiw_api submodule of this module) requires
 Services module to have at least 3.x version.
 
