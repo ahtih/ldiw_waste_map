@@ -136,14 +136,14 @@ sources are http://www.gadm.org/countryres or your national Land Board
 or GIS companies.
 
 Then you can create a number of "Geographic area hierarchy levels" at
-/node/add/geo-hierarchy-level , and then "Geographic areas" at
-/node/add/geo-area. Both of these are ordinary nodes with some CCK fields;
+`node/add/geo-hierarchy-level` , and then "Geographic areas" at
+`node/add/geo-area`. Both of these are ordinary nodes with some CCK fields;
 thus you can get an overview of defined hierarchy levels and areas at
-/admin/content/node.
+`admin/content/node`.
 
 After editing areas or hierarchy levels, you should perform a
-"Recalculate Geographic Areas data for Waste point nodes" operation at
-/admin/settings/ldiw_waste_map.
+"Recalculate Geographic Areas fields for Waste point nodes" operation at
+`admin/settings/ldiw_waste_map/geo_areas`.
 
 Maintainers
 -----------

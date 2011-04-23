@@ -81,13 +81,6 @@ function ldiw_waste_map_admin_settings()
 				'#maxlength' => 4,
 				);
 
-	$form['recalculate_geo_areas']=array(
-				'#type' => 'submit',
-				'#value' => t("Recalculate Geographic Areas data " .
-												"for Waste point nodes"),
-				'#submit' => array('ldiw_waste_map_recalculate_geo_areas'),
-				);
-
 	$form=system_settings_form($form);
 
 	unset($form['#theme']);
@@ -117,10 +110,7 @@ function theme_ldiw_waste_map_admin_settings($form)
 			}
 		}
 
-	$recalculate_geo_areas=drupal_render($form['recalculate_geo_areas']);
-
-	return $recalculate_geo_areas .
-			'<h3>' . t('List of float-valued Waste point fields') . '</h3>' .
+	return '<h3>' . t('List of float-valued Waste point fields') . '</h3>' .
 			t('For any fields holding waste composition information, ' .
 				'specify a label text and marker color; optionally Solo ' .
 				'label could be configured too, this is used as a label ' .
@@ -261,4 +251,187 @@ function ldiw_waste_map_recalculate_geo_areas()
 											'/ldiw_waste_map.admin.inc',
 			);
 	batch_set($batch);
+	}
+
+/***************************************************************************/
+/********************                                  *********************/
+/******************** ldiw_waste_map_admin_geo_areas() *********************/
+/********************                                  *********************/
+/***************************************************************************/
+
+function ldiw_waste_map_admin_geo_areas()
+{
+	$form=array();
+
+	$form['#attributes']['enctype']='multipart/form-data';
+
+	$form['recalculate_geo_areas']=array(
+				'#type' => 'submit',
+				'#value' => t("Recalculate Geographic Areas fields " .
+												"for Waste point nodes"),
+				'#submit' => array('ldiw_waste_map_recalculate_geo_areas'),
+				);
+
+	$hierarchy_level_options=array();
+
+	$r=db_query("SELECT nid,title FROM {node} " .
+							"WHERE type='geo_hierarchy_level' ORDER BY nid");
+	while ($row=db_fetch_object($r)) {
+		$hierarchy_level_options[$row->nid]=$row->title;
+		}
+
+	$form['import']=array(
+		'#type' => 'fieldset',
+		'#title' => t('Import Geographic Areas from ESRI shapefile'),
+		'#tree' => TRUE,
+		'#description' => t('The shapefile must be a .zip file that ' .
+						'includes at least a .shp, .dbf and .shx file.'),
+		'file' => array(
+				'#type' => 'file',
+				'#title' => t('Shapefile .zip'),
+				),
+		'hierarchy_level' => array(
+				'#type' => 'select',
+				'#title' => t('Hieararchy level of areas in this shapefile'),
+				'#options' => $hierarchy_level_options,
+				'#required' => TRUE,
+				),
+		'area_name_fieldname' => array(
+				'#type' => 'textfield',
+				'#title' =>
+						t('Name of shapefile field that contains area name'),
+				'#required' => TRUE,
+				'#size' => 10,
+				'#maxlength' => 100,
+				),
+		'parentarea_name_fieldname' => array(
+				'#type' => 'textfield',
+				'#title' => t('Name of shapefile field that contains ' .
+														'parent area name'),
+				'#size' => 10,
+				'#maxlength' => 100,
+				),
+		'submit' => array(
+				'#type' => 'submit',
+				'#value' => t('Import file'),
+				),
+		);
+
+	return $form;
+	}
+
+/***************************************************************************/
+/*****************                                         *****************/
+/***************** ldiw_waste_map_admin_geo_areas_submit() *****************/
+/*****************                                         *****************/
+/***************************************************************************/
+
+function ldiw_waste_map_admin_geo_areas_submit($form,&$form_state)
+{
+	if (!isset($_FILES['files']['tmp_name']['import'])) {
+		return;
+		}
+
+	$table_name='ldiw_waste_map_import_' . time();
+
+	module_load_include('inc','geo','includes/shp2sql');
+	geo_shp2sql($_FILES['files']['tmp_name']['import'],$table_name);
+
+	$geo=geo_load(array('table_name' => $table_name));
+
+	if (!$geo->name()) {
+		return; 	// Import failed
+		}
+
+	drupal_get_messages();	// Clear successful import message
+
+	$fieldname=preg_replace('/[^a-z0-9_]/','',strtolower(trim(
+			$form_state['values']['import']['area_name_fieldname'])));
+	$parent_fieldname=preg_replace('/[^a-z0-9_]/','',strtolower(trim(
+			$form_state['values']['import']['parentarea_name_fieldname'])));
+
+	$hierarchy_level_node=node_load(
+						$form_state['values']['import']['hierarchy_level']);
+
+	$r=db_query("SELECT %s AS area,%s AS parentarea," .
+								$geo->AsText($geo) . " AS wkt FROM {%s}",
+						$fieldname,
+						$parent_fieldname ? $parent_fieldname : "''",
+						$table_name);
+	$success_count=0;
+	$errors=array();
+	while ($row=db_fetch_object($r)) {
+		if (substr($row->wkt,0,7) == 'POLYGON') {
+			$row->wkt='MULTIPOLYGON(' . substr($row->wkt,7) . ')';
+			}
+
+		global $user;
+		$node=(object)array('type' => 'geo_area');
+		$node->uid=$user->uid;
+		$node->name=$user->name;
+
+			//!!! Append coordinates to unnamed area title
+		$title=empty($row->area) ? 'Unnamed area' : $row->area;
+
+		$node_form_state=array();
+		$node_form_state['values']['op']=t('Save');
+		$node_form_state['values']['title']=$title;
+		$node_form_state['values']['og_description']=$title;
+
+		$node_form_state['values']['field_hierarchy_level'][0]['nid']=
+												$hierarchy_level_node->nid;
+				//!!! check if input widget is optionwidgets
+
+		if (!empty($row->parentarea) && isset(
+					$hierarchy_level_node->field_parent_level[0]['nid'])) {
+			$rr=db_query("SELECT nid FROM {node} " .
+									"WHERE type='geo_area' AND title='%s'",
+									$row->parentarea);
+			$parent_nids=array();
+			while ($parent_row=db_fetch_object($rr)) {
+				$parent_node=node_load($parent_row->nid);
+				if (isset($parent_node->field_hierarchy_level[0]['nid']) &&
+						$parent_node->field_hierarchy_level[0]['nid'] ==
+						$hierarchy_level_node->field_parent_level[0]['nid']) {
+					$parent_nids[]=$parent_row->nid;
+					}
+				}
+
+			if (count($parent_nids) == 1) {
+				//!!! check if input widget is autocomplete
+				$node_form_state['values']['field_parent'][0]['nid']['nid']=
+										'[nid:' . $parent_nids[0] . ']';
+				}
+			else {
+				$errors[]=(empty($parent_nids) ?
+							'No parent area ' : 'Multiple parent areas ') .
+							$row->parentarea . ' found for area ' .
+							$row->area;
+				}
+			}
+
+		$node_form_state['values']['field_geo'][0]['geo']=$row->wkt;
+		module_load_include('inc','node','node.pages');
+		module_load_include('inc','node_import','node_import');
+		@node_import_drupal_execute('geo_area_node_form',$node_form_state,
+																	$node);
+		if (isset($node_form_state['nid'])) {
+			@node_load(array('nid' => $node_form_state['nid']));	// This argument style clears node cache
+			$success_count++;
+			}
+		else {
+			$errors[]='Failed to save node for area ' . $row->area;
+			}
+		}
+
+	foreach ($errors as $e) {
+		drupal_set_message($e,'error');
+		}
+
+	if ($success_count || empty($errors)) {
+		drupal_set_message("Successfully imported $success_count areas");
+		}
+
+	geo_delete($geo);
+	db_query("DROP TABLE $table_name");
 	}

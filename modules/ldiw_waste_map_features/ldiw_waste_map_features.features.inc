@@ -36,7 +36,7 @@ function ldiw_waste_map_features_node_info() {
       'help' => t('This defines a geographic area (county, municipality etc) belonging to an already-defined <em>Geographic area hierarchy level</em>. If you have not defined any hierarchy levels yet, you should do so before creating a <em>Geographic area</em>.
 <p>
 After adding/editing Geographic areas, you should perform a
-<em>Recalculate Geographic Areas data for Waste point nodes</em> operation in
+<em>Recalculate Geographic Areas fields for Waste point nodes</em> operation in
 <em>LDIW Waste Map settings</em>.'),
     ),
     'geo_hierarchy_level' => array(
@@ -58,7 +58,7 @@ After adding/editing Geographic areas, you should perform a
 </ul>
 <p>
 After adding/editing hierarchy levels, you should perform a
-<em>Recalculate Geographic Areas data for Waste point nodes</em> operation in
+<em>Recalculate Geographic Areas fields for Waste point nodes</em> operation in
 <em>LDIW Waste Map settings</em>.'),
     ),
     'waste_point' => array(

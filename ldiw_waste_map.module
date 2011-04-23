@@ -277,7 +277,7 @@ function ldiw_waste_map_menu()
 			'type' => MENU_CALLBACK,
 			),
 
-		// Admin page
+		// Admin pages
 		'admin/settings/ldiw_waste_map' => array(
 			'title' => 'LDIW Waste Map',
 			'description' => 'Configure the LDIW Waste Map.',
@@ -285,6 +285,21 @@ function ldiw_waste_map_menu()
 			'page callback' => 'drupal_get_form',
 			'page arguments' => array('ldiw_waste_map_admin_settings'),
 			'access arguments' => array('administer site configuration'),
+			),
+		'admin/settings/ldiw_waste_map/settings' => array(
+			'title' => 'Settings',
+			'type' => MENU_DEFAULT_LOCAL_TASK,
+			'weight' => 0,
+			),
+		'admin/settings/ldiw_waste_map/geo_areas' => array(
+			'title' => 'Geographic Areas',
+			'description' => 'Administer Geographic Areas.',
+			'file' => 'ldiw_waste_map.admin.inc',
+			'page callback' => 'drupal_get_form',
+			'page arguments' => array('ldiw_waste_map_admin_geo_areas'),
+			'access arguments' => array('administer site configuration'),
+			'type' => MENU_LOCAL_TASK,
+			'weight' => 1,
 			),
 		);
 	}
