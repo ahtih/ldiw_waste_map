@@ -26,7 +26,7 @@ in the modules directory for your site and enable it on the
 "Geo" module needs to be extensively patched for Waste Map to work,
 and the simplest way is to get a patched version of Geo using
 	git clone git@git.drupal.org:sandbox/ahtih/1081362.git <your-destination-dir>
-This is Geo HEAD version patched with http://drupal.org/node/{804878,883020,776436,813482,667034,883032,1104696}
+This is Geo HEAD version patched with http://drupal.org/node/{804878,883020,776436,813482,667034,883032,1104696,1136622}
 
 "Views Bonus Pack" module needs the following patches:
 - http://drupal.org/files/issues/views_bonus_csv_strip_html.patch (http://drupal.org/node/205741)
@@ -131,15 +131,18 @@ municipalities etc. Then each Waste point will automatically be categorised
 to some of these areas; you can see that information in Waste Map, and you
 can also easily create reports on Waste points by county etc.
 
-First you need to obtain boundaries of these areas in WKT format. Potential
-sources are http://www.gadm.org/countryres or your national Land Board
-or GIS companies.
+First you need to obtain boundaries of these areas in WKT or ESRI Shapefile
+(SHP) format. Potential sources are http://www.gadm.org/countryres or your
+national Land Board or GIS companies.
 
 Then you can create a number of "Geographic area hierarchy levels" at
 `node/add/geo-hierarchy-level` , and then "Geographic areas" at
 `node/add/geo-area`. Both of these are ordinary nodes with some CCK fields;
 thus you can get an overview of defined hierarchy levels and areas at
 `admin/content/node`.
+
+You can also import Geographic areas from ESRI Shapefile at
+`admin/settings/ldiw_waste_map/geo_areas`.
 
 After editing areas or hierarchy levels, you should perform a
 "Recalculate Geographic Areas fields for Waste point nodes" operation at

@@ -284,31 +284,53 @@ function ldiw_waste_map_admin_geo_areas()
 		'#type' => 'fieldset',
 		'#title' => t('Import Geographic Areas from ESRI shapefile'),
 		'#tree' => TRUE,
-		'#description' => t('The shapefile must be a .zip file that ' .
-						'includes at least a .shp, .dbf and .shx file.'),
 		'file' => array(
 				'#type' => 'file',
 				'#title' => t('Shapefile .zip'),
+				'#description' => t("The shapefile must be a .zip file " .
+					"that includes at least a .shp, .dbf and .shx file."),
 				),
 		'hierarchy_level' => array(
 				'#type' => 'select',
-				'#title' => t('Hieararchy level of areas in this shapefile'),
+				'#title' => t('Hierarchy level of areas in this shapefile'),
+				'#description' =>
+						t("All areas in imported shapefile must belong " .
+							"to the same hierarchy level."),
 				'#options' => $hierarchy_level_options,
 				'#required' => TRUE,
 				),
 		'area_name_fieldname' => array(
 				'#type' => 'textfield',
-				'#title' =>
-						t('Name of shapefile field that contains area name'),
-				'#required' => TRUE,
+				'#title' => t("Name of shapefile attribute storing " .
+															"area name"),
+				'#description' =>
+						t("If you leave this blank, the resulting areas " .
+							"will all be named 'Unnamed area'."),
 				'#size' => 10,
 				'#maxlength' => 100,
 				),
 		'parentarea_name_fieldname' => array(
 				'#type' => 'textfield',
-				'#title' => t('Name of shapefile field that contains ' .
-														'parent area name'),
+				'#title' => t("Name of shapefile attribute storing " .
+														"parent area name"),
+				'#description' =>
+						t('If you leave this blank, the resulting areas ' .
+							'will not have parent areas defined.'),
 				'#size' => 10,
+				'#maxlength' => 100,
+				),
+		'character_encoding' => array(
+				'#type' => 'textfield',
+				'#title' =>
+						t('Character encoding used for attribute values'),
+				'#description' =>
+						t('Shapefile format does not specify a character ' .
+							'encoding. Therefore you have to know which ' .
+							'encoding your shapefile uses, in order to ' .
+							'correctly interpret non-ASCII characters.'),
+				'#required' => TRUE,
+				'#default_value' => 'Windows-1252',
+				'#size' => 15,
 				'#maxlength' => 100,
 				),
 		'submit' => array(
@@ -335,8 +357,8 @@ function ldiw_waste_map_admin_geo_areas_submit($form,&$form_state)
 	$table_name='ldiw_waste_map_import_' . time();
 
 	module_load_include('inc','geo','includes/shp2sql');
-	geo_shp2sql($_FILES['files']['tmp_name']['import'],$table_name);
-
+	geo_shp2sql($_FILES['files']['tmp_name']['import'],$table_name,TRUE,4326,
+					$form_state['values']['import']['character_encoding']);
 	$geo=geo_load(array('table_name' => $table_name));
 
 	if (!$geo->name()) {
@@ -355,7 +377,7 @@ function ldiw_waste_map_admin_geo_areas_submit($form,&$form_state)
 
 	$r=db_query("SELECT %s AS area,%s AS parentarea," .
 								$geo->AsText($geo) . " AS wkt FROM {%s}",
-						$fieldname,
+						$fieldname ? $fieldname : "''",
 						$parent_fieldname ? $parent_fieldname : "''",
 						$table_name);
 	$success_count=0;

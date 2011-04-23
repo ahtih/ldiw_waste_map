@@ -34,6 +34,7 @@ projects[geo][patch][] = "http://drupal.org/files/issues/geo-813482-updated.patc
 projects[geo][patch][] = "http://drupal.org/files/issues/geo-667034.patch"
 projects[geo][patch][] = "http://drupal.org/files/issues/geo-883032.patch"
 projects[geo][patch][] = "http://drupal.org/files/issues/geo_latlon_maxlength.patch"
+projects[geo][patch][] = "http://drupal.org/files/issues/geo-shp2sql-char-encoding.patch"
 
 projects[geoclustering][type] = "module"
 projects[geoclustering][download][type] = "git"
