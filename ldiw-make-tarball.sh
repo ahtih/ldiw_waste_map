@@ -1,5 +1,10 @@
 #!/bin/sh
 
+if [ -z "$1" ] ; then
+	echo 'Missing output filename';
+	exit;
+fi
+
 TMPDIR=/tmp/ldiw-make-tarball-tmpdir
 
 get_from_git() {
