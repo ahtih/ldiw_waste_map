@@ -484,5 +484,5 @@ function ldiw_waste_map_admin_geo_areas_submit($form,&$form_state)
 		}
 
 	geo_delete($geo);
-	db_query("DROP TABLE $table_name");
+	db_query("DROP TABLE {$table_name}");
 	}
