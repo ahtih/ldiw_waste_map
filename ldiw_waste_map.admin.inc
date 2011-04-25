@@ -354,6 +354,14 @@ function ldiw_waste_map_admin_geo_areas_submit($form,&$form_state)
 		return;
 		}
 
+	if (!file_exists($_FILES['files']['tmp_name']['import'])) {
+		drupal_set_message(t("File upload failed, probably due to your " .
+				"php.ini settings limiting upload of such large files. " .
+				"Check post_max_size and upload_max_filesize in php.ini"),
+				'error');
+		return;
+		}
+
 	$table_name='ldiw_waste_map_import_' . time();
 
 	module_load_include('inc','geo','includes/shp2sql');
