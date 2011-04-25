@@ -49,13 +49,14 @@ function ldiw_waste_map_geoclustering_tree_params()
 	$tree_params->geofield_name='field_coords';
 	$tree_params->node_conditions=array('type' => 'waste_point',
 										'status' => 1);
-	$tree_params->summed_field_names=array(	'field_volume',
-											'field_nr_of_tires');
-	$composition_fields=variable_get('ldiw_waste_map_composition_fields',
+	$tree_params->summed_field_names=array();
+	$summed_fields=variable_get('ldiw_waste_map_composition_fields',
 																array());
+	$summed_fields['field_volume']=TRUE;
+	$summed_fields['field_nr_of_tires']=TRUE;
 	foreach (content_fields(NULL,'waste_point') as $fieldname => $field) {
 		if ($field['type_name'] == 'waste_point' &&
-									isset($composition_fields[$fieldname])) {
+									isset($summed_fields[$fieldname])) {
 			array_push($tree_params->summed_field_names,$fieldname);
 			}
 		}
