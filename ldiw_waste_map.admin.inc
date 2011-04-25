@@ -343,6 +343,26 @@ function ldiw_waste_map_admin_geo_areas()
 	}
 
 /***************************************************************************/
+/*****************                                        ******************/
+/***************** _ldiw_waste_map_check_shapefile_attr() ******************/
+/*****************                                        ******************/
+/***************************************************************************/
+
+function _ldiw_waste_map_check_shapefile_attr($table_name,$fieldname)
+{
+	$fieldname=db_escape_table(preg_replace('/[^a-z0-9_]/','',
+										strtolower(trim($fieldname))));
+	if ($fieldname && !db_column_exists($table_name,$fieldname)) {
+		drupal_set_message(t("Attribute %attr not found in shapefile, " .
+				"treating it as blank",array('%attr' => $fieldname)),
+				'error');
+		$fieldname='';
+		}
+
+	return $fieldname;
+	}
+
+/***************************************************************************/
 /*****************                                         *****************/
 /***************** ldiw_waste_map_admin_geo_areas_submit() *****************/
 /*****************                                         *****************/
@@ -370,24 +390,25 @@ function ldiw_waste_map_admin_geo_areas_submit($form,&$form_state)
 	$geo=geo_load(array('table_name' => $table_name));
 
 	if (!$geo->name()) {
-		return; 	// Import failed
+		return; 	// geo_shp2sql() failed, error message is already set
 		}
 
 	drupal_get_messages();	// Clear successful import message
 
-	$fieldname=preg_replace('/[^a-z0-9_]/','',strtolower(trim(
-			$form_state['values']['import']['area_name_fieldname'])));
-	$parent_fieldname=preg_replace('/[^a-z0-9_]/','',strtolower(trim(
-			$form_state['values']['import']['parentarea_name_fieldname'])));
+	$fieldname=_ldiw_waste_map_check_shapefile_attr($table_name,
+				$form_state['values']['import']['area_name_fieldname']);
+	$parent_fieldname=_ldiw_waste_map_check_shapefile_attr($table_name,
+				$form_state['values']['import']['parentarea_name_fieldname']);
 
 	$hierarchy_level_node=node_load(
 						$form_state['values']['import']['hierarchy_level']);
 
-	$r=db_query("SELECT %s AS area,%s AS parentarea," .
-								$geo->AsText($geo) . " AS wkt FROM {%s}",
-						$fieldname ? $fieldname : "''",
-						$parent_fieldname ? $parent_fieldname : "''",
-						$table_name);
+	$r=db_query("SELECT " .
+				($fieldname ? $fieldname : "''") . " AS area," .
+				($parent_fieldname ? $parent_fieldname : "''") .
+														" AS parentarea," .
+				$geo->AsText($geo) . " AS wkt FROM {%s}",
+				$table_name);
 	$success_count=0;
 	$errors=array();
 	while ($row=db_fetch_object($r)) {
