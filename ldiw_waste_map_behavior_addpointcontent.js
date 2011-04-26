@@ -197,6 +197,9 @@ function ldiw_waste_map_behavior_addpointcontent_state(data,options)
 			$(this.form_popup.contentDiv).prepend(
 					'<b>' + this.form_title + '</b>'); //!!! Move style to CSS
 
+			$(this.form_popup.contentDiv).find('.column-side').hide();
+						// This hides redundant Save button in Fusion theme
+
 			Drupal.attachBehaviors(this.form_popup.contentDiv);
 
 			var state=this;
