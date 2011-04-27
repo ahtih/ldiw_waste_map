@@ -20,6 +20,10 @@ ldiw_waste_map_coords_form_control=OpenLayers.Class(OpenLayers.Control,{
 		return this.div;
 		},
 
+	after_addControl: function() {
+		$(this.div).hide();
+		},
+
 	ajax_done: function(response_json) {
 		$(this.div).stop(true);
 		$(this.div).show();
@@ -312,6 +316,7 @@ function ldiw_waste_map_behavior_addpointcontent_state(data,options)
 						ajax_url: this.options.upload_photo_url });
 
 	data.openlayers.addControl(coords_form_control);
+	coords_form_control.after_addControl();
 
 		// Create temporary features layer
 
