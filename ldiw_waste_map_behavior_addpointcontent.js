@@ -370,6 +370,10 @@ function ldiw_waste_map_behavior_addpointcontent_state(data,options)
    	panel.activate();
    	panel.redraw();
 
+		// Repeat title setting for IE8, as it somehow clears them in redraw()
+	for (var i=0;i < panel.controls.length;i++)
+		$(panel.controls[i].panel_div).text(panel.controls[i].title);
+
 		// Create control to highlight existing points on hover
 
 	this.hover_control=new OpenLayers.Control.SelectFeature(
