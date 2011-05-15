@@ -401,6 +401,17 @@ function ldiw_waste_map_behavior_addpointcontent_state(data,options)
 	this.temp_features_layer.events.register('featureadded',this,
 														this.draw_menu);
 
+		// Workaround for http://trac.osgeo.org/openlayers/ticket/2745
+
+	OpenLayers.Util.extend(panel,{
+			redraw: function () {
+				if (this.div.children.length > 0)
+					for (var l=this.div.children.length,i=l-1;i >= 0;i--)
+						this.div.removeChild(this.div.children[i]);
+				OpenLayers.Control.Panel.prototype.redraw.apply(this,
+																arguments);
+				}});
+
 	data.openlayers.addControl(panel);
 	if (OpenLayers.Util.getBrowserName() != 'firefox' ||
 						(navigator.userAgent.indexOf('Firefox/1') < 0 &&
@@ -412,12 +423,8 @@ function ldiw_waste_map_behavior_addpointcontent_state(data,options)
 															null : 'auto';
 		panel.div.style.zIndex=data.openlayers.Z_INDEX_BASE['Popup']-1;
 		}
-   	panel.activate();
-   	panel.redraw();
-
-		// Repeat title setting for IE8, as it somehow clears them in redraw()
-	for (var i=0;i < panel.controls.length;i++)
-		$(panel.controls[i].panel_div).text(panel.controls[i].title);
+	panel.activate();
+	panel.redraw();
 
 		// Create control to highlight existing points on hover
 
