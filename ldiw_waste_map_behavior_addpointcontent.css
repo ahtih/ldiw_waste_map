@@ -1,17 +1,18 @@
 /* $Id$ */
 
-.ldiw_waste_map_coords_form_control { 
+.ldiw_waste_map_coords_form_control, .ldiw_waste_map_addpoint_help { 
 	float: right;
 	right: 18em;
 	margin: 4px;
 	width: 30em;
 	padding: 5px;
 	border-style: solid;
-	border-color: #666666;
+	border-color: #222222;
 	text-align: center;
 	font-weight: bold;
 	border-width: 3px;
 	background-color: #c900a2;
+	color: #222222;
 	}
 
 .olControlPanel  {

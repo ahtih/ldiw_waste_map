@@ -130,8 +130,43 @@ function ldiw_waste_map_behavior_addpointcontent_state(data,options)
 			this.drawfeature_control.activate();
 			}
 
+	this.remove_addpoint_help=function()
+		{
+			if (this.helptext_control)
+				this.temp_features_layer.map.removeControl(
+													this.helptext_control);
+			}
+
+	this.check_display_addpoint_help=function()
+		{
+			this.remove_addpoint_help();
+
+			if (this.form_displayed)
+				return;
+
+			this.helptext_control=new OpenLayers.Control({
+						displayClass: 'ldiw_waste_map_addpoint_help'});
+			OpenLayers.Util.extend(this.helptext_control,{
+					draw: function () {
+						OpenLayers.Control.prototype.draw.apply(this,
+																arguments);
+						OpenLayers.Event.stopObservingElement(this.div);
+									// Prevent OpenLayers hijacking clicks
+						this.div.innerHTML=Drupal.t('To add a Waste Point, '+
+								'zoom in and click the exact location of ' +
+								'the waste on map. Click <em>Move map</em> '+
+								'if you want to move the map to correct ' +
+								'location beforehand.');
+						return this.div;
+						}
+					});
+			this.temp_features_layer.map.addControl(this.helptext_control);
+			}
+
 	this.close_form=function()
 		{
+			this.remove_addpoint_help();
+
 			if (this.form_popup) {
 				this.temp_features_layer.map.removePopup(this.form_popup);
 				this.form_popup=null;
@@ -231,6 +266,10 @@ function ldiw_waste_map_behavior_addpointcontent_state(data,options)
 
 	this.draw_menu=function(args)
 		{
+			this.form_displayed=true;
+
+			this.remove_addpoint_help();
+
 			var layer=args.object;
 			var coords=args.feature.geometry.getBounds().getCenterLonLat();
 
@@ -353,6 +392,8 @@ function ldiw_waste_map_behavior_addpointcontent_state(data,options)
 	for (var i=0;i < panel.controls.length;i++)
 		$(panel.controls[i].panel_div).text(panel.controls[i].title);
 
+	this.drawfeature_control.events.register('activate',this,
+										this.check_display_addpoint_help);
 	this.drawfeature_control.events.register('deactivate',this,
 														this.close_form);
 	this.temp_features_layer.events.register('sketchcomplete',this,
