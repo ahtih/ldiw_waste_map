@@ -218,6 +218,16 @@ function ldiw_waste_map_form_alter(&$form,$form_state,$form_id)
 		unset($form['book']['pick-book']);
 		unset($form['attachments']['wrapper']['new']['attach']);
 		unset($form['buttons']['preview']);
+
+		if (module_exists('better_formats')) {
+
+				// Ugly hack workaround for Better Formats' behaviour where
+				//   it sets $form['body_field']['format'] anew, without
+				//   caring for any of its previous contents
+
+			$form['body_field2']=$form['body_field'];
+			unset($form['body_field']);
+			}
 		}
 	}
 
