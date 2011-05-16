@@ -20,11 +20,13 @@ ldiw_waste_map_coords_form_control=OpenLayers.Class(OpenLayers.Control,{
 		return this.div;
 		},
 
-	after_addControl: function() {
+	hide_div: function() {
 		$(this.div).hide();
 		},
 
 	ajax_done: function(response_json) {
+		this.addpointcontent_state.remove_addpoint_help();
+
 		$(this.div).stop(true);
 		$(this.div).show();
 
@@ -139,6 +141,7 @@ function ldiw_waste_map_behavior_addpointcontent_state(data,options)
 
 	this.check_display_addpoint_help=function()
 		{
+			this.coords_form_control.hide_div();
 			this.remove_addpoint_help();
 
 			if (this.form_displayed)
@@ -350,12 +353,13 @@ function ldiw_waste_map_behavior_addpointcontent_state(data,options)
 
 		// Create hidden control for upload photo coordinates form
 
-	var coords_form_control=new ldiw_waste_map_coords_form_control({
+	this.coords_form_control=new ldiw_waste_map_coords_form_control({
 						displayClass: 'ldiw_waste_map_coords_form_control',
-						ajax_url: this.options.upload_photo_url });
+						ajax_url: this.options.upload_photo_url,
+						addpointcontent_state: this });
 
-	data.openlayers.addControl(coords_form_control);
-	coords_form_control.after_addControl();
+	data.openlayers.addControl(this.coords_form_control);
+	this.coords_form_control.hide_div();
 
 		// Create temporary features layer
 
@@ -384,9 +388,9 @@ function ldiw_waste_map_behavior_addpointcontent_state(data,options)
 								title: Drupal.t('Move map')}),
 						this.drawfeature_control,
 						new ldiw_waste_map_upload_photo_control({
-								title: Drupal.t('Upload geotagged photo'),
-								displayClass: 'UploadButton',
-								coords_form_control: coords_form_control})]);
+							title: Drupal.t('Upload geotagged photo'),
+							displayClass: 'UploadButton',
+							coords_form_control: this.coords_form_control})]);
 	panel.defaultControl=panel.controls[0];
 
 	for (var i=0;i < panel.controls.length;i++)
