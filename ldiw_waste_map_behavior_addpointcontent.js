@@ -79,7 +79,7 @@ ldiw_waste_map_upload_photo_control=OpenLayers.Class(OpenLayers.Control,{
 
 	stop_openlayers_events: function(evt) {
 		OpenLayers.Event.stop(evt,true);
-		return false;
+		return true;
 		},
 
 	draw: function() {
