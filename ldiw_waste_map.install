@@ -1,5 +1,43 @@
 <?php
 
+function ldiw_waste_map_schema()
+{
+	return array(
+		'ldiw_waste_map_smartphone_install_visitors' => array(
+			'description' => "User activity log for smartphone app QR-Code",
+			'fields' => array(
+				'id' => array(
+					'description' => 'Primary key; required by Views, ' .
+											'unnecessary for anything else',
+					'type' => 'serial',
+					'not null' => TRUE,
+					),
+				'time' => array(
+					'description' => "Time when the event happened",
+					'type' => 'datetime',
+					'not null' => TRUE,
+					),
+				'country_code' => array(
+					'description' => "User country code, from GeoIP",
+					'type' => 'varchar',
+					'length' => 2,
+					),
+				'user_agent' => array(
+					'description' => "HTTP User-Agent string",
+					'type' => 'varchar',
+					'length' => 200,
+					),
+				'smartphone_type' => array(
+					'description' => "Detected smartphone type",
+					'type' => 'varchar',
+					'length' => 30,
+					),
+				),
+			'primary key' => array('id'),
+			),
+		);
+	}
+
 function _ldiw_waste_map_create_geo_index($geo)
 {
 	global $db_type;
@@ -20,6 +58,8 @@ function _ldiw_waste_map_create_geo_index($geo)
 
 function ldiw_waste_map_install()
 {
+	drupal_install_schema('ldiw_waste_map');
+
 	// Update module weight to make our hook_form_alter() run after CCK
 	db_query("UPDATE {system} SET weight=1 WHERE name='ldiw_waste_map'");
 
@@ -31,6 +71,20 @@ function ldiw_waste_map_install()
 						geo_load(array('table_name' => $db_info['table'])));
 
 	_ldiw_waste_map_create_geo_index(geo_load(array('name' => 'field_geo')));
+	}
+
+function ldiw_waste_map_uninstall()
+{
+	drupal_uninstall_schema('ldiw_waste_map');
+	}
+
+function ldiw_waste_map_update_6100()
+{
+	$retval=array();
+	$schema=ldiw_waste_map_schema();
+	db_create_table($retval,'ldiw_waste_map_smartphone_install_visitors',
+					$schema['ldiw_waste_map_smartphone_install_visitors']);
+	return $retval;
 	}
 
 function ldiw_waste_map_requirements($phase)

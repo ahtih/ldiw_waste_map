@@ -287,6 +287,11 @@ function ldiw_waste_map_menu()
 			'access callback' => TRUE,
 			'type' => MENU_CALLBACK,
 			),
+		'ldiw_waste_map/smartphone_app_install' => array(
+			'page callback' => 'ldiw_waste_map_smartphone_app_install',
+			'access callback' => TRUE,
+			'type' => MENU_CALLBACK,
+			),
 
 		// Admin pages
 		'admin/settings/ldiw_waste_map' => array(
@@ -1116,4 +1121,50 @@ function ldiw_waste_map_nodeapi(&$node,$op)
 			_ldiw_waste_map_set_geo_areas($coords,$node);
 			}
 		}
+	}
+
+function ldiw_waste_map_smartphone_app_install()
+{
+	$user_agent=isset($_SERVER['HTTP_USER_AGENT']) ?
+										$_SERVER['HTTP_USER_AGENT'] : '';
+	$redirect_url=FALSE;
+	$smartphone_type=FALSE;
+	if (stristr($user_agent,'Android') !== FALSE) {
+		$smartphone_type='android';
+		$redirect_url='market://details?id=com.letsdoitworld.wastemapper';
+		}
+
+	$log=array('time' => gmdate('Y-m-d H:i:s e'));
+	if ($user_agent != '') {
+		$log['user_agent']=$user_agent;
+		}
+
+	$geoip_result=geoip_city();
+	if (isset($geoip_result->country_code)) {
+		$log['country_code']=$geoip_result->country_code;
+		}
+
+	if ($smartphone_type !== FALSE) {
+		$log['smartphone_type']=$smartphone_type;
+		}
+
+	drupal_write_record('ldiw_waste_map_smartphone_install_visitors',$log);
+
+	if ($redirect_url !== FALSE) {
+		header('Location: ' . $redirect_url);
+		exit();
+		}
+
+	drupal_set_title('Not ready for your phone yet');
+
+	return <<<EOT
+<h1>Waste mapping application is not ready for your phone yet.</h1>
+Our smartphone application is currently available only for
+<a href="http://www.andro-phones.com/">smartphones based on the 
+Android operating system</a>. We'll have an iPhone version available
+in June 2011. Stay tuned for future releases!
+<p><br>
+If you are a developer willing to help by coding additional platforms,
+let us know!
+EOT;
 	}
