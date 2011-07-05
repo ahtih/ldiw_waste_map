@@ -1133,6 +1133,10 @@ function ldiw_waste_map_smartphone_app_install()
 		$smartphone_type='android';
 		$redirect_url='market://details?id=com.letsdoitworld.wastemapper';
 		}
+	elseif (stristr($user_agent,'(iPhone;') !== FALSE) {
+		$smartphone_type='iphone';
+		$redirect_url='http://itunes.apple.com/us/app/lets-do-it-world/id443259456?mt=8&ls=1';
+		}
 
 	$log=array('time' => gmdate('Y-m-d H:i:s e'));
 	if ($user_agent != '') {
@@ -1161,8 +1165,7 @@ function ldiw_waste_map_smartphone_app_install()
 <h1>Waste mapping application is not ready for your phone yet.</h1>
 Our smartphone application is currently available only for
 <a href="http://www.andro-phones.com/">smartphones based on the 
-Android operating system</a>. We'll have an iPhone version available
-in June 2011. Stay tuned for future releases!
+Android operating system</a>, and iPhone. Stay tuned for future releases!
 <p><br>
 If you are a developer willing to help by coding additional platforms,
 let us know!
