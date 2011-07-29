@@ -1123,6 +1123,12 @@ function ldiw_waste_map_nodeapi(&$node,$op)
 		}
 	}
 
+/***************************************************************************/
+/*****************                                         *****************/
+/***************** ldiw_waste_map_smartphone_app_install() *****************/
+/*****************                                         *****************/
+/***************************************************************************/
+
 function ldiw_waste_map_smartphone_app_install()
 {
 	$user_agent=isset($_SERVER['HTTP_USER_AGENT']) ?
@@ -1170,4 +1176,42 @@ Android operating system</a>, and iPhone. Stay tuned for future releases!
 If you are a developer willing to help by coding additional platforms,
 let us know!
 EOT;
+	}
+
+/***************************************************************************/
+/*********************                                 *********************/
+/********************* ldiw_waste_map_country_status() *********************/
+/*********************                                 *********************/
+/***************************************************************************/
+
+function ldiw_waste_map_country_status($country_code)
+{
+	$status_db_info=content_database_info(
+							content_fields('field_co_status_quo','contact'));
+	$country_db_info=content_database_info(
+							content_fields('field_country_code','contact'));
+	$r=db_query("SELECT s.field_co_status_quo_value AS status " .
+					"FROM {node} AS n " .
+					"INNER JOIN {" . $status_db_info['table'] . "} AS s " .
+							"ON (s.nid=n.nid) " .
+					"INNER JOIN {" . $country_db_info['table'] . "} AS c " .
+							"ON (c.nid=n.nid) " .
+					"WHERE c.field_country_code_value='%s'",
+				strtoupper($country_code));
+
+	$status_priorities=array('notcontacted','noclean','contacted',
+													'nodecision','clean');
+	$best_idx=0;
+	while ($row=db_fetch_object($r)) {
+		$idx=array_search($row->status,$status_priorities);
+		if ($idx !== FALSE && $idx > $best_idx) {
+			$best_idx=$idx;
+			}
+		}
+	$status=$status_priorities[$best_idx];
+
+	$status_texts=content_allowed_values(content_fields(
+										'field_co_status_quo','contact'));
+	return array($status,(empty($status_texts[$status]) || !$best_idx) ?
+											'' : $status_texts[$status]);
 	}
