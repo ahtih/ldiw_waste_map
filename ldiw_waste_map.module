@@ -1193,9 +1193,9 @@ function ldiw_waste_map_country_status($country_code)
 	$r=db_query("SELECT s.field_co_status_quo_value AS status " .
 					"FROM {node} AS n " .
 					"INNER JOIN {" . $status_db_info['table'] . "} AS s " .
-							"ON (s.nid=n.nid) " .
+							"ON (s.nid=n.nid AND s.vid=n.vid) " .
 					"INNER JOIN {" . $country_db_info['table'] . "} AS c " .
-							"ON (c.nid=n.nid) " .
+							"ON (c.nid=n.nid AND c.vid=n.vid) " .
 					"WHERE c.field_country_code_value='%s'",
 				strtoupper($country_code));
 
@@ -1214,4 +1214,27 @@ function ldiw_waste_map_country_status($country_code)
 										'field_co_status_quo','contact'));
 	return array($status,(empty($status_texts[$status]) || !$best_idx) ?
 											'' : $status_texts[$status]);
+	}
+
+/***************************************************************************/
+/****************                                           ****************/
+/**************** ldiw_waste_map_country_cleanup_projects() ****************/
+/****************                                           ****************/
+/***************************************************************************/
+
+function ldiw_waste_map_country_cleanup_projects($country_code)
+{
+	$cleanup_db_info=content_database_info(
+					content_fields('field_country_code','cleanup_project'));
+	$r=db_query("SELECT n.nid " .
+					"FROM {node} AS n " .
+					"INNER JOIN {" . $cleanup_db_info['table'] . "} AS c " .
+							"ON (c.nid=n.nid AND c.vid=n.vid) " .
+					"WHERE c.field_country_code_value='%s'",
+				strtoupper($country_code));
+	$nids=array();
+	while ($row=db_fetch_object($r)) {
+		$nids[]=$row->nid;
+		}
+	return $nids;
 	}
