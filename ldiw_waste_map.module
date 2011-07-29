@@ -331,6 +331,10 @@ function ldiw_waste_map_theme()
 	return array('ldiw_waste_map_admin_settings' => array(
 						'arguments' => array('form' => NULL),
 						'file' => 'ldiw_waste_map.admin.inc',
+						),
+				'ldiw_waste_map_formatter_as_link' => array(
+						'arguments' => array('element' => NULL),
+						'file' => 'ldiw_waste_map.theme.inc',
 						));
 	}
 
@@ -1237,4 +1241,16 @@ function ldiw_waste_map_country_cleanup_projects($country_code)
 		$nids[]=$row->nid;
 		}
 	return $nids;
+	}
+
+/***************************************************************************/
+/***********************                             ***********************/
+/*********************** hook_field_formatter_info() ***********************/
+/***********************                             ***********************/
+/***************************************************************************/
+
+function ldiw_waste_map_field_formatter_info()
+{
+	return array('as_link' => array('label' => t('As HTML link'),
+									'field types' => array('text')));
 	}
