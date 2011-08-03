@@ -1221,29 +1221,6 @@ function ldiw_waste_map_country_status($country_code)
 	}
 
 /***************************************************************************/
-/****************                                           ****************/
-/**************** ldiw_waste_map_country_cleanup_projects() ****************/
-/****************                                           ****************/
-/***************************************************************************/
-
-function ldiw_waste_map_country_cleanup_projects($country_code)
-{
-	$cleanup_db_info=content_database_info(
-					content_fields('field_country_code','cleanup_project'));
-	$r=db_query("SELECT n.nid " .
-					"FROM {node} AS n " .
-					"INNER JOIN {" . $cleanup_db_info['table'] . "} AS c " .
-							"ON (c.nid=n.nid AND c.vid=n.vid) " .
-					"WHERE c.field_country_code_value='%s'",
-				strtoupper($country_code));
-	$nids=array();
-	while ($row=db_fetch_object($r)) {
-		$nids[]=$row->nid;
-		}
-	return $nids;
-	}
-
-/***************************************************************************/
 /***********************                             ***********************/
 /*********************** hook_field_formatter_info() ***********************/
 /***********************                             ***********************/
