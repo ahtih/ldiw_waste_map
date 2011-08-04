@@ -6,5 +6,20 @@ function theme_ldiw_waste_map_formatter_as_link($element)
 	if (empty($element['#item']['value'])) {
 		return '';
 		}
-	return l($element['#item']['value'],$element['#item']['value']);
+	$url=$element['#item']['value'];
+	return l($url,$url);
+	}
+
+function theme_ldiw_waste_map_formatter_as_twitter_link($element)
+{
+	if (empty($element['#item']['value'])) {
+		return '';
+		}
+	$url=$element['#item']['value'];
+
+	if (strpos($url,'/') == FALSE) {
+		$url='http://twitter.com/' . $url;
+		}
+
+	return l($url,$url);
 	}
