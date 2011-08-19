@@ -1208,7 +1208,7 @@ function ldiw_waste_map_country_status($country_code)
 				strtoupper($country_code));
 
 	$status_priorities=array('notcontacted','noclean','contacted',
-													'nodecision','clean');
+										'nodecision','clean','willclean');
 	$best_idx=0;
 	while ($row=db_fetch_object($r)) {
 		$idx=array_search($row->status,$status_priorities);
@@ -1220,7 +1220,7 @@ function ldiw_waste_map_country_status($country_code)
 
 	$status_texts=content_allowed_values(content_fields(
 										'field_co_status_quo','contact'));
-	return array($status,(empty($status_texts[$status]) || !$best_idx) ?
+	return array($status,(empty($status_texts[$status]) || $best_idx <= 1) ?
 											'' : $status_texts[$status]);
 	}
 
