@@ -1,0 +1,42 @@
+# LANGUAGE translation of LDIW Waste Map
+# Copyright (c) YEAR NAME <EMAIL@ADDRESS>
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: ldiw-waste-map 1.0\n"
+"POT-Creation-Date: 2011-10-28 14:53+0300\n"
+"PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
+"Last-Translator: NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+
+#: field:waste_point-field_composition_pmp:widget_label
+msgid "Plastics, metals, packaging"
+msgstr ""
+
+#: field:waste_point-field_volume:widget_label
+msgid "Volume"
+msgstr ""
+
+#: field:waste_point-field_nr_of_tires:widget_label
+msgid "Number of tires"
+msgstr ""
+
+#: field:waste_point-field_composition_paper:widget_label
+msgid "Paper or cardboard"
+msgstr ""
+
+#: field:waste_point-field_composition_glass:widget_label
+msgid "Glass (incl glass bottles)"
+msgstr ""
+
+#: field:waste_point-field_composition_large:widget_label
+msgid "Large objects like furniture"
+msgstr ""
+
+#: field:waste_point-field_composition_other:widget_label
+msgid "Other"
+msgstr ""

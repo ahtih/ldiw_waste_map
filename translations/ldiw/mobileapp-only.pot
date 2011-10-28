@@ -1,0 +1,38 @@
+# LANGUAGE translation of LDIW Waste Map
+# Copyright (c) YEAR NAME <EMAIL@ADDRESS>
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: ldiw-waste-map 1.0\n"
+"POT-Creation-Date: 2011-10-28 14:53+0300\n"
+"PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
+"Last-Translator: NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+
+#: composition_fields:field_composition_other:text_solo
+msgid "other (misc waste)"
+msgstr ""
+
+#: composition_fields:field_composition_paper:text
+msgid "paper"
+msgstr ""
+
+#: composition_fields:field_composition_glass:text
+msgid "glass"
+msgstr ""
+
+#: composition_fields:field_composition_large:text
+msgid "large objects"
+msgstr ""
+
+#: composition_fields:field_composition_other:text
+msgid "other"
+msgstr ""
+
+#: composition_fields:field_composition_pmp:text
+msgid "plastic/metal/packaging"
+msgstr ""
