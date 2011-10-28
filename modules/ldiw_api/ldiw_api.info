@@ -5,3 +5,4 @@ core = 6.x
 php = 5.2
 dependencies[] = "services"
 dependencies[] = "ldiw_waste_map"
+dependencies[] = "i18ncck"

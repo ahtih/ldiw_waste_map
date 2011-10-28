@@ -1,6 +1,16 @@
 <?php
 // $Id
 
+function _ldiw_api_set_language($language_code)
+{
+	global $language;
+	$languages=language_list('language');
+	if (!empty($languages[$language_code]) &&
+						!empty($languages[$language_code]->enabled)) {
+		$language=$languages[$language_code];
+		}
+	}
+
 function _ldiw_api_get_server_specific_fields()
 {
 	$data=array();
@@ -57,11 +67,11 @@ function _ldiw_api_get_server_specific_fields()
 				}
 
 			if (!empty($field['widget']['label'])) {
-				$entry['label']=$field['widget']['label'];	//!!! run through t()?
+				$entry['label']=$field['widget']['label'];
 				}
 
 			if (!empty($field['widget']['description'])) {
-				$entry['edit_instructions']=$field['widget']['description'];	//!!! run through t()?
+				$entry['edit_instructions']=$field['widget']['description'];
 				}
 
 			$allowed_values=content_allowed_values($field);
@@ -255,7 +265,15 @@ function _ldiw_api_waste_point_extra_fields()
 {
 	$retval=array();
 
-		//!!! Add language_code parameter
+		/**********************************************/
+		/*****                                    *****/
+		/***** Set language for this HTTP request *****/
+		/*****                                    *****/
+		/**********************************************/
+
+	if (isset($_REQUEST['language_code'])) {
+		_ldiw_api_set_language($_REQUEST['language_code']);
+		}
 
 	$composition_fields=variable_get('ldiw_waste_map_composition_fields',
 																array());
@@ -454,6 +472,8 @@ function _ldiw_api_update()
 
 function _ldiw_api_retrieve($id,$max_width,$language_code)
 {
+	_ldiw_api_set_language($language_code);
+
 	$attrs=array('id' => $id);
 	$photos=array();
 
@@ -486,5 +506,5 @@ function _ldiw_api_retrieve($id,$max_width,$language_code)
 		}
 
 	require_once(dirname(__FILE__) . '/waste_point_html.inc');
-	return _waste_point_html($attrs,$photos,$max_width,$language_code);
+	return _waste_point_html($attrs,$photos,$max_width);
 	}

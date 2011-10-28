@@ -154,6 +154,7 @@ function ldiw_waste_map_admin_settings_submit($form,&$form_state)
 		}
 
 	variable_set('ldiw_waste_map_composition_fields',$composition);
+	ldiw_waste_map_locale_refresh();
 
 	cache_clear_all('services:','cache',TRUE);
 

@@ -34,8 +34,7 @@ function _waste_point_html_section($class_name,$label,$values)
 
 //!!! Move this to theme system
 
-function _waste_point_html($attrs,$photos,$max_width_pixels,
-													$language_code=NULL)
+function _waste_point_html($attrs,$photos,$max_width_pixels)
 {
 		/****************************/
 		/*****                  *****/
@@ -56,24 +55,25 @@ function _waste_point_html($attrs,$photos,$max_width_pixels,
 
 	foreach ($composition_array as $key => $entry) {
 		list($attrname,$info,$value)=$entry;
-		$text=$info['text'];
 		if (count($composition_array) == 1 && !empty($info['text_solo'])) {
-			$text=$info['text_solo'];
+			$text=i18nstrings('ldiw_waste_map:composition_fields:field_' .
+							$attrname . ':text_solo',$info['text_solo']);
 			}
 		else {
-			$text=max(1,round($value*100 / $composition_sum)) . "% ${text}";
+			$text=max(1,round($value*100 / $composition_sum)) . "% " .
+					i18nstrings('ldiw_waste_map:composition_fields:field_' .
+										$attrname . ':text',$info['text']);
 			}
 		$composition_array[$key]=array($attrname,$text);
 		}
 
 	if (!empty($attrs['nr_of_tires'])) {
 		$composition_array[]=array('tires',t('@nr_of_tires tires',
-							array('@nr_of_tires' => $attrs['nr_of_tires']),
-							$language_code));
+							array('@nr_of_tires' => $attrs['nr_of_tires'])));
 		}
 
-	$composition=_waste_point_html_section('composition',
-				t('Composition',array(),$language_code),$composition_array);
+	$composition=_waste_point_html_section('composition',t('Composition'),
+														$composition_array);
 
 		/*********************************/
 		/*****                       *****/
@@ -97,14 +97,11 @@ function _waste_point_html($attrs,$photos,$max_width_pixels,
 		/***********************/
 
 	if (!empty($attrs['nr_of_nodes']) && $attrs['nr_of_nodes'] > 1) {
-		return _waste_point_html_section('cluster_nodes',
-						t('Cluster',array(),$language_code),
+		return _waste_point_html_section('cluster_nodes',t('Cluster'),
 						array(t('@nr_of_points waste points',array(
-							'@nr_of_points' => $attrs['nr_of_nodes']),
-							$language_code))) .
+							'@nr_of_points' => $attrs['nr_of_nodes'])))) .
 				_waste_point_html_separator() .
-				_waste_point_html_section('volume',
-							t('Total volume',array(),$language_code),
+				_waste_point_html_section('volume',t('Total volume'),
 							array("${volume_formatted}m&sup3;")) .
 				_waste_point_html_separator() .
 				$composition;
@@ -151,20 +148,17 @@ function _waste_point_html($attrs,$photos,$max_width_pixels,
 
 	if ($volume_formatted) {
 		$output.=_waste_point_html_separator($output) .
-				_waste_point_html_section('volume',
-									t('Volume',array(),$language_code),
+				_waste_point_html_section('volume',t('Volume'),
 									array("${volume_formatted}m&sup3;"));
 		}
 
-	$output.=_waste_point_html_section('id',t('ID',array(),$language_code),
-											array($attrs['id']));
+	$output.=_waste_point_html_section('id',t('ID'),array($attrs['id']));
 
 	$output.=_waste_point_html_separator($output,$composition) . $composition;
 
 	if (!empty($attrs['description'])) {
 		$output.=_waste_point_html_separator($output) .
-				_waste_point_html_section('description',
-						t('Description',array(),$language_code),
+				_waste_point_html_section('description',t('Description'),
 						array(mb_convert_encoding($attrs['description'],
 												'HTML-ENTITIES','UTF-8')));
 		}
@@ -177,8 +171,8 @@ function _waste_point_html($attrs,$photos,$max_width_pixels,
 												'HTML-ENTITIES','UTF-8');
 			}
 		$output.=_waste_point_html_separator($output,$areas_array) .
-				_waste_point_html_section('geographic_areas',
-						t('Location',array(),$language_code),$areas_array);
+				_waste_point_html_section('geographic_areas',t('Location'),
+															$areas_array);
 		}
 
 	return $output;

@@ -17,6 +17,7 @@ projects[] = formfilter
 projects[] = colorpicker
 projects[] = geoip
 projects[] = autoload
+projects[] = i18nstrings
 
 projects[openlayers][version] = 2.x-dev
 

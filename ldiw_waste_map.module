@@ -1238,3 +1238,35 @@ function ldiw_waste_map_field_formatter_info()
 									'field types' => array('text')),
 				);
 	}
+
+/***************************************************************************/
+/******************************               ******************************/
+/****************************** hook_locale() ******************************/
+/******************************               ******************************/
+/***************************************************************************/
+
+function ldiw_waste_map_locale($op='groups')
+{
+	switch ($op) {
+		case 'groups': return array('ldiw_waste_map' => t('LDIW Waste Map'));
+
+		case 'info': return array('ldiw_waste_map' => array(
+				'refresh callback' => 'ldiw_waste_map_locale_refresh',
+				'format' => FALSE));
+		}
+	}
+
+function ldiw_waste_map_locale_refresh()
+{
+	foreach (variable_get('ldiw_waste_map_composition_fields',array())
+												as $fieldname => $info) {
+		foreach (array('text','text_solo') as $key) {
+			if (!empty($info[$key])) {
+				i18nstrings_update('ldiw_waste_map:composition_fields:' .
+										$fieldname . ':' . $key,$info[$key]);
+				}
+			}
+		}
+
+	return TRUE;
+	}
