@@ -430,6 +430,12 @@ function ldiw_waste_map_behavior_addpointcontent_state(data,options)
 	panel.activate();
 	panel.redraw();
 
+		// Make sure that popupSelect is before panel in listeners[]
+		//   list, otherwise popups do not work after panning map
+
+	Drupal.openlayers.popup.popupSelect.deactivate();
+	Drupal.openlayers.popup.popupSelect.activate();
+
 		// Create control to highlight existing points on hover
 
 	this.hover_control=new OpenLayers.Control.SelectFeature(
@@ -460,6 +466,8 @@ function ldiw_waste_map_behavior_addpointcontent_state(data,options)
 		// Prevent hover_control hijacking clicks
 
 	this.hover_control.handlers.feature.stopClick=false;
+	this.hover_control.handlers.feature.stopDown=false;
+	this.hover_control.handlers.feature.stopUp=false;
 
 	data.openlayers.addControl(this.hover_control);
 	this.hover_control.activate();
