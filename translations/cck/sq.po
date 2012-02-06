@@ -1,0 +1,123 @@
+# Albanian translation of LDIW Waste Map
+# Copyright (c) 2012 Altin Ukshini <altin.ukshini@gmail.com>
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: ldiw-waste-map 1.0\n"
+"POT-Creation-Date: 2011-10-28 14:53+0300\n"
+"PO-Revision-Date: 2012-02-03 17:21+0200\n"
+"Last-Translator: Altin Ukshini <altin.ukshini@gmail.com>\n"
+"Language-Team: Albanian\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: field:waste_point-field_composition_pmp:widget_label
+msgid "Plastics, metals, packaging"
+msgstr "Plastika, metale, paketa"
+
+#: field:geo_area-field_geo:widget_label
+msgid "Geometry"
+msgstr "Gjeometria"
+
+#: field:geo_area-field_geo:widget_description
+msgid "The borders of this area in WKT format (usually a MULTIPOLYGON). This is usually very long text, often 100 000 characters or more; so take care when copy/pasting it."
+msgstr "Kufinjtë e kësaj zone në formatin WKT (zakonisht një MULTIPOLIGON). Ky zakonisht është një tekst shumë i gjatë, shpesh me 100 000 ose më shumë karaktere; pra kujdes kur ta kopjoni/bartni atë."
+
+#: field:geo_area-field_hierarchy_level:widget_label
+msgid "Hierarchy level"
+msgstr "Niveli hierarkik"
+
+#: field:geo_area-field_hierarchy_level:widget_description
+msgid "The <em>Geographic area hierarchy level</em> this area belongs to; e.g. is it a country, or state, or municipality, or something else."
+msgstr "<em>Niveli hierarkik i zonës gjeografike</em> së cilës i takon kjo zonë; p.sh. a është shtet, komunë, apo diçka tjetër."
+
+#: field:geo_area-field_parent:widget_label
+msgid "Parent area name"
+msgstr "Emri i zonës amë"
+
+#: field:geo_area-field_parent:widget_description
+msgid "If this geographic area is not at highest defined hierarchy level, then usually it is topologically part of a larger area one level up in hierarchy. If so, fill in the name of this larger area."
+msgstr "Nëse kjo zonë gjeografike nuk është në nivelin më të lartë hierarkik të definuar, zakonisht atëherë topologjikisht është pjesë e një zone më të madhe në një nivel më lartë në hierarki. Nëse është ashtu, shkruani emrin e kësaj zone më të madhe."
+
+#: field:geo_hierarchy_level-field_parent_level:widget_label
+msgid "Parent hierarchy level"
+msgstr "Niveli amë i hierarkisë"
+
+#: field:geo_hierarchy_level-field_parent_level:widget_description
+msgid "Select a hierarchy level which is one level up from the level you are creating/editing. For example, if you are editing a <em>County</em> hierarchy level, then you might want to select its parent to be the <em>Country</em> level. Select <em>None</em> if this is the highest hierarchy level you have."
+msgstr "Zgjidhni një nivel hierarkik që është në një nivel më lartë nga niveli që po krijoni/ndryshoni. Për shembull, nëse jeni duke e ndryshuar një nivel hierarkik<em>Qark</em>, atëherë do të duhej ta zgjedhni <em>Shtet</em> si nivelin hierarkik amë. Zgjedhni <em>Asgjë</em> nëse ky është niveli hierarkik më i lartë që keni."
+
+#: field:geo_hierarchy_level-field_display_parent:widget_label
+msgid "Display parent name"
+msgstr "Paraqitni emrin amë"
+
+#: field:geo_hierarchy_level-field_display_parent:widget_description
+msgid "Check this if the <em>Name</em> of areas in this hiearchy level is not enough to uniquely identify them without parent area name being present. For example, in Germany not everybody might know where <em>Main-Spessart</em> is, so displaying the parent name (<em>Main-Spessart, Bavaria</em>) is good; similarly, in USA there are several <em>Fayette</em> counties, so <em>Fayette county, Texas</em> is appropriate to display. This is achieved by checking this checkbox for <em>County</em> hierarchy level."
+msgstr "Përzgjedh këtë nëse <em>Emri</em> i zonave në këtë nivel hierarkik nuk është i mjaftueshëm për ti identifikuar ato në mënyrë unike pa qenë prezent edhe emri i zonës amë. Për shembull, në Gjermani jo çdokush e di ku ndodhet <em>Main-Spessart</em>, kështu që paraqitja e emrit të zonës amë (<em>Main-Spessart, Bavaria</em>) është mirë; ngjashëm, në SHBA ka disa qarqe <em>Fayette</em>, pra <em>qarku Fayette, Texas</em> është adekuate për tu paraqitur. Kjo mund të arrihet duke e përzgjedhur këtë kuti për nivelin hierarkik <em>Qark</em>."
+
+#: field:field_display_parent:option_0
+msgid "Do not display parent name"
+msgstr "Mos e paraqitni emrin amë"
+
+#: field:field_display_parent:option_1
+msgid "Display parent name"
+msgstr "Paraqitni emrin amë"
+
+#: field:geo_hierarchy_level-field_waste_point_display_label:widget_label
+msgid "\"Waste point\" display label"
+msgstr "Etiketë \"Pikë e mbeturinave\" "
+
+#: field:geo_hierarchy_level-field_waste_point_display_label:widget_description
+msgid "This controls how information about geographic areas is displayed for individual Waste points in Waste Map popups. If you write a label here for a hierarchy level, then popups will include this label and the area of this level where the Waste point belongs to. For example, having label \"Administrative division\" for United States <em>County</em> level makes <em>Administrative division: Fayette County, Texas</em> to be displayed in popups. More than one hierarchy level may have this set; this makes sense for example if one is administrative division, and another a state forestry division. Then popups show where Waste point belongs to according to both hierarchies."
+msgstr "Kjo kontrollon se si shfaqen informatat për zonat gjeografike të pikave individuale të mbeturinave në dirtaret informative ne Hartën e Mbeturinave. Nëse shkruani këtu një etiketë për ndonjë nivel hierarkik, atëhere dritaret informative do ta përfshijnë këtë etiketë dhe zonën e atij niveli të cilit i takon pika e Mbeturinave. Për shembull, duke e pasur\"Divizion administrativ\" nivelin <em>Qark</em> për Shtetet e Bashkuara e bën që të paraqitet në dritaret informative <em>Divizioni administrativ: Qarku Fayette, Texas</em>. Më shumë se një nivel hierarkik mund ta ketë këtë; kjo ka kuptim kur për shembull njëri është divizion administrativ, dhe një tjetër divizion i pylltarisë. Atëhere dirtaret informative do të paraqesin se kujt i takon pika e Mbeturinave sipas të dyja hierarkive."
+
+#: field:waste_point-field_coords:widget_label
+msgid "Coordinates"
+msgstr "Koordinatat"
+
+#: field:waste_point-field_volume:widget_label
+msgid "Volume"
+msgstr "Vëllimi"
+
+#: field:waste_point-field_nr_of_tires:widget_label
+msgid "Number of tires"
+msgstr "Numri i gomave"
+
+#: field:waste_point-field_composition_paper:widget_label
+msgid "Paper or cardboard"
+msgstr "Letër ose karton"
+
+#: field:waste_point-field_composition_glass:widget_label
+msgid "Glass (incl glass bottles)"
+msgstr "Qelq (përfshirë edhe shishet e qelqit)"
+
+#: field:waste_point-field_composition_large:widget_label
+msgid "Large objects like furniture"
+msgstr "Objekte të mëdha si mobilje"
+
+#: field:waste_point-field_composition_other:widget_label
+msgid "Other"
+msgstr "Tjera"
+
+#: field:waste_point-field_photo:widget_label
+msgid "Photo"
+msgstr "Fotografi"
+
+#: field:waste_point-field_photos_id_width_height:widget_label
+msgid "Photos ID:Width:Height"
+msgstr "Fotografitë ID:Width:Height"
+
+#: field:waste_point-field_external_photo:widget_label
+msgid "External photo"
+msgstr "Fotografi e jashtme"
+
+#: field:waste_point-field_geo_areas:widget_label
+msgid "Geographic areas"
+msgstr "Zona gjeografike"
+
+#: field:waste_point-field_geo_areas_json:widget_label
+msgid "Geographic area names"
+msgstr "Emrat e zonave gjeografike"
+

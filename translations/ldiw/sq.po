@@ -1,0 +1,39 @@
+# Albanian translation of LDIW Waste Map
+# Copyright (c) 2012 Altin Ukshini <altin.ukshini@gmail.com>
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: ldiw-waste-map 1.0\n"
+"POT-Creation-Date: 2011-10-28 14:53+0300\n"
+"PO-Revision-Date: 2012-02-03 16:06+0200\n"
+"Last-Translator: Altin Ukshini <altin.ukshini@gmail.com>\n"
+"Language-Team: Albanian\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: composition_fields:field_composition_other:text_solo
+msgid "other (misc waste)"
+msgstr "tjera (mbeturina të ndryshme)"
+
+#: composition_fields:field_composition_paper:text
+msgid "paper"
+msgstr "letër"
+
+#: composition_fields:field_composition_glass:text
+msgid "glass"
+msgstr "qelq"
+
+#: composition_fields:field_composition_large:text
+msgid "large objects"
+msgstr "objekte të mëdha"
+
+#: composition_fields:field_composition_other:text
+msgid "other"
+msgstr "tjera"
+
+#: composition_fields:field_composition_pmp:text
+msgid "plastic/metal/packaging"
+msgstr "plastikë/metal/paketë"
+
