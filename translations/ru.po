@@ -1,0 +1,115 @@
+# Russian translation of LDIW Waste Map
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: ldiw-waste-map 1.0\n"
+"POT-Creation-Date: 2011-10-28 14:53+0300\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: ldiw_api/ldiw_api.inc:44 ldiw_api/waste_point_html.inc:75
+msgid "Composition"
+msgstr "Количество"
+
+#: ldiw_api/ldiw_api.inc:114
+msgid "It all fits into my pocket"
+msgstr "Все поместится ко мне в карман"
+
+#: ldiw_api/ldiw_api.inc:116
+msgid "Fits in a plastic shopping bag"
+msgstr "Помещается в пакет из магазина"
+
+#: ldiw_api/ldiw_api.inc:118
+msgid "Fits into luggage trunk of a car"
+msgstr "Поместится в багажник автомобиля"
+
+#: ldiw_api/ldiw_api.inc:120
+msgid "Fits into industrial truck/cargo vehicle"
+msgstr "Поместится в грузовой автомобиль/мусоровоз"
+
+#: ldiw_api/ldiw_api.inc:122
+msgid "It's even more than that"
+msgstr "Здесь даже больше чем мусоровоз"
+
+#: ldiw_api/ldiw_api.inc:286
+msgid "Composition percentages (in volume)"
+msgstr ""
+
+#: ldiw_api/ldiw_api.inc:309
+msgid "Invalid session cookie sent by API client"
+msgstr "Ошибка отправки cookie API клиентом»"
+
+#: ldiw_api/ldiw_api.inc:402
+msgid "Error in request sent by API client: %error"
+msgstr "Ошибка запроса API клиента : %error "
+
+#: ldiw_api/waste_point_html.inc:71
+msgid "@nr_of_tires tires"
+msgstr "@количество_шин шин"
+
+#: ldiw_api/waste_point_html.inc:100
+msgid "Cluster"
+msgstr "Кластер"
+
+#: ldiw_api/waste_point_html.inc:101
+msgid "@nr_of_points waste points"
+msgstr "@количество_свалок свалки"
+
+#: ldiw_api/waste_point_html.inc:104
+msgid "Total volume"
+msgstr "Общее количество"
+
+#: ldiw_api/waste_point_html.inc:155
+msgid "ID"
+msgstr "ID"
+
+#: ldiw_api/waste_point_html.inc:161 ldiw_waste_map_features/ldiw_waste_map_features.features.inc:71
+msgid "Description"
+msgstr "Описание"
+
+#: ldiw_api/waste_point_html.inc:174
+msgid "Location"
+msgstr "Местонахождение"
+
+#: ldiw_api/ldiw_api.install:16
+msgid "Yes"
+msgstr "Да"
+
+#: ldiw_api/ldiw_api.install:22
+msgid "No"
+msgstr "Нет"
+
+#: ldiw_waste_map_features/ldiw_waste_map_features.features.inc:28
+msgid "Geographic area"
+msgstr "Территориальная зона"
+
+#: ldiw_waste_map_features/ldiw_waste_map_features.features.inc:30
+msgid "A geographic area (county, municipality etc) belonging to an already-defined <em>Geographic area hierarchy level</em>."
+msgstr "Территориальная зона (область, муниципальное образование) принадлежит к уже определенному «em» территориальным зонам другого уровня "
+
+#: ldiw_waste_map_features/ldiw_waste_map_features.features.inc:32;47
+msgid "Name"
+msgstr "Название"
+
+#: ldiw_waste_map_features/ldiw_waste_map_features.features.inc:36
+msgid "This defines a geographic area (county, municipality etc) belonging to an already-defined <em>Geographic area hierarchy level</em>. If you have not defined any hierarchy levels yet, you should do so before creating a <em>Geographic area</em>.\r\n<p>\r\nAfter adding/editing Geographic areas, you should perform a\r\n<em>Recalculate Geographic Areas fields for Waste point nodes</em> operation in\r\n<em>LDIW Waste Map settings</em>."
+msgstr "Указана территориальная зона (область, муниципальное образование) принадлежит к уже определенному <em> территориальным зонам другого уровня </em>.  Если вы еще не определились с уровнями территорий, сделайте это прежде чем создавать <em>Территориальную зону</em> \r\n<p>\r\ После добавления\редактирования Территориальных зон, вы должны нажать a\r\n<em>Произвести перерасчет Территориальных Зон для установления местоположения свалок</em>запустить операцию\r\n<em>LDIW  Настройки карты мусора<em>."
+
+#: ldiw_waste_map_features/ldiw_waste_map_features.features.inc:43
+msgid "Geographic area hierarchy level"
+msgstr "Уровень территориальной зоны"
+
+#: ldiw_waste_map_features/ldiw_waste_map_features.features.inc:51
+msgid "This is a level in a hierarchy of geographical subdivisions of Waste Map. Three examples of hierarchy levels could be municipality, country, and forestry ranger district. Obviously these are related to each other (each municipality belongs to a country) and these relationships are described by <em>Parent hierarchy level</em> and <em>Display parent name</em> fields. Here is an example of hieararchy levels for United States cleanup:\r\n<ul>\r\n<li>Name: <em>State</em>; Parent hierarchy level: None\r\n<li>Name: <em>County</em>; Parent hierarchy level: <em>State</em>; Display parent name: <em>Yes</em>; Display label: <em>County</em>\r\n<li>Name: <em>Forest Service Region</em>; Parent hierarchy level: None\r\n<li>Name: <em>National Forest</em>; Parent hierarchy level: <em>Forest Service Region</em>\r\n<li>Name: <em>Ranger District</em>; Parent hierarchy level: <em>National Forest</em>; Display parent name: <em>Yes</em>; Display label: <em>Forest Service</em>\r\n</ul>\r\n<p>\r\nAfter adding/editing hierarchy levels, you should perform a\r\n<em>Recalculate Geographic Areas fields for Waste point nodes</em> operation in\r\n<em>LDIW Waste Map settings</em>."
+msgstr " Здесь представлены уровни иерархии территориального деления Карты Мусора.Существует три типа уровней: Регион, Муниципальный район\округ, поселение. Все они принадлежат друг к другу: участок к поселению, поселение к району, и эта иерархия описана в <em>Существующее территориальное районирование </em> и <em>Отобразить текущее районирование<em> поле. Здесь представлен пример: п:\r\n<ul>\r\n<li>Название<em>Регион</em>; Существующее территориальное районирование: Отсутствует\r\n<li>Название: <em>Регион</em>; Текущий уровень: <em>Регион</em>; Отобразить текущее название: <em>Да</em>; Отметка: <em>Регион</em>\r\n<li>Название: <em>Условный регион</em>; Текущий уровень: Отсутствует\r\n<li>Название: <em>Условный район</em>; Текущий уровень : <em>Муниципальный район\округ</em>\r\n<li>Название: <em>Условный</em>; Текущий уровень: <em>Поселение</em>; Отобразить название: <em>Да</em>; Display label: <em>Условное поселение</em>\r\n</ul>\r\n<p>\r\n После установки уровней вы должны нажать a\r\n<em> Произвести перерасчет Территориальных Зон для установления местоположения свалок</em>запустить операцию\r\n<em>LDIW  Настройки карты мусора </em>."
+"
+
+#: ldiw_waste_map_features/ldiw_waste_map_features.features.inc:65;67
+msgid "Waste point"
+msgstr "Свалка"
+
+#: ldiw_waste_map_features/ldiw_waste_map_features.features.inc:69
+msgid "Title"
+msgstr "Название"
