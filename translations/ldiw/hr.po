@@ -1,0 +1,41 @@
+# LANGUAGE translation of LDIW Waste Map
+# Copyright (c) YEAR NAME <EMAIL@ADDRESS>
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: ldiw-waste-map 1.0\n"
+"POT-Creation-Date: 2011-10-28 14:53+0300\n"
+"PO-Revision-Date: 2012-02-12 22:37+0100\n"
+"Last-Translator: Aleksej Červar <acervar@gmail.com>\n"
+"Language-Team: Žmergo <info@jedandan.com.hr>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Croatian\n"
+"X-Poedit-Country: CROATIA\n"
+"X-Poedit-SourceCharset: utf-8\n"
+
+#: composition_fields:field_composition_other:text_solo
+msgid "other (misc waste)"
+msgstr "ostalo (razni otpad)"
+
+#: composition_fields:field_composition_paper:text
+msgid "paper"
+msgstr "papir"
+
+#: composition_fields:field_composition_glass:text
+msgid "glass"
+msgstr "staklo"
+
+#: composition_fields:field_composition_large:text
+msgid "large objects"
+msgstr "veliki komadi"
+
+#: composition_fields:field_composition_other:text
+msgid "other"
+msgstr "ostalo"
+
+#: composition_fields:field_composition_pmp:text
+msgid "plastic/metal/packaging"
+msgstr "plastika/metal/ambalaža"
+

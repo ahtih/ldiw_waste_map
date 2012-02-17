@@ -1,0 +1,124 @@
+# LANGUAGE translation of LDIW Waste Map
+# Copyright (c) YEAR NAME <EMAIL@ADDRESS>
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: ldiw-waste-map 1.0\n"
+"POT-Creation-Date: 2011-10-28 14:53+0300\n"
+"PO-Revision-Date: 2012-02-12 23:02+0100\n"
+"Last-Translator: Aleksej Červar <acervar@gmail.com>\n"
+"Language-Team: Žmergo <info@jedandan.com.hr>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Croatian\n"
+"X-Poedit-Country: CROATIA\n"
+
+#: field:waste_point-field_composition_pmp:widget_label
+msgid "Plastics, metals, packaging"
+msgstr "Plastika, metal, ambalaža"
+
+#: field:geo_area-field_geo:widget_label
+msgid "Geometry"
+msgstr "Geometrija"
+
+#: field:geo_area-field_geo:widget_description
+msgid "The borders of this area in WKT format (usually a MULTIPOLYGON). This is usually very long text, often 100 000 characters or more; so take care when copy/pasting it."
+msgstr "Granice područja u WKT formatu (obično MULTIPOLYGON). Ovo je obično vrlo dugačak tekst, često 100.000 ili više znakova; imajte to u vidu kod copy/paste operacija."
+
+#: field:geo_area-field_hierarchy_level:widget_label
+msgid "Hierarchy level"
+msgstr "Razina hijerarhije"
+
+#: field:geo_area-field_hierarchy_level:widget_description
+msgid "The <em>Geographic area hierarchy level</em> this area belongs to; e.g. is it a country, or state, or municipality, or something else."
+msgstr "<em>Razina hijerarhije zemljopisnog područja</em> kojoj pripada ovo područje; npr. je li to država, županija, općina ili grad, ili nešto četvrto."
+
+#: field:geo_area-field_parent:widget_label
+msgid "Parent area name"
+msgstr "Naziv veće jedinice"
+
+#: field:geo_area-field_parent:widget_description
+msgid "If this geographic area is not at highest defined hierarchy level, then usually it is topologically part of a larger area one level up in hierarchy. If so, fill in the name of this larger area."
+msgstr "Ako ovo zemljopisno područje nije najviše razine, topološki je dio jedinice više razine u hijerarhiji. Ako je tako, unesite ime te veće jdeinice."
+
+#: field:geo_hierarchy_level-field_parent_level:widget_label
+msgid "Parent hierarchy level"
+msgstr "Viša zemljopisna razina"
+
+#: field:geo_hierarchy_level-field_parent_level:widget_description
+msgid "Select a hierarchy level which is one level up from the level you are creating/editing. For example, if you are editing a <em>County</em> hierarchy level, then you might want to select its parent to be the <em>Country</em> level. Select <em>None</em> if this is the highest hierarchy level you have."
+msgstr "Odaberite zemljopisnu razinu koja je stupanj više od razine koju unosite. Na primjer, ako unosite razinu<em>županije</em>, tada ćete za višu razinu odabrati <em>državu</em>. Odaberite <em>Ništa</em> ukoliko se radi o najvišoj razini."
+
+#: field:geo_hierarchy_level-field_display_parent:widget_label
+msgid "Display parent name"
+msgstr "Prikaži naziv više jedinice"
+
+#: field:geo_hierarchy_level-field_display_parent:widget_description
+msgid "Check this if the <em>Name</em> of areas in this hiearchy level is not enough to uniquely identify them without parent area name being present. For example, in Germany not everybody might know where <em>Main-Spessart</em> is, so displaying the parent name (<em>Main-Spessart, Bavaria</em>) is good; similarly, in USA there are several <em>Fayette</em> counties, so <em>Fayette county, Texas</em> is appropriate to display. This is achieved by checking this checkbox for <em>County</em> hierarchy level."
+msgstr "Označite ovo ukoliko <em>Naziv</em> područja na ovoj razini nije dovoljan da ga točno identificira, bez navođenja više jedinice. Na primjer, neće svi znati gdje se nalazi <em>Veli Mlun</em>, pa će u tom slučaju koristiti naziv više jedinice (<em>Veli Mlun, Grad Buzet</em>). Nadalje, možemo imati više mjesta s istim imenom, pa je prikladno označiti kojoj višoj jedinici pripadaju, npr. <em>Sveta Nedelja, Zagrebačka županija</em>. To ćemo postići stavljanjem kvačice na checkbox za razinu županije."
+
+#: field:field_display_parent:option_0
+msgid "Do not display parent name"
+msgstr "Ne prikazuj naziv više jedinice"
+
+#: field:field_display_parent:option_1
+msgid "Display parent name"
+msgstr "Prikaži naziv više jedinice"
+
+#: field:geo_hierarchy_level-field_waste_point_display_label:widget_label
+msgid "\"Waste point\" display label"
+msgstr "Oznaka \"Lokacije otpada\""
+
+#: field:geo_hierarchy_level-field_waste_point_display_label:widget_description
+msgid "This controls how information about geographic areas is displayed for individual Waste points in Waste Map popups. If you write a label here for a hierarchy level, then popups will include this label and the area of this level where the Waste point belongs to. For example, having label \"Administrative division\" for United States <em>County</em> level makes <em>Administrative division: Fayette County, Texas</em> to be displayed in popups. More than one hierarchy level may have this set; this makes sense for example if one is administrative division, and another a state forestry division. Then popups show where Waste point belongs to according to both hierarchies."
+msgstr "Ovdje kontroliramo kako se podaci o zemljopisnim područjima prikazuju u popup okvirima za pojedinačne lokacije u Karti Otpada. Ako ovdje upišete oznaku hijerarhijske razine, popup okvir će sadržavati tu oznaku i područje kojemu to smetlište pripada. Na primjer, ako upišete oznaku \"Administrativna podjela\" za Hrvatsku razinu <em>županije</em>, u popup okviru će pisati <em>Administrativna podjela: Primorsko-goranska županija</em>. Te oznake mogu biti višestruke; ako npr. želimo unijeti podjele po jedinicama lokalne samouprave, i područja odgovornosti šumarija. U tom slučaju popup okvir će pokazati kojem području lokacija otpada pripada po obje podjele."
+
+#: field:waste_point-field_coords:widget_label
+msgid "Coordinates"
+msgstr "Koordinate"
+
+#: field:waste_point-field_volume:widget_label
+msgid "Volume"
+msgstr "Količina"
+
+#: field:waste_point-field_nr_of_tires:widget_label
+msgid "Number of tires"
+msgstr "Broj automobilskih guma"
+
+#: field:waste_point-field_composition_paper:widget_label
+msgid "Paper or cardboard"
+msgstr "Papir ili karton"
+
+#: field:waste_point-field_composition_glass:widget_label
+msgid "Glass (incl glass bottles)"
+msgstr "Staklo (uključujući staklene boce)"
+
+#: field:waste_point-field_composition_large:widget_label
+msgid "Large objects like furniture"
+msgstr "Veliki objekti, komadi pokućstva"
+
+#: field:waste_point-field_composition_other:widget_label
+msgid "Other"
+msgstr "Ostalo"
+
+#: field:waste_point-field_photo:widget_label
+msgid "Photo"
+msgstr "Fotografija"
+
+#: field:waste_point-field_photos_id_width_height:widget_label
+msgid "Photos ID:Width:Height"
+msgstr "Foto ID:širina:visina"
+
+#: field:waste_point-field_external_photo:widget_label
+msgid "External photo"
+msgstr "Vanjska forografija"
+
+#: field:waste_point-field_geo_areas:widget_label
+msgid "Geographic areas"
+msgstr "Zemljopisna područja"
+
+#: field:waste_point-field_geo_areas_json:widget_label
+msgid "Geographic area names"
+msgstr "Nazivi zemljopisnih područja"
+

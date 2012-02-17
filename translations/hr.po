@@ -1,0 +1,148 @@
+# LANGUAGE translation of LDIW Waste Map
+# Copyright (c) YEAR NAME <EMAIL@ADDRESS>
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: ldiw-waste-map 1.0\n"
+"POT-Creation-Date: 2011-10-28 14:53+0300\n"
+"PO-Revision-Date: 2012-02-12 23:09+0100\n"
+"Last-Translator: Aleksej Červar <acervar@gmail.com>\n"
+"Language-Team: Žmergo <info@jedandan.com.hr>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Croatian\n"
+"X-Poedit-Country: CROATIA\n"
+"X-Poedit-SourceCharset: utf-8\n"
+
+#: ldiw_api/ldiw_api.inc:44
+#: ldiw_api/waste_point_html.inc:75
+msgid "Composition"
+msgstr "Sadržaj"
+
+#: ldiw_api/ldiw_api.inc:114
+msgid "It all fits into my pocket"
+msgstr "Stane mi u džep"
+
+#: ldiw_api/ldiw_api.inc:116
+msgid "Fits in a plastic shopping bag"
+msgstr "Stane u plastičnu vrećicu"
+
+#: ldiw_api/ldiw_api.inc:118
+msgid "Fits into luggage trunk of a car"
+msgstr "Stane u prtljažnik automobila"
+
+#: ldiw_api/ldiw_api.inc:120
+msgid "Fits into industrial truck/cargo vehicle"
+msgstr "Stane u teretno vozilo"
+
+#: ldiw_api/ldiw_api.inc:122
+msgid "It's even more than that"
+msgstr "Više od toga svega"
+
+#: ldiw_api/ldiw_api.inc:286
+msgid "Composition percentages (in volume)"
+msgstr "Sadržaj u postocima (zapremine)"
+
+#: ldiw_api/ldiw_api.inc:309
+msgid "Invalid session cookie sent by API client"
+msgstr "Nepravilni cookie poslan"
+
+#: ldiw_api/ldiw_api.inc:402
+msgid "Error in request sent by API client: %error"
+msgstr "Greška u zahtjevu poslanom s aplikacije: %error"
+
+#: ldiw_api/waste_point_html.inc:71
+msgid "@nr_of_tires tires"
+msgstr "@nr_of_tires automobilskih guma"
+
+#: ldiw_api/waste_point_html.inc:100
+msgid "Cluster"
+msgstr "Gomila"
+
+#: ldiw_api/waste_point_html.inc:101
+msgid "@nr_of_points waste points"
+msgstr "@nr_of_points lokacija otpada"
+
+#: ldiw_api/waste_point_html.inc:104
+msgid "Total volume"
+msgstr "Ukupna količina"
+
+#: ldiw_api/waste_point_html.inc:155
+msgid "ID"
+msgstr "ID"
+
+#: ldiw_api/waste_point_html.inc:161
+#: ldiw_waste_map_features/ldiw_waste_map_features.features.inc:71
+msgid "Description"
+msgstr "Opis"
+
+#: ldiw_api/waste_point_html.inc:174
+msgid "Location"
+msgstr "Lokacija"
+
+#: ldiw_api/ldiw_api.install:16
+msgid "Yes"
+msgstr "Da"
+
+#: ldiw_api/ldiw_api.install:22
+msgid "No"
+msgstr "Ne"
+
+#: ldiw_waste_map_features/ldiw_waste_map_features.features.inc:28
+msgid "Geographic area"
+msgstr "Zemljopisno područje"
+
+#: ldiw_waste_map_features/ldiw_waste_map_features.features.inc:30
+msgid "A geographic area (county, municipality etc) belonging to an already-defined <em>Geographic area hierarchy level</em>."
+msgstr "Jedinica (županija, općina) koja pripada određenoj <em>Razini hijerarhije zemljopisnog područja</em>"
+
+#: ldiw_waste_map_features/ldiw_waste_map_features.features.inc:32;47
+msgid "Name"
+msgstr "Naziv"
+
+#: ldiw_waste_map_features/ldiw_waste_map_features.features.inc:36
+msgid ""
+"This defines a geographic area (county, municipality etc) belonging to an already-defined <em>Geographic area hierarchy level</em>. If you have not defined any hierarchy levels yet, you should do so before creating a <em>Geographic area</em>.\r\n"
+"<p>\r\n"
+"After adding/editing Geographic areas, you should perform a\r\n"
+"<em>Recalculate Geographic Areas fields for Waste point nodes</em> operation in\r\n"
+"<em>LDIW Waste Map settings</em>."
+msgstr "Ovo određuje zemljopisno područje (županiju, općinu) koja spada u prethodno definiranu <em>Razinu zemljopisnog područja</em>. Ako niste definirali te razine, učinite to prije negoli unesete novo <em>Zemljopisno područje</em>.<p>Nakon dodavanja/uređivanja Zemljopisnih područja, potrebno je pokrenuti operaciju<em>Rekalkulacije zemljopisnih područja za lokacije otpada</em> u <em>postavkama LDIW karte</em> odlagališta otpada."
+
+#: ldiw_waste_map_features/ldiw_waste_map_features.features.inc:43
+msgid "Geographic area hierarchy level"
+msgstr "Razina hijerarhije zemljopisnog područja"
+
+#: ldiw_waste_map_features/ldiw_waste_map_features.features.inc:51
+msgid ""
+"This is a level in a hierarchy of geographical subdivisions of Waste Map. Three examples of hierarchy levels could be municipality, country, and forestry ranger district. Obviously these are related to each other (each municipality belongs to a country) and these relationships are described by <em>Parent hierarchy level</em> and <em>Display parent name</em> fields. Here is an example of hieararchy levels for United States cleanup:\r\n"
+"<ul>\r\n"
+"<li>Name: <em>State</em>; Parent hierarchy level: None\r\n"
+"<li>Name: <em>County</em>; Parent hierarchy level: <em>State</em>; Display parent name: <em>Yes</em>; Display label: <em>County</em>\r\n"
+"<li>Name: <em>Forest Service Region</em>; Parent hierarchy level: None\r\n"
+"<li>Name: <em>National Forest</em>; Parent hierarchy level: <em>Forest Service Region</em>\r\n"
+"<li>Name: <em>Ranger District</em>; Parent hierarchy level: <em>National Forest</em>; Display parent name: <em>Yes</em>; Display label: <em>Forest Service</em>\r\n"
+"</ul>\r\n"
+"<p>\r\n"
+"After adding/editing hierarchy levels, you should perform a\r\n"
+"<em>Recalculate Geographic Areas fields for Waste point nodes</em> operation in\r\n"
+"<em>LDIW Waste Map settings</em>."
+msgstr ""
+"Ovo je razina u hijerarhiji zemljopisnih jedinica Karte Otpada. Tri primjera takvih razina su općina, država ili područje šumarije. One su očito povezane (svaka općina pripada državi), a ti su odnosi opisani u poljima <em>Viša zemljiopisna razina</em> i <em>Prikaži višu jedinicu</em>. Evo primjera hijerarhijskih razina za kampanju čišćenja u SAD:\r\n"
+"<ul>\r\n"
+"<li>Name: <em>State</em>; Parent hierarchy level: None\r\n"
+"<li>Name: <em>County</em>; Parent hierarchy level: <em>State</em>; Display parent name: <em>Yes</em>; Display label: <em>County</em>\r\n"
+"<li>Name: <em>Forest Service Region</em>; Parent hierarchy level: None\r\n"
+"<li>Name: <em>National Forest</em>; Parent hierarchy level: <em>Forest Service Region</em>\r\n"
+"<li>Name: <em>Ranger District</em>; Parent hierarchy level: <em>National Forest</em>; Display parent name: <em>Yes</em>; Display label: <em>Forest Service</em>\r\n"
+"</ul>\r\n"
+
+#: ldiw_waste_map_features/ldiw_waste_map_features.features.inc:65;67
+msgid "Waste point"
+msgstr "Lokacija otpada"
+
+#: ldiw_waste_map_features/ldiw_waste_map_features.features.inc:69
+msgid "Title"
+msgstr "Naslov"
+
