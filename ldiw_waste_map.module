@@ -339,6 +339,10 @@ function ldiw_waste_map_theme()
 				'ldiw_waste_map_formatter_as_twitter_link' => array(
 						'arguments' => array('element' => NULL),
 						'file' => 'ldiw_waste_map.theme.inc',
+						),
+				'ldiw_waste_map_formatter_as_youtube_link' => array(
+						'arguments' => array('element' => NULL),
+						'file' => 'ldiw_waste_map.theme.inc',
 						));
 	}
 
@@ -1235,6 +1239,8 @@ function ldiw_waste_map_field_formatter_info()
 	return array('as_link' => array('label' => t('As HTML link'),
 									'field types' => array('text')),
 				'as_twitter_link' => array('label' => t('As HTML Twitter link'),
+									'field types' => array('text')),
+				'as_youtube_link' => array('label' => t('As HTML YouTube link'),
 									'field types' => array('text')),
 				);
 	}
