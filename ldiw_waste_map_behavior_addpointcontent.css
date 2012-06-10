@@ -35,7 +35,7 @@
 
 .olControlPanel .olControlNavigationItemActive,
 .olControlPanel .olControlDrawFeaturePointItemActive,
-.UploadButtonItemActive {
+.WasteMapButtonItemActive {
 	background-color: #f1c02a; 
 	border-width: 3px;
 	margin: 4px;
@@ -43,7 +43,7 @@
 
 .olControlPanel .olControlNavigationItemInactive,
 .olControlPanel .olControlDrawFeaturePointItemInactive,
-.UploadButtonItemInactive {
+.WasteMapButtonItemInactive {
 	background-color: #e9e7e3;
 	border-width: 2px;
 	margin: 5px;

@@ -115,6 +115,38 @@ ldiw_waste_map_upload_photo_control=OpenLayers.Class(OpenLayers.Control,{
 	CLASS_NAME: 'ldiw_waste_map_upload_photo_control'
 	});
 
+ldiw_waste_map_layer_switcher=OpenLayers.Class(OpenLayers.Control.Button,{
+
+	eligible_layers: function(map) {
+		var dest=[];
+		for (var i=0;i < map.layers.length;i++) {
+			var layer=map.layers[i];
+			if (layer.displayInLayerSwitcher && layer.isBaseLayer)
+				dest.push(layer);
+			}
+		return dest;
+		},
+
+	trigger: function() {
+		var layers=this.eligible_layers(this.map);
+		if (!layers.length)
+			return;
+
+		var new_base_layer=layers[0];
+
+		for (var i=0;i+1 < layers.length;i++)
+			if (layers[i] == this.map.baseLayer) {
+				new_base_layer=layers[i+1];
+				break;
+				}
+
+		if (new_base_layer)
+			this.map.setBaseLayer(new_base_layer);
+		},
+
+	CLASS_NAME: 'ldiw_waste_map_layer_switcher'
+	});
+
 Drupal.theme.prototype.openlayersAddPointContentNoNodeID=function(feature)
 {
 	return Drupal.t('Selected feature has no Node ID to edit');
@@ -385,13 +417,21 @@ function ldiw_waste_map_behavior_addpointcontent_state(data,options)
 											styleMap: invisible_stylemap}}}
 						);
 	var panel=new OpenLayers.Control.Panel();
-	panel.addControls([	new OpenLayers.Control.Navigation({
+	var controls=[		new OpenLayers.Control.Navigation({
 								title: Drupal.t('Move map')}),
 						this.drawfeature_control,
 						new ldiw_waste_map_upload_photo_control({
 							title: Drupal.t('Upload geotagged photo'),
-							displayClass: 'UploadButton',
-							coords_form_control: this.coords_form_control})]);
+							displayClass: 'WasteMapButton',
+							coords_form_control: this.coords_form_control})];
+
+	if (ldiw_waste_map_layer_switcher.prototype.eligible_layers(
+											data.openlayers).length >= 2)
+		controls.push(new ldiw_waste_map_layer_switcher({
+									title: Drupal.t('Switch map type'),
+									displayClass: 'WasteMapButton'}));
+	panel.addControls(controls);
+
 	panel.defaultControl=panel.controls[0];
 
 	for (var i=0;i < panel.controls.length;i++)

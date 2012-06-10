@@ -29,14 +29,6 @@ function ldiw_waste_map_features_openlayers_presets() {
       ),
     ),
     'behaviors' => array(
-      'ldiw_waste_map_behavior_addpointcontent' => array(
-        'content_type' => 'waste_point',
-        'features_layer' => 'waste_map_csv',
-      ),
-      'ldiw_waste_map_behavior_automaticpopup' => array(
-        'features_layer' => 'waste_map_csv',
-        'required_feature_attribute' => 'photos',
-      ),
       'openlayers_behavior_attribution' => array(),
       'openlayers_behavior_popup' => array(
         'layers' => array(),
@@ -47,9 +39,18 @@ function ldiw_waste_map_features_openlayers_presets() {
       ),
       'openlayers_behavior_panzoombar' => array(),
       'openlayers_behavior_scaleline' => array(),
+      'ldiw_waste_map_behavior_addpointcontent' => array(
+        'content_type' => 'waste_point',
+        'features_layer' => 'waste_map_csv',
+      ),
+      'ldiw_waste_map_behavior_automaticpopup' => array(
+        'features_layer' => 'waste_map_csv',
+        'required_feature_attribute' => 'photos',
+      ),
     ),
     'default_layer' => 'osm_mapnik',
     'layers' => array(
+      'google_normal' => 'google_normal',
       'osm_mapnik' => 'osm_mapnik',
       'waste_map_csv' => 'waste_map_csv',
     ),

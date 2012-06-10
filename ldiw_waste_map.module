@@ -429,6 +429,17 @@ function ldiw_waste_map_openlayers_map_alter(&$map)
 			$map['center']['initial']['zoom']=$zoom;
 			}
 		}
+
+		// Remove Google layer if Google Maps API key is not configured
+
+	if (!variable_get('openlayers_layers_google_api',
+								variable_get('googlemap_api_key',''))) {
+		unset($map['layers']['google_normal']);
+		if ($map['default_layer'] == 'google_normal') {
+			reset($map['layers']);
+			$map['default_layer']=key($map['layers']);
+			}
+		}
 	}
 
 /***************************************************************************/
