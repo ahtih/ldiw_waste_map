@@ -40,10 +40,10 @@ ldiw_waste_map_coords_form_control=OpenLayers.Class(OpenLayers.Control,{
 						'geotagged, so please enter coordinates manually:');
 			this.div.innerHTML+='<p>' +
 					'<form class="UploadCoordsForm" method="post">' +
-					Drupal.t('Longitude') +
-					':<input type="text" name="lon" size="6" maxlength="30">' +
 					Drupal.t('Latitude') +
 					':<input type="text" name="lat" size="6" maxlength="30">' +
+					Drupal.t('Longitude') +
+					':<input type="text" name="lon" size="6" maxlength="30">' +
 					'<input type="hidden" name="fid" value="' +
 						response_json.missing_coords_fid + '">' +
 					'<input type="submit" value="' + Drupal.t('Done') + '">' +
