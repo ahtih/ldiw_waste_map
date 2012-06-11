@@ -57,7 +57,7 @@ msgstr ""
 msgid "Cluster"
 msgstr ""
 
-#: ldiw_api/waste_point_html.inc:101
+#: ldiw_api/waste_point_html.inc:101 sites/all/modules/ldiw_waste_map/plugins/style_plugin/ldiw_waste_map_point_style_plugin.js
 msgid "@nr_of_points waste points"
 msgstr ""
 
@@ -115,4 +115,77 @@ msgstr ""
 
 #: ldiw_waste_map_features/ldiw_waste_map_features.features.inc:69
 msgid "Title"
+msgstr ""
+
+#: sites/all/modules/ldiw_waste_map/ldiw_waste_map_behavior_addpointcontent.js
+msgid "Latitude"
+msgstr ""
+
+#: sites/all/modules/ldiw_waste_map/ldiw_waste_map_behavior_addpointcontent.js
+msgid "Longitude"
+msgstr ""
+
+#: sites/all/modules/ldiw_waste_map/plugins/style_plugin/ldiw_waste_map_point_style_plugin.js
+msgid "Zoom in here"
+msgstr ""
+
+#: sites/all/modules/ldiw_waste_map/plugins/style_plugin/ldiw_waste_map_point_style_plugin.js
+msgid "Total volume <b>@volumem&sup3;</b>"
+msgstr ""
+
+#: sites/all/modules/ldiw_waste_map/ldiw_waste_map_behavior_addpointcontent.js
+msgid ""
+"To add a Waste Point, zoom in and click the exact location of the "
+"waste on map. Click <em>Move map</em> if you want to move the map to "
+"correct location beforehand."
+msgstr ""
+
+#: sites/all/modules/ldiw_waste_map/ldiw_waste_map_behavior_addpointcontent.js
+msgid "Upload geotagged photo"
+msgstr ""
+
+#: sites/all/modules/ldiw_waste_map/ldiw_waste_map_behavior_addpointcontent.js
+msgid "Loading..."
+msgstr ""
+
+#: sites/all/modules/ldiw_waste_map/ldiw_waste_map_behavior_addpointcontent.js
+msgid "Move map"
+msgstr ""
+
+#: sites/all/modules/ldiw_waste_map/ldiw_waste_map_behavior_addpointcontent.js
+msgid "Done"
+msgstr ""
+
+#: sites/all/modules/ldiw_waste_map/ldiw_waste_map_behavior_addpointcontent.js
+msgid "Switch map type"
+msgstr ""
+
+#: sites/all/modules/ldiw_waste_map/ldiw_waste_map_behavior_addpointcontent.js
+msgid "Add new @type"
+msgstr ""
+
+#:  field:waste_point-field_volume:widget_label; sites/all/modules/ldiw_waste_map/plugins/style_plugin/ldiw_waste_map_point_style_plugin.js
+msgid "Volume"
+msgstr ""
+
+#: sites/all/modules/ldiw_waste_map/ldiw_waste_map_behavior_addpointcontent.js
+msgid "This photo is not geotagged, so please enter coordinates manually:"
+msgstr ""
+
+#: sites/all/modules/ldiw_waste_map/ldiw_waste_map_behavior_addpointcontent.js
+msgid "Edit existing @type"
+msgstr ""
+
+#: sites/all/modules/ldiw_waste_map/plugins/style_plugin/ldiw_waste_map_point_style_plugin.js
+msgid ""
+"This is a cluster of @nr_of_nodes Waste points. You have to zoom in "
+"before you can see and edit them individually."
+msgstr ""
+
+#: sites/all/modules/ldiw_waste_map/ldiw_waste_map_behavior_addpointcontent.js
+msgid "Add/Edit Waste Point"
+msgstr ""
+
+#: sites/all/modules/ldiw_waste_map/ldiw_waste_map_behavior_addpointcontent.js
+msgid "Photo added. Thank you for your contribution to Waste Map!"
 msgstr ""

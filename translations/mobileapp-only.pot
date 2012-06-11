@@ -49,7 +49,7 @@ msgstr ""
 msgid "Cluster"
 msgstr ""
 
-#: ldiw_api/waste_point_html.inc:101
+#: ldiw_api/waste_point_html.inc:101 sites/all/modules/ldiw_waste_map/plugins/style_plugin/ldiw_waste_map_point_style_plugin.js
 msgid "@nr_of_points waste points"
 msgstr ""
 
