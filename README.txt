@@ -26,7 +26,7 @@ in the modules directory for your site and enable it on the
 "Geo" module needs to be extensively patched for Waste Map to work,
 and the simplest way is to get a patched version of Geo using
 	git clone git@git.drupal.org:sandbox/ahtih/1081362.git <your-destination-dir>
-This is Geo HEAD version patched with http://drupal.org/node/{804878,883020,776436,813482,667034,883032,1104696,1136622}
+This is Geo HEAD version patched with http://drupal.org/node/{804878,883020,776436,813482,667034,883032,1104696,1136622,1090154}
 
 "Views Bonus Pack" module needs the following patches:
 - http://drupal.org/files/issues/views_bonus_csv_strip_html.patch (http://drupal.org/node/205741)
