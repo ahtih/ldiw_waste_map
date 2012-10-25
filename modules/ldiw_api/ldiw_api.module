@@ -53,21 +53,21 @@ function ldiw_api_services_resources()
 				array(
 					'name' => 'lon',
 					'optional' => TRUE,
-					'source' => 'data',
+					'source' => array('data' => 'lon'),
 					'type' => 'double',
 					'description' => 'Longitude, in WGS84',
 					),
 				array(
 					'name' => 'lat',
 					'optional' => TRUE,
-					'source' => 'data',
+					'source' => array('data' => 'lat'),
 					'type' => 'double',
 					'description' => 'Latitude, in WGS84',
 					),
 				array(
 					'name' => 'client_id',
 					'optional' => TRUE,
-					'source' => 'data',
+					'source' => array('data' => 'client_id'),
 					'type' => 'string',
 					'description' => 'Semi-unique ID of ' .
 							'phone/computer of the user. Used for ' .
@@ -79,10 +79,11 @@ function ldiw_api_services_resources()
 	require_once('ldiw_api.inc');
 	foreach (ldiw_waste_map_get_photo_upload_fields() as
 													$idx => $photo_field) {
+		$key='photo_file_' . ($idx+1);
 		$create_update_args[]=array(
-								'name' => 'photo_file_' . ($idx+1),
+								'name' => $key,
 								'optional' => TRUE,
-								'source' => 'data',
+								'source' => array('data' => $key),
 								'type' => 'struct',
 								);
 		}
@@ -91,7 +92,7 @@ function ldiw_api_services_resources()
 		$create_update_args[]=array(
 								'name' => $key,
 								'optional' => TRUE,
-								'source' => 'data',
+								'source' => array('data' => $key),
 								'type' => 'string',
 								);
 		}
@@ -143,7 +144,7 @@ function ldiw_api_services_resources()
 							'name' => 'max_width',
 							'optional' => TRUE,
 							'default value' => 500,
-							'source' => 'param',
+							'source' => array('param' => 'max_width'),
 							'type' => 'int',
 							'description' => 'Maximum display width, in ' .
 									'pixels. This is important for photos',
@@ -152,7 +153,7 @@ function ldiw_api_services_resources()
 							'name' => 'language_code',
 							'optional' => TRUE,
 							'default value' => NULL,
-							'source' => 'param',
+							'source' => array('param' => 'language_code'),
 							'type' => 'string',
 							'description' => "RFC 4646 compliant language " .
 									"code, e.g. 'es'. If it is " .
