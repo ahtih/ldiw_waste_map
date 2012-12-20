@@ -1135,6 +1135,8 @@ function _ldiw_waste_map_set_geo_areas($coords,&$node)
 function ldiw_waste_map_nodeapi(&$node,$op)
 {
 	if ($node->type == 'waste_point' && $op == 'presave') {
+		$node->revision=1;      // Force creation of new revision
+
 		$coords=geoclustering_extract_coords_from_node($node,'field_coords');
 
 		if (empty($node->nid) || $coords !=
