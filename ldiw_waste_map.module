@@ -596,7 +596,6 @@ function ldiw_waste_map_prepare_adding_waste_point(&$coords,$id=FALSE)
 						array($distance_threshold_meters),$bbox_sql[1])));
 		if ($row) {
 			$id=$row['nid'];
-			$coords=array(NULL,NULL);
 			}
 		}
 
