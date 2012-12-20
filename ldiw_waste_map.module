@@ -657,7 +657,7 @@ function ldiw_waste_map_submit_waste_point_form($node,$form_state,
 	$success=FALSE;
 	if (isset($form_state['nid'])) {
 		$node=@node_load(array('nid' => $form_state['nid']));	// This argument style does not use node cache
-		$success=($id === FALSE || $node->vid != $prev_vid);
+		$success=(is_null($prev_vid) || $node->vid != $prev_vid);
 		}
 
 	$messages=drupal_get_messages();
