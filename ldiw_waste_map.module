@@ -183,7 +183,8 @@ function ldiw_waste_map_form_alter(&$form,$form_state,$form_id)
 						}
 					}
 
-				$form['#submit'][]='ldiw_waste_map_composition_singlevalue_submit';
+				$form['#submit'][]=
+							'ldiw_waste_map_composition_singlevalue_submit';
 				}
 			else {
 				$form['composition']=array(
@@ -202,8 +203,8 @@ function ldiw_waste_map_form_alter(&$form,$form_state,$form_id)
 				}
 			}
 
-		foreach (array('field_volume','field_nr_of_tires','body_field',
-												'composition') as $key) {
+		foreach (array('field_volume','field_diameter','field_nr_of_tires',
+									'body_field','composition') as $key) {
 			if (isset($form[$key])) {
 				$form[$key]['#prefix']='<span class="label-left-of-input">';
 				$form[$key]['#suffix']='</span>';
