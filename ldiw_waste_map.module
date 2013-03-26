@@ -122,7 +122,22 @@ function ldiw_waste_map_openlayers_behaviors()
  */
 function ldiw_waste_map_form_alter(&$form,$form_state,$form_id)
 {
-	if ($form_id == 'waste_point_node_form') {
+	if (strpos($form_id,'waste_point_node_form') === 0) {
+
+		if ($form_id != 'waste_point_node_form') {
+				// Hack to make waste_point_node_form_* form_id's to work
+				//   (necessary for modules/ldiw_api)
+				// Without this code they would fail, because
+				//   content_form_alter() does not recognise them. Here we
+				//   replicate content_form_alter() functionality.
+
+			$type=content_types($form['#node']->type);
+			module_load_include('inc','content','includes/content.node_form');
+			$form=array_merge($form,content_form($form,$form_state));
+			$form['#pre_render'][]='content_alter_extra_weights';
+			$form['#content_extra_fields']=$type['extra'];
+			}
+
 		formfilter_filter_form($form,array(
 				array('revision_information'),
 				array('body_field','format'),
@@ -600,7 +615,7 @@ function ldiw_waste_map_prepare_adding_waste_point(&$coords,$id=FALSE)
 			}
 		}
 
-	$node=($id !== FALSE) ? @node_load($id) :
+	$node=($id !== FALSE) ? @node_load(array('nid' => $id)) :	// This argument style does not use node cache
 									(object)array('type' => 'waste_point');
 	$node->uid=$user->uid;
 	$node->name=$user->name;
@@ -637,6 +652,12 @@ function ldiw_waste_map_prepare_adding_waste_point(&$coords,$id=FALSE)
 	return array($node,$form_state);
 	}
 
+/***************************************************************************/
+/****************                                          *****************/
+/**************** ldiw_waste_map_submit_waste_point_form() *****************/
+/****************                                          *****************/
+/***************************************************************************/
+
 function ldiw_waste_map_submit_waste_point_form($node,$form_state,
 													$file_fids=array())
 {
@@ -648,7 +669,13 @@ function ldiw_waste_map_submit_waste_point_form($node,$form_state,
 	$prev_vid=isset($node->vid) ? $node->vid : null;
 	module_load_include('inc','node','node.pages');
 
-	@drupal_execute('waste_point_node_form',$form_state,$node);
+	$form_id='waste_point_node_form';
+	static $forms_submitted=0;
+	if ($forms_submitted) {
+		$form_id.="_$forms_submitted";
+		}
+	$forms_submitted++;
+	@drupal_execute($form_id,$form_state,$node);
 
 	foreach ($file_fids as $fid) {
 		field_file_load($fid,TRUE);	// Reload file cache; otherwise file is not found if "FileField Paths" module is used
@@ -670,6 +697,21 @@ function ldiw_waste_map_submit_waste_point_form($node,$form_state,
 		return strip_tags(implode(';',$messages['error']));
 		}
 	return "Unknown drupal_execute() error";
+	}
+
+/***************************************************************************/
+/******************************              *******************************/
+/****************************** hook_forms() *******************************/
+/******************************              *******************************/
+/***************************************************************************/
+
+function ldiw_waste_map_forms($form_id)
+{
+	$forms=array();
+	if (strpos($form_id,'waste_point_node_form_') === 0) {
+		$forms[$form_id]=array('callback' => 'node_form');
+		}
+	return $forms;
 	}
 
 /***************************************************************************/
