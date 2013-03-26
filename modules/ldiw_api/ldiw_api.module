@@ -74,6 +74,14 @@ function ldiw_api_services_resources()
 							'anti-abuse, e.g. blocking specific ' .
 							'anonymous users',
 					),
+				array(
+					'name' => 'cleaned_by_mapper',
+					'optional' => TRUE,
+					'source' => array('data' => 'cleaned_by_mapper'),
+					'type' => 'integer',
+					'description' => 'Nonzero if the mapper cleaned the ' .
+							'Waste Point after mapping',
+					),
 		);
 
 	require_once('ldiw_api.inc');

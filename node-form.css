@@ -48,3 +48,8 @@
 #field_external_photo_values {
 	display: none;
 }
+
+#edit-field-cleaned-by-mapper-value-wrapper {
+	font-weight: 700 !important;
+	display: none;
+}

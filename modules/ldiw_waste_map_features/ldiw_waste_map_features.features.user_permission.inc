@@ -39,6 +39,15 @@ function ldiw_waste_map_features_user_default_permissions() {
     ),
   );
 
+  // Exported permission: edit field_cleaned_by_mapper
+  $permissions['edit field_cleaned_by_mapper'] = array(
+    'name' => 'edit field_cleaned_by_mapper',
+    'roles' => array(
+      '0' => 'anonymous user',
+      '1' => 'authenticated user',
+    ),
+  );
+
   // Exported permission: edit field_composition_glass
   $permissions['edit field_composition_glass'] = array(
     'name' => 'edit field_composition_glass',
@@ -195,6 +204,15 @@ function ldiw_waste_map_features_user_default_permissions() {
   // Exported permission: edit own waste_point content
   $permissions['edit own waste_point content'] = array(
     'name' => 'edit own waste_point content',
+    'roles' => array(
+      '0' => 'anonymous user',
+      '1' => 'authenticated user',
+    ),
+  );
+
+  // Exported permission: view field_cleaned_by_mapper
+  $permissions['view field_cleaned_by_mapper'] = array(
+    'name' => 'view field_cleaned_by_mapper',
     'roles' => array(
       '0' => 'anonymous user',
       '1' => 'authenticated user',

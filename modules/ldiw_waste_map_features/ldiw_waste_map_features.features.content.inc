@@ -341,6 +341,60 @@ function ldiw_waste_map_features_content_default_fields() {
     ),
   );
 
+  // Exported field: field_cleaned_by_mapper
+  $fields['waste_point-field_cleaned_by_mapper'] = array(
+    'field_name' => 'field_cleaned_by_mapper',
+    'type_name' => 'waste_point',
+    'display_settings' => array(
+      'label' => array(
+        'format' => 'above',
+        'exclude' => 0,
+      ),
+      'teaser' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'full' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      '4' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'token' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+    ),
+    'widget_active' => '1',
+    'type' => 'number_integer',
+    'required' => '0',
+    'multiple' => '0',
+    'module' => 'number',
+    'active' => '1',
+    'prefix' => '',
+    'suffix' => '',
+    'min' => '0',
+    'max' => '1',
+    'allowed_values' => '0|I did not clean it up
+1|I cleaned it up after mapping',
+    'allowed_values_php' => '',
+    'widget' => array(
+      'default_value' => array(
+        '0' => array(
+          'value' => 0,
+        ),
+      ),
+      'default_value_php' => NULL,
+      'label' => 'Cleaned by mapper',
+      'weight' => '31',
+      'description' => '',
+      'type' => 'optionwidgets_onoff',
+      'module' => 'optionwidgets',
+    ),
+  );
+
   // Exported field: field_composition_glass
   $fields['waste_point-field_composition_glass'] = array(
     'field_name' => 'field_composition_glass',
@@ -1085,6 +1139,7 @@ function ldiw_waste_map_features_content_default_fields() {
   // Translatables
   // Included for use with string extractors like potx.
   t('"Waste point" display label');
+  t('Cleaned by mapper');
   t('Coordinates');
   t('Diameter');
   t('Display parent name');

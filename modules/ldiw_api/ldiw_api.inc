@@ -18,6 +18,7 @@ function _ldiw_api_get_server_specific_fields()
 						'ldiw_waste_map_photo_field_names',
 						LDIW_WASTE_MAP_DEFAULT_PHOTO_FIELDS));
 	$fields_to_omit[]='field_geo_areas_json';
+	$fields_to_omit[]='field_cleaned_by_mapper';
 
 	$content_fields=content_fields(NULL,'waste_point');
 	$composition_fields=variable_get('ldiw_waste_map_composition_fields',
@@ -295,6 +296,48 @@ function _ldiw_api_waste_point_extra_fields()
 	}
 
 /***************************************************************************/
+/******************                                       ******************/
+/****************** _ldiw_api_set_server_specific_field() ******************/
+/******************                                       ******************/
+/***************************************************************************/
+
+function _ldiw_api_set_server_specific_field(&$form_state,$info,&$value)
+{
+	if ($info[1]['type'] == 'text' && !isset($value)) {
+		$value='';
+		}
+	if ($info[1]['type'] == 'float' && isset($value) && floatval($value)) {
+		$value=floatval($value);
+		}
+
+	if ($info[0] == 'body' || $info[0] == 'composition') {
+		$form_state['values'][$info[0]]=$value;
+		}
+	else {
+		$form_state['values'][$info[0]][0]['value']=$value;
+		}
+	}
+
+/***************************************************************************/
+/**************************                       **************************/
+/************************** _ldiw_api_save_node() **************************/
+/**************************                       **************************/
+/***************************************************************************/
+
+function _ldiw_api_save_node($node,$form_state,$file_fids)
+{
+	$node_or_errormsg=ldiw_waste_map_submit_waste_point_form(
+											$node,$form_state,$file_fids);
+	if (!is_object($node_or_errormsg)) {
+		watchdog('ldiw_api',"Error in request sent by API client: %error",
+									array('%error' => $node_or_errormsg));
+		throw new ServicesException($node_or_errormsg,400);
+		}
+
+	return $node_or_errormsg;
+	}
+
+/***************************************************************************/
 /************************                           ************************/
 /************************ _ldiw_api_create_update() ************************/
 /************************                           ************************/
@@ -326,6 +369,8 @@ function _ldiw_api_create_update($args,$id=FALSE)
 
 	$client_id=array_shift($args);
 	//!!! Store client_id field
+
+	$cleaned_by_mapper=array_shift($args);
 
 		/**********************/
 		/*****            *****/
@@ -369,25 +414,23 @@ function _ldiw_api_create_update($args,$id=FALSE)
 		/*****                              *****/
 		/****************************************/
 
+	$mapped_as_no_waste=TRUE;
 	$server_specific_fields=_ldiw_api_get_server_specific_fields();
 	if ($args !== array_fill(0,count($args),null)) {
 		foreach ($server_specific_fields as $key => $info) {
 			$value=array_shift($args);
-			if ($info[1]['type'] == 'text' && !isset($value)) {
-				$value='';
-				}
-			if ($info[1]['type'] == 'float' && isset($value) &&
-													floatval($value)) {
-				$value=floatval($value);
-				}
-			if ($info[0] == 'body' || $info[0] == 'composition') {
-				$form_state['values'][$info[0]]=$value;
-				}
-			else {
-				$form_state['values'][$info[0]][0]['value']=$value;
+			_ldiw_api_set_server_specific_field($form_state,$info,$value);
+
+			if (($key == 'volume' || $key == 'diameter') && !empty($value)) {
+					//!!! If there are no server-specific 'volume' or
+					//     'diameter' fields, then check other size fields
+				$mapped_as_no_waste=FALSE;
 				}
 			}
 		}
+
+	$form_state['values']['field_cleaned_by_mapper'][0]['value']=
+							(int)($cleaned_by_mapper && $mapped_as_no_waste);
 
 		/*********************/
 		/*****           *****/
@@ -395,16 +438,29 @@ function _ldiw_api_create_update($args,$id=FALSE)
 		/*****           *****/
 		/*********************/
 
-	$node_or_errormsg=ldiw_waste_map_submit_waste_point_form(
-											$node,$form_state,$file_fids);
+	$node=_ldiw_api_save_node($node,$form_state,$file_fids);
 
-	if (!is_object($node_or_errormsg)) {
-		watchdog('ldiw_api',"Error in request sent by API client: %error",
-									array('%error' => $node_or_errormsg));
-		throw new ServicesException($node_or_errormsg,400);
+		/************************************************/
+		/*****                                      *****/
+		/***** Re-map as empty if cleaned_by_mapper *****/
+		/*****                                      *****/
+		/************************************************/
+
+	if ($cleaned_by_mapper && !$mapped_as_no_waste) {
+		$coords=array(null,null);
+		list($node,$form_state)=ldiw_waste_map_prepare_adding_waste_point(
+															$coords,$id);
+		$form_state['values']['field_cleaned_by_mapper'][0]['value']=1;
+
+		foreach ($server_specific_fields as $key => $info) {
+			$value=($key == 'volume' || $key == 'diameter') ? 0 : null;
+						//!!! If there are no server-specific 'volume' or
+						//   'diameter' fields, then set other size fields
+			_ldiw_api_set_server_specific_field($form_state,$info,$value);
+			}
+
+		$node=_ldiw_api_save_node($node,$form_state,array());
 		}
-
-	$node=$node_or_errormsg;
 
 		/******************************/
 		/*****                    *****/
@@ -416,6 +472,8 @@ function _ldiw_api_create_update($args,$id=FALSE)
 	$wp=array('id' => '' . $node->nid,
 			'lon' => $coords[0],
 			'lat' => $coords[1],
+			'cleaned_by_mapper' =>
+						(int)$node->field_cleaned_by_mapper[0]['value'],
 			);
 
 	if (!empty($node->field_photos_id_width_height[0]['value'])) {
