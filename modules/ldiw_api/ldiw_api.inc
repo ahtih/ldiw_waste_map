@@ -389,6 +389,9 @@ function _ldiw_api_create_update($args,$id=FALSE)
 		if (is_object($photo_param)) {
 			$fname=$photo_param->tmp_name;
 			}
+		else if (is_array($photo_param)) {
+			$fname=$photo_param['tmp_name'];
+			}
 		else {
 			$fname=file_destination(file_create_path(
 					file_directory_temp() . '/' . time()),FILE_EXISTS_RENAME);
